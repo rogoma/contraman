@@ -966,7 +966,7 @@ class ContractsController extends Controller
             }
 
             // definimos fecha de recepcion de consultas
-            $dia_apertura_sobres = date('N', strtotime($order->advance_validity_to));
+            // $dia_apertura_sobres = date('N', strtotime($order->advance_validity_to));
             // dias habiles, sumamos sabados y domingos (4 sabados y 4 domingos)
             $tope_recepcion_consultas = 0;
 
@@ -979,6 +979,7 @@ class ContractsController extends Controller
                 $segundos_llegar_tope = $limite_mayor_consultas - $hoy;
                 $dias_tope_consultas = floor(abs($segundos_llegar_tope / 60 / 60 / 24 )); 
                 $pac_id = number_format($order->iddncp,0,",",".");
+                // $name = $order->iddncp;
                 $fecha_ini = date("d-m-Y", $limite_menor_consultas); 
                 $fecha_fin = date("d-m-Y", $limite_mayor_consultas); 
                 array_push($alerta_consultas, array('pac_id' => $pac_id,'llamado' => $order->number_year, 'dias' => $dias_tope_consultas, 'fecha_fin' => $fecha_fin, 'fecha_ini' => $fecha_ini));

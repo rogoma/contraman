@@ -20,7 +20,10 @@ $(document).ready(function(){
                                 try{
                                     if(data.status == "success"){
                                         // notificaciones = '<li><h6>Alertas</h6></li>';
-                                        notificaciones = '<li><h6>Alertas: Fecha Tope Comunic. desde DNCP</h6></li>';                                        
+                                        notificaciones = '<li style="font-size: 20px;color:red"><h6>Alertas: Fecha Tope Vigencia Contratos</h6></li>';
+                                        
+                                        // '<p style="font-size: 14px;color:red" class="notification-msg">FECHA FINAL: '+ (element.fecha_fin)+'</p>'+
+
                                         parent = document.getElementById('alertas-notificaciones');
                                         alertas = 0;
 
@@ -40,13 +43,15 @@ $(document).ready(function(){
                                                 notificaciones += '<li><div class="media"><div class="media-body">'+
                                                     // '<h5 class="notification-user">Fecha Tope Comunic. desde DNCP</h5>'+                                                    
                                                     // '<p class="notification-msg">DIAS: '+element.dias+'</p>'+
-                                                    '<p class="notification-msg">PAC_ID: '+element.pac_id+'</p>'+
-                                                    '<p class="notification-msg">FECHA INICIO: '+ (element.fecha_ini)+'</p>'+
+                                                    '<p class="notification-msg">IDDNCP: '+element.pac_id+' - N° CONTRATO: '+element.llamado+'</p>'+
+                                                    // '<p class="notification-msg">N° CONTRATO: '+element.llamado+'</p>'+
+                                                    // '<p class="notification-msg">DIAS PARA VCTO PÓLIZA: 60</p>'+
+                                                    '<p style="font-size: 14px;color:red" class="notification-msg">DIAS PARA VCTO: 60 -'+ ' FECHA:'+(element.fecha_ini)+'</p>'+
                                                     '<p style="font-size: 14px;color:red" class="notification-msg">FECHA FINAL: '+ (element.fecha_fin)+'</p>'+
                                                     // $hoy = strtotime(date('Y-m-d'));
                                                     // '<p class="notification-msg">Llamado Nº '+element.llamado+'</p>'+                                                    
                                                     
-                                                    '<span style="font-size: 14px;color:red;background-color:yellow;" class="notification-time f-w-600">'+limite+'</span>'+
+                                                    // '<span style="font-size: 14px;color:red;background-color:yellow;" class="notification-time f-w-600">'+limite+'</span>'+
                                                     '</div></div></li>';3                                                    
                                             });
                                             
