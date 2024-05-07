@@ -6,8 +6,8 @@
         <div class="row align-items-end">
             <div class="col-lg-8">
                 <div class="page-header-title">
-                    <br><br>
-                    <i class="feather icon-shield bg-c-blue"></i>                                        
+                    {{-- <br><br> --}}
+                    <i class="feather icon-shield bg-c-blue"></i>
                     <div class="d-inline">
                         <h5>Página de inicio</h5>
                         <span>Bienvenido</span>

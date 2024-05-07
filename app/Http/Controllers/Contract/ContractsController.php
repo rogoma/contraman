@@ -759,7 +759,7 @@ class ContractsController extends Controller
 
     }
 
-   
+
 
     public function excel(){
         $spreadsheet = new Spreadsheet();
@@ -949,9 +949,18 @@ class ContractsController extends Controller
     public function getNotifications(Request $request)
     {
         // obtenemos los pedidos que se han recibido en Contratos (ESTADO = 75)
-        $orders = Contract::where('contract_state_id', [1])        
-                        ->get(); 
-        
+        // $orders = Contract::where('contract_state_id', [1])
+        //                 ->get();
+
+        $orders = DB::table('vista_contracts')//vista que muestra los datos
+                        ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
+                        'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
+                        'contract_end_date', 'total_amount', 'advance_validity_to','fidelity_validity_to','accidents_validity_to',
+                        'risks_validity_to','civil_resp_validity_to','comentarios'])
+                        ->where('state_id', '=', 1)
+                        ->get();
+
+
         // Por cada orden verificamos fecha tope y consultas sin responder
         $alerta_consultas = array();
         $alerta_aclaraciones = array();
@@ -977,16 +986,17 @@ class ContractsController extends Controller
 
             if($hoy <= $limite_mayor_consultas && $hoy >= $limite_menor_consultas){
                 $segundos_llegar_tope = $limite_mayor_consultas - $hoy;
-                $dias_tope_consultas = floor(abs($segundos_llegar_tope / 60 / 60 / 24 )); 
+                $dias_tope_consultas = floor(abs($segundos_llegar_tope / 60 / 60 / 24 ));
                 $pac_id = number_format($order->iddncp,0,",",".");
                 // $name = $order->iddncp;
-                $fecha_ini = date("d-m-Y", $limite_menor_consultas); 
-                $fecha_fin = date("d-m-Y", $limite_mayor_consultas); 
-                array_push($alerta_consultas, array('pac_id' => $pac_id,'llamado' => $order->number_year, 'dias' => $dias_tope_consultas, 'fecha_fin' => $fecha_fin, 'fecha_ini' => $fecha_ini));
+                $contratista = $order->contratista;
+                $fecha_ini = date("d-m-Y", $limite_menor_consultas);
+                $fecha_fin = date("d-m-Y", $limite_mayor_consultas);
+                array_push($alerta_consultas, array('pac_id' => $pac_id,'llamado' => $order->number_year, 'contratista' => $contratista, 'dias' => $dias_tope_consultas, 'fecha_fin' => $fecha_fin, 'fecha_ini' => $fecha_ini));
             }
         }
 
         // return response()->json(['status' => 'success', 'alerta_consultas' => $alerta_consultas,'alerta_aclaraciones' => $alerta_aclaraciones], 200);
         return response()->json(['status' => 'success', 'alerta_consultas' => $alerta_consultas,'alerta_aclaraciones' => $alerta_aclaraciones], 200);
-    }   
+    }
 }
