@@ -359,8 +359,10 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     Route::get('pdf/panel_contracts3', [ReportsController::class, 'generarContracts3'])->name('pdf.panel_contracts3');
     //REPORTE DE DETALLE DE PÓLIZAS
     Route::get('pdf/panel_contracts4', [ReportsController::class, 'generarContracts4'])->name('pdf.panel_contracts4');
-    
-    
+    //REPORTE DE DETALLE DE PÓLIZAS
+    Route::get('pdf/panel_contracts5', [ReportsController::class, 'generarContracts5'])->name('pdf.panel_contracts5');
+
+
     Route::get('pdf/users', [ReportsController::class, 'pdfUsers'])->name('pdf.users');
     Route::get('pdf/users2', [ReportsController::class, 'pdfUsers2'])->name('pdf.users2');
 
@@ -492,7 +494,7 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
 
     //ITEMS SE PASA A EXCEL EN CONTRACTS
     Route::get('items/export-excel3/{order_id}', [ItemsAdjudicaController::class, 'exportExcel3']);
-    
+
 
     /********** MODULO CONTRACTS - CONTRATOS Y GARANTIAS **********/
     Route::post('contracts/create}', [ContractsController::class, 'calculo'])->name('contracts.calculo');
@@ -508,7 +510,7 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     Route::get('contracts/orders/{order_id}/edit', [ContractsController::class, 'edit'])->name('contracts.orders.edit');
     Route::put('contracts/orders/{order_id}/edit', [ContractsController::class, 'update'])->name('contracts.orders.update');
     Route::post('contracts/derive_order/{order_id}', [ContractsController::class, 'deriveOrder'])->name('contracts.deriveOrder');
-    
+
     // Route::get('contracts/getNotifications', [ContractsController::class, 'getNotifications'])->name('contracts.getNotifications');
     // Route::resource('contracts', ContractsController::class);
     // Route::resource('contracts.objections', ObjectionsController::class);

@@ -22,7 +22,7 @@
                                     <i class="feather icon-bell"></i>
                                     <span id="numero-notificaciones" class="badge bg-c-red"></span>
                                 </div>
-                                <ul id="alertas-notificaciones" class="show-notification notification-view dropdown-menu" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
+                                <ul style="color:#ff0000" id="alertas-notificaciones" class="show-notification notification-view dropdown-menu" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
                                     <li>
                                         <h6>Alertas</h6>
                                     </li>
