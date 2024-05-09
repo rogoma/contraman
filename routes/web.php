@@ -90,7 +90,7 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     /********** MODULO ADMINISTRADOR **********/
 
     //USUARIOS A EXCEL - //PARA GENERAR ARCHIVOS EXCEL PRIMERO SE COLOCA EL GET ANTES DEL RESOURCE
-    Route::get('/users/exportarexcel', [UsersController::class, 'exportarExcel']);
+    Route::get('/users/exportarexcel', [UsersController::class, 'exportarExcel']);    
     Route::get('/users/create2', [UsersController::class, 'create2'])->name('users.create2');
     Route::get('/users/change_pass', [UsersController::class, 'change_pass'])->name('users.change_pass');
 
@@ -361,6 +361,8 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     Route::get('pdf/panel_contracts4', [ReportsController::class, 'generarContracts4'])->name('pdf.panel_contracts4');
     //REPORTE DE DETALLE DE PÓLIZAS
     Route::get('pdf/panel_contracts5', [ReportsController::class, 'generarContracts5'])->name('pdf.panel_contracts5');
+
+    Route::get('/contracts/exportarexcel5', [ReportsController::class, 'exportarExcel5']);
 
 
     Route::get('pdf/users', [ReportsController::class, 'pdfUsers'])->name('pdf.users');

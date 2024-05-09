@@ -38,9 +38,9 @@ p.centrado {
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <br>
                             <a href="pdf/panel_contracts" class="btn btn-outline-primary" target="_blank"> TOTAL LLAMADOS</a>
-                            <a href="pdf/panel_contracts1" class="btn btn-outline-warning" target="_blank">LLAMADOS EN CURSO</a>
-                            <a href="pdf/panel_contracts3" class="btn btn-outline-danger" target="_blank">LLAMADOS CERRADOS</a>
-                            <a href="pdf/panel_contracts2" class="btn btn-outline-success" target="_blank">LLAMADOS RESCINDIDOS</a>
+                            <a href="pdf/panel_contracts1" class="btn btn-outline-warning" target="_blank">EN CURSO</a>
+                            <a href="pdf/panel_contracts3" class="btn btn-outline-danger" target="_blank">CERRADOS</a>
+                            <a href="pdf/panel_contracts2" class="btn btn-outline-success" target="_blank">RESCINDIDOS</a>
                             <a href="pdf/panel_contracts4" class="btn btn-outline-primary" target="_blank">DETALLE PÓLIZAS</a>
                     </div>
                 </div>

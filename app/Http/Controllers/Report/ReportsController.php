@@ -6,6 +6,8 @@ use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\App;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\OrdersExport6;
 use Mpdf;
 // use Mpdf;
 
@@ -176,32 +178,16 @@ class ReportsController extends Controller{
         $nombreMetodo = __METHOD__;
 
         //Donde contracts es una vista
-        $contracts = DB::table('vista_contracts')//vista que muestra los datos
-        ->select(['llamado','iddncp',
-        'number_year',
-        // 'year_adj',
-        // 'sign_date',
-        'contratista',
-        'estado',
-        // 'code',
-        // 'modalidad',
-        // 'org_financ',
-        // 'tipo_contrato',
-        // 'contract_begin_date',
-        // 'contract_end_date',
-        'total_amount',
-        'advance_validity_from',
-        'advance_validity_to',
-        'fidelity_validity_from',
-        'fidelity_validity_to',
-        'accidents_validity_from',
-        'accidents_validity_to',
-        'risks_validity_from',
-        'risks_validity_to',
-        'civil_resp_validity_from',
-        'civil_resp_validity_to',
-        'comentarios'])
-        // ->where('state_id', '=', 3)
+        $contracts = DB::table('vista_contracts_vctos')//vista que muestra los datos
+        ->select(['iddncp','number_year','contratista','tipo_contrato','total_amount','fecha_tope_advance',
+        'vcto_adv','dias_advance','fecha_tope_fidelity','vcto_fid','dias_fidelity','fecha_tope_accidents',
+        'vcto_acc','dias_accidents','fecha_tope_risks','vcto_ris','dias_risks','fecha_tope_civil_resp',
+        'vcto_civ','dias_civil_resp'])
+        ->where('dias_advance', '<=', 0) 
+        ->orWhere('dias_fidelity', '<=', 0)
+        ->orWhere('dias_accidents', '<=', 0)
+        ->orWhere('dias_risks', '<=', 0)
+        ->orWhere('dias_civil_resp', '<=', 0)
         ->get();
 
         $view = View::make('reports.contracts_vctos_polizas', compact('contracts', 'nombreMetodo'))->render();
@@ -209,6 +195,13 @@ class ReportsController extends Controller{
         $pdf->loadHTML($view);
         $pdf->setPaper('A4', 'landscape');//coloca en apaisado
         return $pdf->stream('DETALLES ALERTA VENCIMIENTOS DE PÓLIZAS'.'.pdf');
+    }
+
+    //Para exportar a Excel Alerta de pólizas
+    public function exportarExcel5()
+    {
+        return Excel::download(new OrdersExport6, 'Alertas_polizas.xlsx');
+
     }
 
     // function to display preview
