@@ -91,7 +91,15 @@ p.centrado {
 
                                                 {{-- Verificamos permisos de edición del usuario --}}
                                                 @if ((Auth::user()->hasPermission(['contracts.contracts.update']) && $contract->contract_state_id >= 1) || Auth::user()->hasPermission(['admin.contracts.update']))
-                                                    <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="{{ route('contracts.edit', $contract->id)}}">Editar Pedido</a>
+                                                    <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="{{ route('contracts.edit', $contract->id)}}">Editar Llamado</a>
+                                                @endif
+
+                                                @if ((Auth::user()->hasPermission(['contracts.contracts.delete']) && $contract->contract_state_id >= 1) || Auth::user()->hasPermission(['admin.contracts.delete']))
+                                                    {{-- <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="{{ route('contracts.destroy', $contract->id)}}">Eliminar Llamado</a> --}}
+                                                    {{-- <td><button title="Eliminar Respuesta a Consulta" onclick="deleteQueryResponse({{ $queries[$i]->id.','.$query_response->id }})" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Eliminar</a></td> --}}
+                                                        <a style="font-size: 14px; font-weight: bold; color:red;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" onclick="deleteContract({{ $contract->id }})">Eliminar Llamado</a>
+                                                        {{-- <button title="Eliminar Archivo" onclick="deleteFile({{ $contract->id }})" class="btn btn-danger"><i class="fa fa-trash"></i></a> --}}
+                                                    {{-- <button title="Eliminar Archivo" onclick="deleteFile({{ $contracts[$i]->id }})" class="btn btn-danger"><i class="fa fa-trash"></i></a> --}}
                                                 @endif
 
                                                 {{-- Verificamos permisos de eliminación del usuario --}}
@@ -215,7 +223,6 @@ p.centrado {
                                                             <td>
                                                                 <a href="{{ asset('storage/files/'.$user_files[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
                                                                 <a href="{{ route('contracts.files.download', $user_files[$i]->id) }}" title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a>
-                                                                <button title="Eliminar Archivo" onclick="deleteFile({{ $user_files[$i]->id }})" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                                                             </td>
                                                         </tr>
                                                         @endfor
@@ -352,6 +359,46 @@ $(document).ready(function(){
     itemAwardHistories = function(item){
         location.href = '/items/'+item+'/item_contract_histories';
     }
+
+    deleteContract = function(contract){
+      swal({
+            title: "Atención",
+            text: "Está seguro que desea eliminar el llamado?",
+
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Sí, eliminar",
+            cancelButtonText: "Cancelar",
+        },
+        function(isConfirm){
+          if(isConfirm){
+            $.ajax({
+              url : '/contracts/contract'+contract+'/delete/',
+              method : 'POST',
+              data: {_method: 'DELETE', _token: '{{ csrf_token() }}'},
+              success: function(data){
+                try{
+                    response = (typeof data == "object") ? data : JSON.parse(data);
+                    if(response.status == "success"){
+                        location.reload();
+                    }else{
+                        swal("Error!", response.message, "error");
+                    }
+                }catch(error){
+                    swal("Error!", "Ocurrió un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
+                    console.log(error);
+                }
+              },
+              error: function(error){
+                swal("Error!", "Ocurrió 1 error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
+                console.log(error);
+              }
+            });
+          }
+        }
+      );
+    };
 
     deleteFile = function(file){
       swal({

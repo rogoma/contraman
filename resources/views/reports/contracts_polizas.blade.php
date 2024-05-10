@@ -68,7 +68,7 @@
 
 {{-- SE PREGUNTA POR EL NOMBRE DEL METODO DE ACUERDO A ESO SE ESCOGE EL TITULO DEL REPORTE --}}
 @if ($nombreMetodo == "App\Http\Controllers\Report\ReportsController::generarContracts4")
-    <h2>LISTADO DE LLAMADOS CON DETALLES DE PÓLIZAS</h2>
+    <h2 style="color:#ff0000">LISTADO DE LLAMADOS CON DETALLES DE PÓLIZAS</h2>
 @endif
 
 

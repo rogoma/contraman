@@ -68,15 +68,15 @@
 
 {{-- SE PREGUNTA POR EL NOMBRE DEL METODO DE ACUERDO A ESO SE ESCOGE EL TITULO DEL REPORTE --}}
 @if ($nombreMetodo == "App\Http\Controllers\Report\ReportsController::generarContracts")
-    <h2>LISTADO TOTAL DE LLAMADOS</h2>
+    <h2 style="color:#ff0000">LISTADO TOTAL DE LLAMADOS</h2>
 @endif
 
 @if ($nombreMetodo == "App\Http\Controllers\Report\ReportsController::generarContracts1")
-    <h2>LISTADO DE LLAMADOS EN CURSO</h2>
+    <h2 style="color:#ff0000">LISTADO DE LLAMADOS EN CURSO</h2>
 @endif
 
 @if ($nombreMetodo == "App\Http\Controllers\Report\ReportsController::generarContracts3")
-    <h2>LISTADO DE LLAMADOS CERRADOS</h2>
+    <h2 style="color:#ff0000">LISTADO DE LLAMADOS CERRADOS</h2>
 @endif
 
 @if ($nombreMetodo == "App\Http\Controllers\Report\ReportsController::generarContracts2")

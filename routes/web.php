@@ -90,7 +90,7 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     /********** MODULO ADMINISTRADOR **********/
 
     //USUARIOS A EXCEL - //PARA GENERAR ARCHIVOS EXCEL PRIMERO SE COLOCA EL GET ANTES DEL RESOURCE
-    Route::get('/users/exportarexcel', [UsersController::class, 'exportarExcel']);    
+    Route::get('/users/exportarexcel', [UsersController::class, 'exportarExcel']);
     Route::get('/users/create2', [UsersController::class, 'create2'])->name('users.create2');
     Route::get('/users/change_pass', [UsersController::class, 'change_pass'])->name('users.change_pass');
 
@@ -504,6 +504,9 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     Route::post('contracts/files/{contract_id}/store', [ContractsFilesController::class, 'store'])->name('contracts.files.store');
     Route::get('contracts/files/{file_id}/download', [ContractsFilesController::class, 'download'])->name('contracts.files.download');
     Route::delete('contracts/files/{file_id}/delete', [ContractsFilesController::class, 'destroy'])->name('contracts.files.delete');
+
+    Route::delete('contracts/contract/{contract_id}/delete', [ContractsController::class, 'destroy'])->name('contracts.delete');
+
     Route::get('contracts/getNotifications', [ContractsController::class, 'getNotifications'])->name('contracts.getNotifications');
     Route::resource('contracts', ContractsController::class);
     Route::resource('contracts.objections', ObjectionsController::class);
