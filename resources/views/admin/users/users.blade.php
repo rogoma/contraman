@@ -10,8 +10,7 @@
         <th>ESTADO</th>
       </tr>
     </thead>
-    <tbody>
-        {{-- @foreach ($users as $user) --}}
+    <tbody>        
         @for ($i = 0; $i < count($users); $i++)         
           <tr>
             <td>{{($i+1)}}</td>
@@ -19,8 +18,7 @@
             <td>{{$users[$i]->nombre}} {{$users[$i]->apellido}}</td>
             <td>{{$users[$i]->dependencia}}</td>                        
             <td>{{$users[$i]->cargo}}</td>
-            <td>{{$users[$i]->rol}}</td>
-            {{-- <td>{{$users[$i]->state}}</td> --}}
+            <td>{{$users[$i]->rol}}</td>            
             @if ($users[$i]->state == 1)                                                        
               <td>Activo</td>
             @else

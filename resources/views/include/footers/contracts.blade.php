@@ -26,7 +26,7 @@ $(document).ready(function(){
                                         // LISTADO DE VENCIMEINTO EN PDF ESTIRA DE UNA VISTA
                                         // notificaciones += '<p><u style="font-size: 14px;color:red" target="_blank" href="pdf/panel_contracts4">**** REPORTE DE VENCIMIENTOS: ****</u></p>'
                                         notificaciones += '<p><a style="font-size: 14px;color:red" target="_blank" href="pdf/panel_contracts5">REPORTE DE VENCIMIENTOS PDF</a></p>'
-                                        notificaciones += '<p><a style="font-size: 14px;color:red" target="_blank" href="/contracts/exportarexcel5">REPORTE DE VENCIMIENTOS EXCEL</a></p>'
+                                        notificaciones += '<p><a style="font-size: 14px;color:red" target="_blank" href="/contracts/exportarexcel6">REPORTE DE VENCIMIENTOS EXCEL</a></p>'
 
                                         // notificaciones pólizas anticipos
                                         if(data.alerta_advance.length > 0){

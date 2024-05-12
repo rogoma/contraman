@@ -197,13 +197,7 @@ class ReportsController extends Controller{
         return $pdf->stream('DETALLES ALERTA VENCIMIENTOS DE PÓLIZAS'.'.pdf');
     }
 
-    //Para exportar a Excel Alerta de pólizas
-    public function exportarExcel5()
-    {
-        return Excel::download(new OrdersExport6, 'Alertas_polizas.xlsx');
-
-    }
-
+    
     // function to display preview
     public function generarModalities()
     {

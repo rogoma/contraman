@@ -362,7 +362,8 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     //REPORTE DE DETALLE DE PÓLIZAS
     Route::get('pdf/panel_contracts5', [ReportsController::class, 'generarContracts5'])->name('pdf.panel_contracts5');
 
-    Route::get('/contracts/exportarexcel5', [ReportsController::class, 'exportarExcel5']);
+    //REPORTE DE DETALLE DE PÓLIZAS EN EXCEL
+    Route::get('/contracts/exportarexcel6', [ContractsController::class, 'exportarExcel6']);
 
 
     Route::get('pdf/users', [ReportsController::class, 'pdfUsers'])->name('pdf.users');

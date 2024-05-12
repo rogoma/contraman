@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\DB;
 use App\Exports\OrdersExport;
 use App\Exports\OrdersExport2;
 use App\Exports\OrdersExport3;
+use App\Exports\OrdersExport6;
 
 use App\Rules\ValidarCalendarios;
 
@@ -92,6 +93,13 @@ class ContractsController extends Controller
     public function exportarExcel3()
     {
         return Excel::download(new OrdersExport3, 'usuarios.xlsx');
+
+    }
+
+    //Para exportar a Excel Alerta de pólizas
+    public function exportarExcel6()
+    {
+        return Excel::download(new OrdersExport6, 'Alertas_polizas.xlsx');
 
     }
 

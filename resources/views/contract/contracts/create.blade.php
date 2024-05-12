@@ -209,11 +209,13 @@
                                             <div class="form-group @error('total_amount') has-danger @enderror">
                                                 <label class="col-form-label">Monto Total</label>
                                                 <input type="text" id="total_amount" name="total_amount" value="{{ old('total_amount') }}" class="form-control total_amount autonumber" data-a-sep="." data-a-dec=",">
+                                                {{-- <input type="text" id="total_amount" name="total_amount" value="{{ old('total_amount', number_format($contract->total_amount, 0, ',', '.')) }}" class="form-control total_amount autonumber" data-a-sep="." data-a-dec=","> --}}
                                                 @error('total_amount')
                                                     <div class="col-form-label">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                         </div>
+                                        
                                         {{-- #13 --}}
                                         <div class="col-sm-12">
                                             <div class="form-group @error('comments') has-danger @enderror">
