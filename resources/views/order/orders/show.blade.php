@@ -623,6 +623,7 @@
                                                 </tbody>
                                             </table>
                                         </div>
+                                        
                                         <div class="tab-pane" id="tab5" role="tabpanel">
                                             <label class="col-form-label f-w-600">Documentos SIMESE relacionados al pedido:</label>
                                             <table class="table table-striped table-bordered">

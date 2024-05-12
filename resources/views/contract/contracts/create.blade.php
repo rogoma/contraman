@@ -78,7 +78,7 @@
                                         <div class="col-sm-2">
                                             <div class="form-group @error('iddncp') has-danger @enderror">
                                                 <label class="col-form-label">ID DNCP</label>
-                                                <input type="text" id="iddncp" name="iddncp" value="{{ old('iddncp') }}" class="form-control iddncp autonumber" data-a-sep=".">
+                                                <input type="text" id="iddncp" name="iddncp" value="{{ old('iddncp') }}" class="form-control iddncp autonumber" data-a-sep="." data-a-dec=",">
                                                 @error('iddncp')
                                                     <div class="col-form-label">{{ $message }}</div>
                                                 @enderror
@@ -208,8 +208,7 @@
                                         <div class="col-sm-3" style="padding-bottom: 10px;">
                                             <div class="form-group @error('total_amount') has-danger @enderror">
                                                 <label class="col-form-label">Monto Total</label>
-                                                <input type="text" id="total_amount" name="total_amount" value="{{ old('total_amount') }}" class="form-control total_amount autonumber" data-a-sep="." data-a-dec=",">
-                                                {{-- <input type="text" id="total_amount" name="total_amount" value="{{ old('total_amount', number_format($contract->total_amount, 0, ',', '.')) }}" class="form-control total_amount autonumber" data-a-sep="." data-a-dec=","> --}}
+                                                <input type="text" id="total_amount" name="total_amount" value="{{ old('total_amount') }}" class="form-control total_amount autonumber" data-a-sep="." data-a-dec=",">                                                
                                                 @error('total_amount')
                                                     <div class="col-form-label">{{ $message }}</div>
                                                 @enderror
@@ -487,6 +486,27 @@
 
 @push('scripts')
 <script type="text/javascript">
+
+// Script para formatear el valor con separador de miles mientras se ingresa IDDNCP
+document.getElementById('iddncp').addEventListener('input', function(event) {
+    // Obtenemos el valor ingresado y eliminamos los separadores de miles existentes
+    let monto = event.target.value.replace(/\./g, '');
+    // Formateamos el valor con separador de miles
+    monto = parseFloat(monto).toLocaleString('es-ES');
+    // Actualizamos el valor en el input text
+    event.target.value = monto;
+});
+
+// Script para formatear el valor con separador de miles mientras se ingresa TOTAL AMOUNT
+document.getElementById('total_amount').addEventListener('input', function(event) {
+    // Obtenemos el valor ingresado y eliminamos los separadores de miles existentes
+    let monto = event.target.value.replace(/\./g, '');
+    // Formateamos el valor con separador de miles
+    monto = parseFloat(monto).toLocaleString('es-ES');
+    // Actualizamos el valor en el input text
+    event.target.value = monto;
+});
+
 
 $(document).ready(function(){
 

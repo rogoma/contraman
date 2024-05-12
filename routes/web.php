@@ -506,7 +506,12 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     Route::get('contracts/files/{file_id}/download', [ContractsFilesController::class, 'download'])->name('contracts.files.download');
     Route::delete('contracts/files/{file_id}/delete', [ContractsFilesController::class, 'destroy'])->name('contracts.files.delete');
 
-    Route::delete('contracts/contract/{contract_id}/delete', [ContractsController::class, 'destroy'])->name('contracts.delete');
+    // Route::delete('contracts/{contract_id}/delete', [ContractsController::class, 'destroy'])->name('contracts.delete');
+    // Route::delete('/contracts/contract/{contract_id}/delete', 'ContractController@delete')->name('contracts.delete');
+    Route::delete('contracts/contract/{contract_id}/delete', [ContractsFilesController::class, 'destroy'])->name('contracts.delete');
+
+
+
 
     Route::get('contracts/getNotifications', [ContractsController::class, 'getNotifications'])->name('contracts.getNotifications');
     Route::resource('contracts', ContractsController::class);

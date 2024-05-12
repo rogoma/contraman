@@ -478,7 +478,7 @@ class ContractsController extends Controller
             return view('contract.contracts.update', compact('contract','dependencies', 'modalities','sub_programs', 'funding_sources', 'financial_organisms',
                 'expenditure_objects', 'providers', 'contr_states','contract_types'));
         }else{
-            return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
+            return back()->with('error', 'No tiene los suficientes permisos para editar el llamado.');
         }
     }
 
@@ -862,56 +862,25 @@ class ContractsController extends Controller
     }
 
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Request $request, $id)
     {
-        $contract = Order::find($id);
+        // Chequeamos que el usuario actual disponga de permisos de eliminacion        
+        // if(!$request->user()->hasPermission(['admin.contracts.delete']) || !$request->user()->hasPermission(['contracts.contracts.delete'])){
+        //     return response()->json(['status' => 'error', 'message' => 'No posee los suficientes permisos para realizar esta acción.', 'code' => 200], 200);
+        // }
 
-        // chequeamos que el usuario tenga permisos para eliminar el pedido
-        if( ($request->user()->hasPermission(['orders.orders.delete']) && $contract->dependency_id == $request->user()->dependency_id) ||
-            $request->user()->hasPermission(['admin.orders.delete']) ){
-            // Si el pedido se encuentra en ESTADO SOLICITUD se elimina directamente
-            if($contract->actual_state == 1){
-                foreach ($contract->items as $item) {
-                    foreach ($item->itemAwardHistories as $row) {
-                        // eliminamos precios referenciales relacionados a los items
-                        $row->delete();
-                    }
-                }
-                // eliminamos items relacionados
-                foreach ($contract->items as $row) { $row->delete(); }
-                // eliminamos solicitud de presupuestos relacionados
-                foreach ($contract->budgetRequestProviders as $row) { $row->delete(); }
-                // eliminamos plurianualidad relacionada
-                foreach ($contract->orderMultiYears as $row) { $row->delete(); }
-            }else{
-                // Chequeamos si existen items referenciando al pedido
-                if($contract->items->count() > 0){
-                    return response()->json(['status' => 'error', 'message' => 'No se ha podido eliminar el pedido debido a que se encuentra vinculado con items ', 'code' => 200], 200);
-                }
-                // Chequeamos si existen budgetRequestProviders referenciando al pedido
-                if($contract->budgetRequestProviders->count() > 0){
-                    return response()->json(['status' => 'error', 'message' => 'No se ha podido eliminar el pedido debido a que se encuentra vinculado con presupuestos de empresas cargados ', 'code' => 200], 200);
-                }
-                // Chequeamos si existen orderMultiYears referenciando al pedido
-                if($contract->orderMultiYears->count() > 0){
-                    return response()->json(['status' => 'error', 'message' => 'No se ha podido eliminar el pedido debido a que se encuentra vinculado con datos guardados de plurianualidad ', 'code' => 200], 200);
-                }
-            }
-
-            // Eliminamos en caso de no existir registros referenciando al pedido
-            $contract->delete();
-            $request->session()->flash('success', 'Se ha eliminado exitosamente el pedido.');
-            return response()->json(['status' => 'success', 'code' => 200], 200);
-        }else{
-            return response()->json(['status' => 'error', 'message' => 'No posee los suficientes permisos para realizar esta acción.', 'code' => 200], 200);
-        }
+        $contract = Contract::find($id);
+        
+        // Chequeamos si existen cargos vinculados al usuarios
+        // if($contract->users->count() > 0){
+        //     return response()->json(['status' => 'error', 'message' => 'No se ha podido eliminar el cargo debido a que se encuentra vinculado a usuario ', 'code' => 200], 200);
+        // }
+        
+        // Eliminamos en caso de no existir usuarios vinculados al cargo
+        $contract->delete();
+        return response()->json(['status' => 'success', 'message' => 'Se ha eliminado el Llamado' . $contract->description, 'code' => 200], 200);
     }
+    
 
     //Para mostrar un archivo EXCEL guardado en el Proyecto
     public function ArchivoPedido(){

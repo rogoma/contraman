@@ -184,6 +184,87 @@ class Contract extends Model
         }
     }
 
+    public function advance_from_validityDateFormat(){
+        if(empty($this->advance_validity_from)){
+            return "";
+        }else{
+            return date('d/m/Y', strtotime($this->advance_validity_from));
+        }
+    }
+
+    public function advance_to_validityDateFormat(){
+        if(empty($this->advance_validity_to)){
+            return "";
+        }else{
+            return date('d/m/Y', strtotime($this->advance_validity_to));
+        }
+    }
+
+    public function fidelity_from_validityDateFormat(){
+        if(empty($this->fidelity_validity_from)){
+            return "";
+        }else{
+            return date('d/m/Y', strtotime($this->fidelity_validity_from));
+        }
+    }
+
+    public function fidelity_to_validityDateFormat(){
+        if(empty($this->fidelity_validity_to)){
+            return "";
+        }else{
+            return date('d/m/Y', strtotime($this->fidelity_validity_to));
+        }
+    }
+
+    public function accidents_from_validityDateFormat(){
+        if(empty($this->accidents_validity_from)){
+            return "";
+        }else{
+            return date('d/m/Y', strtotime($this->accidents_validity_from));
+        }
+    }
+
+    public function accidents_to_validityDateFormat(){
+        if(empty($this->accidents_validity_to)){
+            return "";
+        }else{
+            return date('d/m/Y', strtotime($this->accidents_validity_to));
+        }
+    }
+
+    public function risks_from_validityDateFormat(){
+        if(empty($this->risks_validity_from)){
+            return "";
+        }else{
+            return date('d/m/Y', strtotime($this->risks_validity_from));
+        }
+    }
+
+    public function risks_to_validityDateFormat(){
+        if(empty($this->risks_validity_to)){
+            return "";
+        }else{
+            return date('d/m/Y', strtotime($this->risks_validity_to));
+        }
+    }
+
+    public function civil_resp_from_validityDateFormat(){
+        if(empty($this->civil_resp_validity_from)){
+            return "";
+        }else{
+            return date('d/m/Y', strtotime($this->civil_resp_validity_from));
+        }
+    }
+
+    public function civil_resp_to_validityDateFormat(){
+        if(empty($this->civil_resp_validity_to)){
+            return "";
+        }else{
+            return date('d/m/Y', strtotime($this->civil_resp_validity_to));
+        }
+    }
+
+
     // public function beginDateFormatmY(){
     //     if(empty($this->begin_date)){
     //         return "";

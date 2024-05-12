@@ -65,57 +65,35 @@ p.centrado {
                 <div class="page-body">
                     <div class="row">
                         <div class="col-sm-12">
-
                             <div class="card">
                                 <div class="card-header">
                                     <div class="row">
                                         <div class="col-sm-10 text-left">
-                                            <h5>Llamado: {{ $contract->description." - ".$contract->modality->description." N° ".$contract->number_year." - ".$contract->provider->description }}
-                                            {{-- @if ($contract->covid==0)
-                                                <h5>{{ is_null($contract->number)? $contract->description : $contract->modality->description." N° ".$contract->number."/".$contract->year."-".$contract->description }}
-                                            @else
-                                                <h5>{{ is_null($contract->number)? $contract->description : $contract->modality->description." N° ".$contract->number."/".$contract->year."-".$contract->description }}
-                                                <label style="font-size: 16px; font-weight: bold; color:blue;background-color:yellow;">Proceso COVID</label></h5>
-                                            @endif  --}}
-
-                                            {{-- PARA MOSTRAR SI ES COVID Y SI ES URGENCIA IMPOSTERGABLE --}}
-
-
+                                            <h5>Llamado: {{ $contract->description." - ".$contract->modality->description." N° ".$contract->number_year." - ".$contract->provider->description }}                                           
                                         </div>
                                             <div class="col-sm-2">
-
                                             @if (in_array($contract->contract_state_id, [1,3, 2]))
                                                 <button class="btn btn-primary dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Acciones</button>
                                             @endif
                                             <div class="dropdown-menu" aria-labelledby="acciones" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
-
                                                 {{-- Verificamos permisos de edición del usuario --}}
                                                 @if ((Auth::user()->hasPermission(['contracts.contracts.update']) && $contract->contract_state_id >= 1) || Auth::user()->hasPermission(['admin.contracts.update']))
                                                     <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="{{ route('contracts.edit', $contract->id)}}">Editar Llamado</a>
                                                 @endif
 
-                                                @if ((Auth::user()->hasPermission(['contracts.contracts.delete']) && $contract->contract_state_id >= 1) || Auth::user()->hasPermission(['admin.contracts.delete']))
-                                                    {{-- <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="{{ route('contracts.destroy', $contract->id)}}">Eliminar Llamado</a> --}}
-                                                    {{-- <td><button title="Eliminar Respuesta a Consulta" onclick="deleteQueryResponse({{ $queries[$i]->id.','.$query_response->id }})" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Eliminar</a></td> --}}
-                                                        <a style="font-size: 14px; font-weight: bold; color:red;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" onclick="deleteContract({{ $contract->id }})">Eliminar Llamado</a>
-                                                        {{-- <button title="Eliminar Archivo" onclick="deleteFile({{ $contract->id }})" class="btn btn-danger"><i class="fa fa-trash"></i></a> --}}
-                                                    {{-- <button title="Eliminar Archivo" onclick="deleteFile({{ $contracts[$i]->id }})" class="btn btn-danger"><i class="fa fa-trash"></i></a> --}}
+                                                @if ((Auth::user()->hasPermission(['admin.contracts.delete'])) || Auth::user()->hasPermission(['contracts.contracts.delete']))
+                                                        {{-- <a style="font-size: 14px; font-weight: bold; color:red;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" onclick="deleteContract({{ $contract->id }})">Eliminar Llamado</a> --}}
+                                                        {{-- <a style="font-size: 14px; font-weight: bold; color:red;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" onclick="deleteContract({{ $contract->id }})">Eliminar Llamado</a> --}}
+                                                        <a href="#" style="font-size: 14px; font-weight: bold; color:red;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" onclick="deleteContract('{{ $contract->id }}')">Eliminar Llamado</a>
+
+
+                                                        {{-- <button type="button" title="Borrar" class="btn btn-danger btn-icon" onclick="deleteItem({{ $contract->id }})"><i class="fa fa-trash"></i></button>                                                         --}}
                                                 @endif
-
-                                                {{-- Verificamos permisos de eliminación del usuario --}}
-                                                {{-- @if ((Auth::user()->hasPermission(['contracts.contracts.delete']) && $contract->dependency_id == Auth::user()->dependency_id && $contract->contract_state_id >= 1) || Auth::user()->hasPermission(['admin.contracts.delete']))
-                                                <a style="font-size: 14px; font-weight: bold; color:white;background-color:red;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="anulecontract({{ $contract->id }})">Anular Pedido</a>
-                                                @endif --}}
-
-                                                {{-- Verificamos que el pedido tenga estado 1 y Verificamos que el pedido tenga ítems, y que tenga SIMESE--}}
-                                                {{-- @if (Auth::user()->hasPermission(['contracts.contracts.derive']) && $contract->contract_state_id == 1 && $contract->items->count() > 0 && count($related_simese_user) <> 0)
-                                                    <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="derivecontract({{ $contract->id }});">Derivar Pedido a DGAF</a>
-                                                @endif --}}
 
                                                 {{-- Verificamos permisos de derivación del pedido y que el pedido tenga estado PROCESADO PEDIDO --}}
-                                                @if (Auth::user()->hasPermission(['derive_contracts.contracts.derive']) && $contract->contract_state_id == 4)
+                                                {{-- @if (Auth::user()->hasPermission(['derive_contracts.contracts.derive']) && $contract->contract_state_id == 4)
                                                 <a class="dropdown-item waves-effect f-w-600" href="{{ route('derive_contracts.create', $contract->id) }}">Procesar Pedido en DGAF</a>
-                                                @endif
+                                                @endif --}}
                                         </div>
                                     </div>
                                 </div>
@@ -123,21 +101,11 @@ p.centrado {
 
                             <div class="card">
                                 <div class="card-block">
-
                                     <ul class="nav nav-tabs md-tabs" role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link active" data-toggle="tab" href="#tab1" role="tab"><i class="fa fa-tasks"></i> Datos del Llamado</a>
                                             <div class="slide"></div>
                                         </li>
-                                        {{-- <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tab3" role="tab"><i class="fa fa-list"></i> Ítems adjudicados</a>
-                                            <div class="slide"></div>
-                                        </li>
-
-                                        <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tab2" role="tab"><i class="fa fa-briefcase"></i> Empresas adjudicadas</a>
-                                            <div class="slide"></div>
-                                        </li> --}}
 
                                         <li class="nav-item">
                                             <a class="nav-link" data-toggle="tab" href="#tab6" role="tab"><i class="fa fa-file-archive-o"></i> Archivos (Anteced.)</a>
@@ -186,6 +154,36 @@ p.centrado {
                                                         <td colspan="2" style="font-size: 16px;color:blue;font-weight: bold">{{ 'Gs. '.$contract-> totalAmountFormat() }}</td>
                                                     </tr>
                                                 </tbody>
+                                            </table>                                            
+                                            <br>
+                                            <h5 class="text-center">PÓLIZAS del LLAMADO</h5>
+                                            <table class="table table-striped table-bcontracted">
+                                                <tbody>
+                                                    <tr>
+                                                        <td><label class="col-form-label f-w-600" >ANTICIPO DESDE:</label></td>
+                                                        <td><label class="col-form-label f-w-600" >ANTICIPO HASTA:</label></td>
+                                                        <td><label class="col-form-label f-w-600">FIEL CUMPLIMIENTO DESDE:</label></td>
+                                                        <td><label class="col-form-label f-w-600">FIEL CUMPLIMIENTO HASTA:</label></td>
+                                                        <td><label class="col-form-label f-w-600">COBERT. ACCIDENTES DESDE:</label></td>
+                                                        <td><label class="col-form-label f-w-600">COBERT. ACCIDENTES HASTA:</label></td>
+                                                        <td><label class="col-form-label f-w-600">COBERT. RIESGOS DESDE:</label></td>
+                                                        <td><label class="col-form-label f-w-600">COBERT. RIESGOS HASTA:</label></td>
+                                                        <td><label class="col-form-label f-w-600">RESPONS. CIVIL DESDE:</label></td>
+                                                        <td><label class="col-form-label f-w-600">RESPONS. CIVIL HASTA:</label></td>
+                                                    </tr>
+                                                    <tr>                                                        
+                                                        <td>{{ $contract->advance_from_validityDateFormat() }}</td>                                                        
+                                                        <td>{{ $contract->advance_to_validityDateFormat() }}</td>
+                                                        <td>{{ $contract->fidelity_from_validityDateFormat() }}</td>
+                                                        <td>{{ $contract->fidelity_to_validityDateFormat() }}</td>
+                                                        <td>{{ $contract->accidents_from_validityDateFormat() }}</td>
+                                                        <td>{{ $contract->accidents_to_validityDateFormat() }}</td>
+                                                        <td>{{ $contract->risks_from_validityDateFormat()}}</td>
+                                                        <td>{{ $contract->risks_to_validityDateFormat() }}</td>
+                                                        <td>{{ $contract->civil_resp_from_validityDateFormat()}}</td>
+                                                        <td>{{ $contract->civil_resp_to_validityDateFormat() }}</td>
+                                                    </tr>                                                   
+                                                </tbody>
                                             </table>
                                         </div>
 
@@ -202,18 +200,6 @@ p.centrado {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @for ($i=0; $i < count($other_files); $i++)
-                                                    <tr>
-                                                        <td>{{ $i+1 }}</td>
-                                                        <td>{{ $other_files[$i]->description }}</td>
-                                                        <td>{{ $other_files[$i]->dependency->description }}</td>
-                                                        <td>{{ $other_files[$i]->updated_atDateFormat() }}</td>
-                                                        <td>
-                                                            <a href="{{ asset('storage/files/'.$other_files[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
-                                                            <a href="{{ route('contracts.files.download', $other_files[$i]->id) }}" title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a>
-                                                        </td>
-                                                    </tr>
-                                                    @endfor
                                                         @for ($i=0; $i < count($user_files); $i++)
                                                         <tr>
                                                             <td>{{ $i+1 }}</td>
@@ -223,20 +209,28 @@ p.centrado {
                                                             <td>
                                                                 <a href="{{ asset('storage/files/'.$user_files[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
                                                                 <a href="{{ route('contracts.files.download', $user_files[$i]->id) }}" title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a>
+                                                                <button title="Eliminar Archivo" onclick="deleteFile({{ $user_files[$i]->id }})" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                                                             </td>
                                                         </tr>
                                                         @endfor
+
+                                                        @for ($i=0; $i < count($other_files); $i++)
+                                                        <tr>
+                                                            <td>{{ $i+1 }}</td>
+                                                            <td>{{ $other_files[$i]->description }}</td>
+                                                            <td>{{ $other_files[$i]->dependency->description }}</td>
+                                                            <td>{{ $other_files[$i]->updated_atDateFormat() }}</td>
+                                                            <td>
+                                                                <a href="{{ asset('storage/files/'.$other_files[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                                                                <a href="{{ route('contracts.files.download', $other_files[$i]->id) }}" title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                    @endfor
                                                 </tbody>
                                             </table>
                                             <div class="text-right">
                                                 <a href="{{ route('contracts.files.create', $contract->id) }}" class="btn btn-primary">Cargar Archivos</a>
-                                            </div>
-                                                {{-- Mostrar esto una vez que Adjudicaciones haya notificado al Oferente --}}
-                                                {{-- @if ($contract->actual_state == 65)
-                                                    <div class="col-sm-10 text-center">
-                                                        <h5><p style="font-size: 18px; font-weight: bold; color:#FF0000;background-color:yellow">Adjuntar: Nota de Adjudicación</p></h5>
-                                                    </div>
-                                                @endif --}}
+                                            </div>                                               
                                         </div>
                                     </div>
                                 </div>
@@ -360,45 +354,84 @@ $(document).ready(function(){
         location.href = '/items/'+item+'/item_contract_histories';
     }
 
-    deleteContract = function(contract){
-      swal({
+    deleteContract = function(id){
+        swal({
             title: "Atención",
-            text: "Está seguro que desea eliminar el llamado?",
-
+            text: "¿Está seguro que desea eliminar el llamado?",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "Sí, eliminar",
             cancelButtonText: "Cancelar",
         },
-        function(isConfirm){
-          if(isConfirm){
-            $.ajax({
-              url : '/contracts/contract'+contract+'/delete/',
-              method : 'POST',
-              data: {_method: 'DELETE', _token: '{{ csrf_token() }}'},
-              success: function(data){
-                try{
-                    response = (typeof data == "object") ? data : JSON.parse(data);
-                    if(response.status == "success"){
-                        location.reload();
-                    }else{
-                        swal("Error!", response.message, "error");
+        function(isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    url: '{{ route("contracts.delete", ["contract_id" => ":id"]) }}'.replace(':id', id),
+                    method: 'POST',
+                    data: {_method: 'DELETE', _token: '{{ csrf_token() }}'},
+                    success: function(data) {
+                        try {
+                            response = (typeof data == "object") ? data : JSON.parse(data);
+                            if (response.status == "success") {
+                                location.reload();
+                            } else {
+                                swal("Error!", response.message, "error");
+                            }
+                        } catch (error) {
+                            swal("Error!", "Ocurrió un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
+                            console.log(error);
+                        }
+                    },
+                    error: function(error) {
+                        swal("Error!", "Ocurrió 1 un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
+                        console.log(error);
                     }
-                }catch(error){
-                    swal("Error!", "Ocurrió un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
-                    console.log(error);
-                }
-              },
-              error: function(error){
-                swal("Error!", "Ocurrió 1 error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
-                console.log(error);
-              }
-            });
-          }
-        }
-      );
-    };
+                });
+            }
+        });
+    }
+
+    // deleteContract = function(id){
+    //   swal({
+    //         title: "Atención",
+    //         text: "Está seguro que desea eliminar el llamado?",
+
+    //         type: "warning",
+    //         showCancelButton: true,
+    //         confirmButtonColor: "#DD6B55",
+    //         confirmButtonText: "Sí, eliminar",
+    //         cancelButtonText: "Cancelar",
+    //     },
+    //     function(isConfirm){
+    //       if(isConfirm){
+    //         $.ajax({
+    //         //   url : '/contracts/contract/'+id+'/delete/',
+    //           url : '{{ route("contracts.delete", ["contract_id" => ":id"]) }}'.replace(':id', id),
+    //           method : 'POST',
+    //           data: {_method: 'DELETE', _token: '{{ csrf_token() }}'},
+    //           success: function(data){
+    //             try{
+    //                 response = (typeof data == "object") ? data : JSON.parse(data);
+    //                 if(response.status == "success"){
+    //                     location.reload();
+    //                 }else{
+    //                     swal("Error!", response.message, "error");
+    //                 }
+    //             }catch(error){
+    //                 swal("Error!", "Ocurrió un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
+    //                 console.log(error);
+    //             }
+    //           },
+    //           error: function(error){
+    //             swal("Error!", "Ocurrió 1 error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
+    //             console.log(error);
+    //           }
+    //         });
+    //       }
+    //     }
+    //   );
+    // };
 
     deleteFile = function(file){
       swal({
