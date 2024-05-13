@@ -508,7 +508,7 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
 
     // Route::delete('contracts/{contract_id}/delete', [ContractsController::class, 'destroy'])->name('contracts.delete');
     // Route::delete('/contracts/contract/{contract_id}/delete', 'ContractController@delete')->name('contracts.delete');
-    Route::delete('contracts/contract/{contract_id}/delete', [ContractsFilesController::class, 'destroy'])->name('contracts.delete');
+    Route::delete('contracts/contract/{contract_id}/delete', [ContractsController::class, 'destroy'])->name('contracts.delete');
 
 
 
