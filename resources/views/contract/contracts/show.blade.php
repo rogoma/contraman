@@ -69,12 +69,13 @@ p.centrado {
                                 <div class="card-header">
                                     <div class="row">
                                         <div class="col-sm-10 text-left">
-                                            <h5>Llamado: {{ $contract->description." - ".$contract->modality->description." N° ".$contract->number_year." - ".$contract->provider->description }}                                           
+                                            <h5>Llamado: {{ $contract->description." - ".$contract->modality->description." N° ".$contract->number_year." - ".$contract->provider->description }}
                                         </div>
                                             <div class="col-sm-2">
-                                            @if (in_array($contract->contract_state_id, [1,3, 2]))
+                                            @if (in_array($contract->contract_state_id, [1,2]))
                                                 <button class="btn btn-primary dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Acciones</button>
                                             @endif
+
                                             <div class="dropdown-menu" aria-labelledby="acciones" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
                                                 {{-- Verificamos permisos de edición del usuario --}}
                                                 @if ((Auth::user()->hasPermission(['contracts.contracts.update']) && $contract->contract_state_id >= 1) || Auth::user()->hasPermission(['admin.contracts.update']))
@@ -147,14 +148,21 @@ p.centrado {
                                                     </tr>
                                                     <tr>
                                                         <td>{{ $contract->provider->description }}</td>
-                                                        <td>{{ $contract->contractState->description }}</td>
+
+                                                        {{-- SI ESTADO ESTA ANULADO, RESCINDIDO O CANCELADO --}}
+                                                        @if (in_array($contract->contract_state_id, [2,3,4]))
+                                                            <td style="color:#ff0000">{{ $contract->contractState->description }}</td>
+                                                        @else
+                                                            <td style="color:green">{{ $contract->contractState->description }}</td>
+                                                        @endif
+
                                                         <td>{{ $contract->modality->description }}</td>
                                                         <td>{{ $contract->financialOrganism->description }}</td>
                                                         <td>{{ $contract->contractType->description }}</td>
                                                         <td colspan="2" style="font-size: 16px;color:blue;font-weight: bold">{{ 'Gs. '.$contract-> totalAmountFormat() }}</td>
                                                     </tr>
                                                 </tbody>
-                                            </table>                                            
+                                            </table>
                                             <br>
                                             <h5 class="text-center">PÓLIZAS del LLAMADO</h5>
                                             <table class="table table-striped table-bcontracted">
@@ -171,8 +179,8 @@ p.centrado {
                                                         <td><label class="col-form-label f-w-600">RESPONS. CIVIL DESDE:</label></td>
                                                         <td><label class="col-form-label f-w-600">RESPONS. CIVIL HASTA:</label></td>
                                                     </tr>
-                                                    <tr>                                                        
-                                                        <td>{{ $contract->advance_from_validityDateFormat() }}</td>                                                        
+                                                    <tr>
+                                                        <td>{{ $contract->advance_from_validityDateFormat() }}</td>
                                                         <td>{{ $contract->advance_to_validityDateFormat() }}</td>
                                                         <td>{{ $contract->fidelity_from_validityDateFormat() }}</td>
                                                         <td>{{ $contract->fidelity_to_validityDateFormat() }}</td>
@@ -182,7 +190,7 @@ p.centrado {
                                                         <td>{{ $contract->risks_to_validityDateFormat() }}</td>
                                                         <td>{{ $contract->civil_resp_from_validityDateFormat()}}</td>
                                                         <td>{{ $contract->civil_resp_to_validityDateFormat() }}</td>
-                                                    </tr>                                                   
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -229,8 +237,10 @@ p.centrado {
                                                 </tbody>
                                             </table>
                                             <div class="text-right">
-                                                <a href="{{ route('contracts.files.create', $contract->id) }}" class="btn btn-primary">Cargar Archivos</a>
-                                            </div>                                               
+                                                @if (in_array($contract->contract_state_id, [1,2]))
+                                                    <a href="{{ route('contracts.files.create', $contract->id) }}" class="btn btn-primary">Cargar Archivos</a>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

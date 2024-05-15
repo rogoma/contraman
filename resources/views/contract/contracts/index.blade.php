@@ -34,7 +34,7 @@ p.centrado {
                 <div class="page-header-title">
                     <i class="fa fa-list bg-c-blue"></i>
                     <div class="d-inline">
-                        <h5>Llamados - Listado de Llamados de Licitaciones</h5>                        
+                        <h5>Llamados - Listado de Llamados de Licitaciones</h5>
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <br>
                             <a href="pdf/panel_contracts" class="btn btn-outline-primary" target="_blank"> TOTAL LLAMADOS</a>
@@ -44,7 +44,7 @@ p.centrado {
                             <a href="pdf/panel_contracts4" class="btn btn-outline-primary" target="_blank">DETALLE PÓLIZAS</a>
                             {{-- <a href="/contracts/exportarexcel6" class="btn btn-outline-primary" target="_blank">EXCEL PÓLIZAS</a> --}}
                             {{-- <a href="/users/exportarexcel" class="btn btn-success">Bajar_en_Excel</a> --}}
-                            
+
                     </div>
                 </div>
             </div>
@@ -73,15 +73,15 @@ p.centrado {
                                     <div class="float-left">
                                         <h5>Listado de Llamados de Licitaciones</h5>
                                     </div>
-                                                                        
-                                    {{-- @php                                                   
-                                        var_dump(Auth::user()->role_id); exit; 
+
+                                    {{-- @php
+                                        var_dump(Auth::user()->role_id); exit;
                                     @endphp --}}
 
                                     @if (Auth::user()->hasPermission(['derive_contracts.contracts.show','contracts.contracts.create','admin.orders.create']))
                                         <div class="float-right">
-                                            <a href="{{ route('contracts.create') }}" title="Agregar llamado" class="btn btn-primary">Agregar Llamado</a>                                            
-                                        </div>                                        
+                                            <a href="{{ route('contracts.create') }}" title="Agregar llamado" class="btn btn-primary">Agregar Llamado</a>
+                                        </div>
                                     @endif
                                 </div>
                                 <div class="card-block">
@@ -89,7 +89,7 @@ p.centrado {
                                         <table id="contracts" class="table table-striped table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th>#</th>                                                   
+                                                    <th>#</th>
                                                     <th>Llamado</th>
                                                     <th>IDDNCP</th>
                                                     <th>Link DNCP</th>
@@ -107,14 +107,19 @@ p.centrado {
                                                     <td>{{ ($i+1) }}</td>
                                                     <td class="columna2">{{ $contracts[$i]->description }}</td>
                                                     <td> {{ number_format($contracts[$i]->iddncp,'0', ',','.') }} </td>
-                                                    <td style="color:#ff0000">{{ $contracts[$i]->linkdncp }}</td>                                                    
+                                                    <td style="color:#ff0000">{{ $contracts[$i]->linkdncp }}</td>
                                                     <td> Gs.{{ number_format($contracts[$i]->total_amount,'0', ',','.') }} </td>
                                                     <td>{{ $contracts[$i]->provider->ruc }}-{{ $contracts[$i]->provider->description }}</td>
-                                                    <td>{{ $contracts[$i]->modality->code }}-{{ $contracts[$i]->modality->description }}</td>                                                    
-                                                    @if ($contracts[$i]->contractState->id >1)
+                                                    <td>{{ $contracts[$i]->modality->code }}-{{ $contracts[$i]->modality->description }}</td>
+
+                                                    @if (in_array($contracts[$i]->contractState->id, [2,3]))
                                                         <td style="color:#ff0000">{{ $contracts[$i]->contractState->description }}</td>
                                                     @else
-                                                        <td style="color:green">{{ $contracts[$i]->contractState->description }}</td>
+                                                        @if (in_array($contracts[$i]->contractState->id, [4]))
+                                                            <td style="color:red;font-weight: bold;background-color:yellow">{{ $contracts[$i]->contractState->description }}</td>
+                                                        @else
+                                                            <td style="color:green">{{ $contracts[$i]->contractState->description }}</td>
+                                                        @endif
                                                     @endif
 
                                                     <td class="columna11">{{ $contracts[$i]->contractType->description }}</td>
