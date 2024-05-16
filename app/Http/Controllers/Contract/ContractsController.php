@@ -434,6 +434,12 @@ class ContractsController extends Controller
         ->orderBy('created_at','asc')
         ->get();
 
+        // PARA MOSTRAR ARCHIVOS DE PÓLIZAS SE FILTRA POR TIPO DE ARCHIVO 
+        // $other_files = $contract->files()->where('dependency_id', '!=', $user_dependency)
+        // ->whereIn('file_type', [0, 3, 4, 5])//0-antecedentes 3-contratos 4-addendas  5-dictamenes 
+        // ->orderBy('created_at','asc')
+        // ->get();
+
         // ROL ADMINSTRADOR Obtenemos los archivos cargados por otras dependencias
         if($role_user == 1){
             $other_files = $contract->files()->where('dependency_id', '!=', $user_dependency)

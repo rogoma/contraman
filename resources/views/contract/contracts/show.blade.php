@@ -107,9 +107,20 @@ p.centrado {
                                             <a class="nav-link active" data-toggle="tab" href="#tab1" role="tab"><i class="fa fa-tasks"></i> Datos del Llamado</a>
                                             <div class="slide"></div>
                                         </li>
-
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tab6" role="tab"><i class="fa fa-file-archive-o"></i> Archivos (Anteced.)</a>
+                                            <a class="nav-link" data-toggle="tab" href="#tab3" role="tab"><i class="fa fa-list"></i> Pólizas</a>
+                                            <div class="slide"></div>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-toggle="tab" href="#tab4" role="tab"><i class="fa fa-file-pdf-o"></i> Reportes (VER FORMATO)</a>
+                                            <div class="slide"></div>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-toggle="tab" href="#tab5" role="tab"><i class="fa fa-folder-open-o"></i> Archivos Pólizas (Ver en el Controller paramostrar por separado)</a>
+                                            <div class="slide"></div>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-toggle="tab" href="#tab6" role="tab"><i class="fa fa-file-archive-o"></i> Archivos Contratos</a>
                                             <div class="slide"></div>
                                         </li>
                                     </ul>
@@ -182,8 +193,22 @@ p.centrado {
                                                     <tr>
                                                         <td>{{ $contract->advance_from_validityDateFormat() }}</td>
                                                         <td>{{ $contract->advance_to_validityDateFormat() }}</td>
-                                                        <td>{{ $contract->fidelity_from_validityDateFormat() }}</td>
+
+                                                        {{-- @if (($contract->fidelity_from_validityDateFormat()-60) <= today())
+                                                            <td style="color:#ff0000">{{ is_null($contracts[$i]->fecha_tope_advance)? "-" : date('d/m/Y', strtotime($contracts[$i]->fecha_tope_advance )) }}</td>
+                                                        @else
+                                                            <td>{{ $contract->fidelity_from_validityDateFormat() }}</td>
+                                                        @endif --}}
                                                         <td>{{ $contract->fidelity_to_validityDateFormat() }}</td>
+                                                        
+                                                        @if (($contract->fidelity_to_validityDateFormat()) <= today())
+                                                            <td style="color:#ff0000">{{ is_null($contract->fidelity_to_validityDateFormat())? "-" : date('d/m/Y', strtotime($contract->fidelity_to_validityDateFormat())) }}</td>
+                                                        @else
+                                                            <td>{{ $contract->fidelity_to_validityDateFormat() }}</td>                                                        
+                                                        @endif
+
+                                                        <td>{{ $contract->fidelity_to_validityDateFormat() }}</td>
+
                                                         <td>{{ $contract->accidents_from_validityDateFormat() }}</td>
                                                         <td>{{ $contract->accidents_to_validityDateFormat() }}</td>
                                                         <td>{{ $contract->risks_from_validityDateFormat()}}</td>
@@ -195,8 +220,166 @@ p.centrado {
                                             </table>
                                         </div>
 
-                                        <div class="tab-pane" id="tab6" role="tabpanel">
-                                            <label class="col-form-label f-w-600">Archivos cargados al llamado:</label>
+                                        <div class="tab-pane" id="tab3" role="tabpanel">
+                                            <div class="row">
+                                                <table id="items" class="table table-striped table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Lote</th>
+                                                            <th>Ítem</th>
+                                                            <th>Cód. de Catál.</th>
+                                                            <th>Descripción</th>
+                                                            <th>EETT</th>
+                                                            <th>Present.</th>
+                                                            <th>U.M.</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {{-- @for ($i = 0; $i < count($order->items); $i++)
+                                                        <tr>
+                                                            <td>{{ ($i+1) }}</td>
+                                                            <td>{{ $order->items[$i]->batch }}</td>
+                                                            <td>{{ $order->items[$i]->item_number }}</td>                                                                
+                                                            @if ($order->items[$i]->level5CatalogCode->code == '99999999-9999')                                                                    
+                                                                <td class="columna3" style="color:red;font-weight: bold">{{ $order->items[$i]->level5CatalogCode->code }}</td>
+                                                                <td style="color:red;font-weight: bold">{{ $order->items[$i]->level5CatalogCode->description }}</td>
+                                                            @else
+                                                                <td class="columna3"> {{ $order->items[$i]->level5CatalogCode->code }}</td>                                                                    
+                                                                <td class="columna4"> {{ $order->items[$i]->level5CatalogCode->description }}</td>
+                                                            @endif                                                                
+                                                            <td>{{ $order->items[$i]->technical_specifications }}</td>
+                                                            <td>{{ $order->items[$i]->orderPresentation->description }}</td>
+                                                            <td>{{ $order->items[$i]->orderMeasurementUnit->description }}</td>                                                            
+                                                                                                                        
+                                                            
+                                                            <td style="white-space:nowrap">
+                                                                <button type="button" title="Listado de Precios Referenciales" class="btn btn-primary btn-icon" onclick="itemAwardHistories({{ $order->items[$i]->id }})">
+                                                                    <i class="fa fa-list"></i>
+                                                                </button>
+                                                            @if (Auth::user()->hasPermission(['admin.items.update']) || $order->dependency_id == Auth::user()->dependency_id)
+                                                                <button type="button" title="Editar" class="btn btn-warning btn-icon" onclick="updateItem({{ $order->items[$i]->id }})">
+                                                                    <i class="fa fa-pencil"></i>
+                                                                </button>
+                                                            @endif
+                                                            @if (Auth::user()->hasPermission(['admin.items.delete']) || $order->dependency_id == Auth::user()->dependency_id)
+                                                                <button type="button" title="Borrar" class="btn btn-danger btn-icon" onclick="deleteItem({{ $order->items[$i]->id }})">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                            @endif
+                                                            </td>
+                                                        </tr>
+                                                    @endfor --}}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="text-right">
+                                                @if (Auth::user()->hasPermission(['contracts.contracts.create','admin.orders.create']))
+                                                    {{-- Si pedido está anulado no muestra agregar ítems --}}
+                                                    @if ($contract->contract_state_id == 0)
+                                                    @else
+                                                        <a href="{{ route('contracts.create', $contract->id) }}" class="btn btn-primary">Agregar póliza</a>
+                                                        <a href="{{ route('contracts.create', $contract->id)}}" title="Cargar Archivo EXCEL" class="btn btn-success btn-icon">
+                                                        {{-- <a href="{{ route('admin.contracts.uploadExcel', $contract->id)}}" title="Cargar Archivo EXCEL" class="btn btn-success btn-icon"> --}}
+                                                    @endif
+                                                        <i class="fa fa-upload text-white"></i>
+                                                    </a>
+                                                @endif
+                                            </div>
+                                        <span style="font-size: 16px; font-weight: bold; color:red;background-color:yellow;" >MONTO TOTAL DEL PEDIDO: {{ $contract->totalAmountFormat() }}</span>  
+                                    </div>
+
+                                    <div class="tab-pane" id="tab4" role="tabpanel">
+                                        <table id="forms" class="table table-striped table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Reporte</th>
+                                                    <th>Acción</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>Reporte 1</td>                                                    
+                                                    <td><a href="/pdf/panel_contracts" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Total Llamados</a></td>
+                                                    {{-- DEBE SER ASÍ EL REPORTE POR EL LLAMADO ESPECÍFICO --}}
+                                                    {{-- <td><a href="/pdf/reporte1/{{ $order->id }}" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Ver Formulario 1</a></td> --}}
+                                                </tr>
+                                                <tr>
+                                                    <td>2</td>
+                                                    <td>Reporte 2</td>                                                    
+                                                    <td><a href="/pdf/panel_contracts1" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Llamados en curso</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3</td>
+                                                    <td>Reporte 3</td>                                                    
+                                                    <td><a href="/pdf/panel_contracts3" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Llamados cerrados</a></td>
+                                                </tr>                                                
+                                                <tr>
+                                                    <td>4</td>
+                                                    <td>Reporte 4</td>                                                    
+                                                    <td><a href="/pdf/panel_contracts2" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Llamados rescindidos</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>5</td>
+                                                    <td>Reporte 5</td>                                                    
+                                                    <td><a href="/pdf/panel_contracts4" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Detalle de pólizas</a></td>
+                                                </tr>                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="tab-pane" id="tab5" role="tabpanel">
+                                        <label class="col-form-label f-w-600">Archivos de pólizas cargados al llamado:</label>
+                                        <table class="table table-striped table-bcontracted">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Descripción</th>
+                                                    <th>Dependencia</th>
+                                                    <th>Fecha/Hora</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    @for ($i=0; $i < count($user_files); $i++)
+                                                    <tr>
+                                                        <td>{{ $i+1 }}</td>
+                                                        <td>{{ $user_files[$i]->description }}</td>
+                                                        <td>{{ $user_files[$i]->dependency->description }}</td>
+                                                        <td>{{ $user_files[$i]->updated_atDateFormat() }}</td>
+                                                        <td>
+                                                            <a href="{{ asset('storage/files/'.$user_files[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                                                            <a href="{{ route('contracts.files.download', $user_files[$i]->id) }}" title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a>
+                                                            <button title="Eliminar Archivo" onclick="deleteFile({{ $user_files[$i]->id }})" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                    @endfor
+
+                                                    @for ($i=0; $i < count($other_files); $i++)
+                                                    <tr>
+                                                        <td>{{ $i+1 }}</td>
+                                                        <td>{{ $other_files[$i]->description }}</td>
+                                                        <td>{{ $other_files[$i]->dependency->description }}</td>
+                                                        <td>{{ $other_files[$i]->updated_atDateFormat() }}</td>
+                                                        <td>
+                                                            <a href="{{ asset('storage/files/'.$other_files[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                                                            <a href="{{ route('contracts.files.download', $other_files[$i]->id) }}" title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a>
+                                                    </td>
+                                                </tr>
+                                                @endfor
+                                            </tbody>
+                                        </table>
+                                        <div class="text-right">
+                                            @if (in_array($contract->contract_state_id, [1,2]))
+                                                <a href="{{ route('contracts.files.create', $contract->id) }}" class="btn btn-primary">Cargar Pólizas</a>
+                                            @endif
+                                        </div>
+                                    </div>                                
+
+                                    <div class="tab-pane" id="tab6" role="tabpanel">
+                                            <label class="col-form-label f-w-600">Archivos de contratos cargados al llamado:</label>
                                             <table class="table table-striped table-bcontracted">
                                                 <thead>
                                                     <tr>
@@ -238,7 +421,7 @@ p.centrado {
                                             </table>
                                             <div class="text-right">
                                                 @if (in_array($contract->contract_state_id, [1,2]))
-                                                    <a href="{{ route('contracts.files.create', $contract->id) }}" class="btn btn-primary">Cargar Archivos</a>
+                                                    <a href="{{ route('contracts.files.create', $contract->id) }}" class="btn btn-primary">Cargar Contratos</a>
                                                 @endif
                                             </div>
                                         </div>
