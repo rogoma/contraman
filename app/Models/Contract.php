@@ -38,6 +38,14 @@ class Contract extends Model
     }
 
     /**
+     * Para obtener el vinculo con la tabla dependencies
+     */
+    public function dependency(){
+        return $this->belongsTo('App\Models\Dependency');
+    }
+
+    
+    /**
      * Para obtener el vinculo con la tabla users
      */
     public function creatorUser(){

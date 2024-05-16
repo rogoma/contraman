@@ -208,13 +208,26 @@
                                         <div class="col-sm-3" style="padding-bottom: 10px;">
                                             <div class="form-group @error('total_amount') has-danger @enderror">
                                                 <label class="col-form-label">Monto Total</label>
-                                                <input type="text" id="total_amount" name="total_amount" value="{{ old('total_amount') }}" class="form-control total_amount autonumber" data-a-sep="." data-a-dec=",">                                                
+                                                <input type="text" id="total_amount" name="total_amount" value="{{ old('total_amount') }}" class="form-control total_amount autonumber" data-a-sep="." data-a-dec=",">
                                                 @error('total_amount')
                                                     <div class="col-form-label">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                         </div>
-                                        
+                                        <div class="col-sm-6">
+                                            <div class="form-group @error('dependency_id') has-danger @enderror">
+                                                <label class="col-form-label">Depedendencia Responsable </label>
+                                                <select id="dependency_id" name="dependency_id" class="form-control">
+                                                    <option value="">Seleccionar</option>
+                                                @foreach ($dependencies as $dependency)
+                                                    <option value="{{ $dependency->id }}" @if ($dependency->id == old('dependency_id')) selected @endif>{{ $dependency->description }}</option>
+                                                @endforeach
+                                                </select>
+                                                @error('dependency_id')
+                                                    <div class="col-form-label">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
                                         {{-- #13 --}}
                                         <div class="col-sm-12">
                                             <div class="form-group @error('comments') has-danger @enderror">
@@ -517,6 +530,8 @@ $(document).ready(function(){
     $('#contract_type_id').select2();
     $('#funding_source_id').select2();
     $('#financial_organism_id').select2();
+    $('#dependency_id').select2();
+
     // $('#expenditure_object').select2();
 
     $('#sign_date').datepicker({

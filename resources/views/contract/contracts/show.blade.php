@@ -154,8 +154,8 @@ p.centrado {
                                                         <td><label class="col-form-label f-w-600">Modalidad:</label></td>
                                                         <td><label class="col-form-label f-w-600">Organismo Finaciador:</label></td>
                                                         <td><label class="col-form-label f-w-600">Tipo de Contrato:</label></td>
-                                                        <td><label class="col-form-label f-w-600">Monto Total:</label></td>
-
+                                                        <td><label class="col-form-label f-w-500">Monto Total:</label></td>
+                                                        {{-- <td><label class="col-form-label f-w-600">Dependencia Responsable:</label></td> --}}
                                                     </tr>
                                                     <tr>
                                                         <td>{{ $contract->provider->description }}</td>
@@ -170,11 +170,21 @@ p.centrado {
                                                         <td>{{ $contract->modality->description }}</td>
                                                         <td>{{ $contract->financialOrganism->description }}</td>
                                                         <td>{{ $contract->contractType->description }}</td>
-                                                        <td colspan="2" style="font-size: 16px;color:blue;font-weight: bold">{{ 'Gs. '.$contract-> totalAmountFormat() }}</td>
+                                                        <td colspan="3" style="font-size: 16px;color:blue;font-weight: bold">{{ 'Gs. '.$contract-> totalAmountFormat() }}</td>
+                                                        {{-- <td>{{ $contract->dependency->description }}</td> --}}
+                                                        {{-- <td>{{ $contract->comments }}</td> --}}
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label class="col-form-label f-w-600">Dependencia Responsable:</label></td>
+                                                        <td><label class="col-form-label f-w-1600">Comentarios:</label></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{{ $contract->dependency->description }}</td>
+                                                        <td>{{ $contract->comments }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                            <br>
+                                            {{-- <br>
                                             <h5 class="text-center">PÓLIZAS del LLAMADO</h5>
                                             <table class="table table-striped table-bcontracted">
                                                 <tbody>
@@ -194,17 +204,12 @@ p.centrado {
                                                         <td>{{ $contract->advance_from_validityDateFormat() }}</td>
                                                         <td>{{ $contract->advance_to_validityDateFormat() }}</td>
 
-                                                        {{-- @if (($contract->fidelity_from_validityDateFormat()-60) <= today())
-                                                            <td style="color:#ff0000">{{ is_null($contracts[$i]->fecha_tope_advance)? "-" : date('d/m/Y', strtotime($contracts[$i]->fecha_tope_advance )) }}</td>
-                                                        @else
-                                                            <td>{{ $contract->fidelity_from_validityDateFormat() }}</td>
-                                                        @endif --}}
                                                         <td>{{ $contract->fidelity_to_validityDateFormat() }}</td>
-                                                        
+
                                                         @if (($contract->fidelity_to_validityDateFormat()) <= today())
                                                             <td style="color:#ff0000">{{ is_null($contract->fidelity_to_validityDateFormat())? "-" : date('d/m/Y', strtotime($contract->fidelity_to_validityDateFormat())) }}</td>
                                                         @else
-                                                            <td>{{ $contract->fidelity_to_validityDateFormat() }}</td>                                                        
+                                                            <td>{{ $contract->fidelity_to_validityDateFormat() }}</td>
                                                         @endif
 
                                                         <td>{{ $contract->fidelity_to_validityDateFormat() }}</td>
@@ -217,7 +222,7 @@ p.centrado {
                                                         <td>{{ $contract->civil_resp_to_validityDateFormat() }}</td>
                                                     </tr>
                                                 </tbody>
-                                            </table>
+                                            </table> --}}
                                         </div>
 
                                         <div class="tab-pane" id="tab3" role="tabpanel">
@@ -236,40 +241,7 @@ p.centrado {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                    {{-- @for ($i = 0; $i < count($order->items); $i++)
-                                                        <tr>
-                                                            <td>{{ ($i+1) }}</td>
-                                                            <td>{{ $order->items[$i]->batch }}</td>
-                                                            <td>{{ $order->items[$i]->item_number }}</td>                                                                
-                                                            @if ($order->items[$i]->level5CatalogCode->code == '99999999-9999')                                                                    
-                                                                <td class="columna3" style="color:red;font-weight: bold">{{ $order->items[$i]->level5CatalogCode->code }}</td>
-                                                                <td style="color:red;font-weight: bold">{{ $order->items[$i]->level5CatalogCode->description }}</td>
-                                                            @else
-                                                                <td class="columna3"> {{ $order->items[$i]->level5CatalogCode->code }}</td>                                                                    
-                                                                <td class="columna4"> {{ $order->items[$i]->level5CatalogCode->description }}</td>
-                                                            @endif                                                                
-                                                            <td>{{ $order->items[$i]->technical_specifications }}</td>
-                                                            <td>{{ $order->items[$i]->orderPresentation->description }}</td>
-                                                            <td>{{ $order->items[$i]->orderMeasurementUnit->description }}</td>                                                            
-                                                                                                                        
-                                                            
-                                                            <td style="white-space:nowrap">
-                                                                <button type="button" title="Listado de Precios Referenciales" class="btn btn-primary btn-icon" onclick="itemAwardHistories({{ $order->items[$i]->id }})">
-                                                                    <i class="fa fa-list"></i>
-                                                                </button>
-                                                            @if (Auth::user()->hasPermission(['admin.items.update']) || $order->dependency_id == Auth::user()->dependency_id)
-                                                                <button type="button" title="Editar" class="btn btn-warning btn-icon" onclick="updateItem({{ $order->items[$i]->id }})">
-                                                                    <i class="fa fa-pencil"></i>
-                                                                </button>
-                                                            @endif
-                                                            @if (Auth::user()->hasPermission(['admin.items.delete']) || $order->dependency_id == Auth::user()->dependency_id)
-                                                                <button type="button" title="Borrar" class="btn btn-danger btn-icon" onclick="deleteItem({{ $order->items[$i]->id }})">
-                                                                    <i class="fa fa-trash"></i>
-                                                                </button>
-                                                            @endif
-                                                            </td>
-                                                        </tr>
-                                                    @endfor --}}
+                                                    {
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -286,7 +258,7 @@ p.centrado {
                                                     </a>
                                                 @endif
                                             </div>
-                                        <span style="font-size: 16px; font-weight: bold; color:red;background-color:yellow;" >MONTO TOTAL DEL PEDIDO: {{ $contract->totalAmountFormat() }}</span>  
+                                        <span style="font-size: 16px; font-weight: bold; color:red;background-color:yellow;" >MONTO TOTAL DEL LLAMADO: {{ $contract->totalAmountFormat() }}</span>
                                     </div>
 
                                     <div class="tab-pane" id="tab4" role="tabpanel">
@@ -301,31 +273,31 @@ p.centrado {
                                             <tbody>
                                                 <tr>
                                                     <td>1</td>
-                                                    <td>Reporte 1</td>                                                    
+                                                    <td>Reporte 1</td>
                                                     <td><a href="/pdf/panel_contracts" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Total Llamados</a></td>
                                                     {{-- DEBE SER ASÍ EL REPORTE POR EL LLAMADO ESPECÍFICO --}}
                                                     {{-- <td><a href="/pdf/reporte1/{{ $order->id }}" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Ver Formulario 1</a></td> --}}
                                                 </tr>
                                                 <tr>
                                                     <td>2</td>
-                                                    <td>Reporte 2</td>                                                    
+                                                    <td>Reporte 2</td>
                                                     <td><a href="/pdf/panel_contracts1" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Llamados en curso</a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>3</td>
-                                                    <td>Reporte 3</td>                                                    
+                                                    <td>Reporte 3</td>
                                                     <td><a href="/pdf/panel_contracts3" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Llamados cerrados</a></td>
-                                                </tr>                                                
+                                                </tr>
                                                 <tr>
                                                     <td>4</td>
-                                                    <td>Reporte 4</td>                                                    
+                                                    <td>Reporte 4</td>
                                                     <td><a href="/pdf/panel_contracts2" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Llamados rescindidos</a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>5</td>
-                                                    <td>Reporte 5</td>                                                    
+                                                    <td>Reporte 5</td>
                                                     <td><a href="/pdf/panel_contracts4" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Detalle de pólizas</a></td>
-                                                </tr>                                                
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -376,7 +348,7 @@ p.centrado {
                                                 <a href="{{ route('contracts.files.create', $contract->id) }}" class="btn btn-primary">Cargar Pólizas</a>
                                             @endif
                                         </div>
-                                    </div>                                
+                                    </div>
 
                                     <div class="tab-pane" id="tab6" role="tabpanel">
                                             <label class="col-form-label f-w-600">Archivos de contratos cargados al llamado:</label>

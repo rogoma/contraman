@@ -22,33 +22,33 @@ class Dependency extends Model
     public function users(){
         return $this->hasMany('App\Models\User');
     }
-    
+
     /**
-     * Para obtener el vinculo con la misma tabla    
+     * Para obtener el vinculo con la misma tabla
      */
     public function superiorDependency(){
         return $this->belongsTo('App\Models\Dependency');
     }
 
     /**
-     * Para obtener el vinculo con la tabla dependency_types    
+     * Para obtener el vinculo con la tabla dependency_types
      */
     public function dependencyType(){
         return $this->belongsTo('App\Models\DependencyType');
-    } 
-    
+    }
+
     /**
-     * Para obtener el vinculo con la tabla uoc_types    
+     * Para obtener el vinculo con la tabla uoc_types
      */
     public function uocType(){
         return $this->belongsTo('App\Models\UocType');//cambiar nombre en Model y otros lugares
-    } 
+    }
 
     /**
-     * Para obtener el vinculo con la tabla orders
+     * Para obtener el vinculo con la tabla contracts
      */
-    public function orders(){
-        return $this->hasMany('App\Models\Order');
+    public function contracts(){
+        return $this->hasMany('App\Models\Contract');
     }
 
     /**
