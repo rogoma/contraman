@@ -44,7 +44,13 @@ class Contract extends Model
         return $this->belongsTo('App\Models\Dependency');
     }
 
-    
+    /**
+     * Para obtener el vinculo con la tabla items
+     */
+    public function item_contracts(){
+        return $this->hasMany('App\Models\Item_contracts');
+    }
+
     /**
      * Para obtener el vinculo con la tabla users
      */

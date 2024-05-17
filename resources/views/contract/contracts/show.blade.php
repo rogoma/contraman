@@ -83,9 +83,7 @@ p.centrado {
                                                 @endif
 
                                                 @if ((Auth::user()->hasPermission(['admin.contracts.delete'])) || Auth::user()->hasPermission(['contracts.contracts.delete']))
-                                                        {{-- <a style="font-size: 14px; font-weight: bold; color:red;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" onclick="deleteContract({{ $contract->id }})">Eliminar Llamado</a> --}}
-                                                        {{-- <a style="font-size: 14px; font-weight: bold; color:red;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" onclick="deleteContract({{ $contract->id }})">Eliminar Llamado</a> --}}
-                                                        <a href="#" style="font-size: 14px; font-weight: bold; color:red;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" onclick="deleteContract('{{ $contract->id }}')">Eliminar Llamado</a>
+                                                        {{-- <a href="#" style="font-size: 14px; font-weight: bold; color:red;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" onclick="deleteContract('{{ $contract->id }}')">Eliminar Llamado</a> --}}
 
 
                                                         {{-- <button type="button" title="Borrar" class="btn btn-danger btn-icon" onclick="deleteItem({{ $contract->id }})"><i class="fa fa-trash"></i></button>                                                         --}}
@@ -345,7 +343,7 @@ p.centrado {
                                         </table>
                                         <div class="text-right">
                                             @if (in_array($contract->contract_state_id, [1,2]))
-                                                <a href="{{ route('contracts.files.create', $contract->id) }}" class="btn btn-primary">Cargar Pólizas</a>
+                                                <a href="{{ route('contracts.files.create', $contract->id) }}" class="btn btn-danger">Cargar Pólizas</a>
                                             @endif
                                         </div>
                                     </div>

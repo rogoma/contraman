@@ -67,7 +67,6 @@
                                         <div class="col-sm-12 text-center">
                                             <button id="guardar" type="submit" class="btn btn-primary m-b-0">Guardar</button>
                                         </div>
-
                                     </form>
                                 </div>
                             </div>
