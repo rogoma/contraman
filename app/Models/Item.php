@@ -12,9 +12,9 @@ class Item extends Model
     /**
      * Para obtener el vinculo con la tabla orders
      */
-    public function order(){
-        return $this->belongsTo('App\Models\Order');
-    }
+   public function contract(){
+       return $this->belongsTo('App\Models\Contract');
+   }
 
     /**
      * Para obtener el vinculo con la tabla level5_catalog_codes

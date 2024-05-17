@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Order;
+use App\Models\Contract;
+use App\Models\Policy;
 use App\Models\Item;
 use App\Models\Level5CatalogCode;
 use App\Models\OrderPresentation;
@@ -119,18 +121,20 @@ class ItemsController extends Controller
      */
     public function create(Request $request, $order_id)
     {
-        $order = Order::findOrFail($order_id);
+        $contract = Contract::findOrFail($order_id);
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
         if(!$request->user()->hasPermission(['admin.items.create']) &&
-        $order->dependency_id != $request->user()->dependency_id){
+        $contract->dependency_id != $request->user()->dependency_id){
             return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
         }
 
-        $level5_catalog_codes = Level5CatalogCode::all();
-        $order_presentations = OrderPresentation::all();
-        $order_measurement_units = OrderMeasurementUnit::all();
-        return view('order.items.create', compact('order','level5_catalog_codes', 'order_presentations', 'order_measurement_units'));
+        $policies = Policy::all();
+        // $level5_catalog_codes = Level5CatalogCode::all();
+        // $order_presentations = OrderPresentation::all();
+        // $order_measurement_units = OrderMeasurementUnit::all();
+
+        return view('order.items.create', compact('contract','level5_catalog_codes', 'order_presentations', 'order_measurement_units'));
     }
 
     /**
@@ -198,7 +202,7 @@ class ItemsController extends Controller
         return redirect()->route('orders.show', $order_id)->with('success', 'Ítem agregado correctamente'); // Caso usuario posee rol pedidos
     }
 
-    
+
     /**
      * Formulario de agregacion de ítems Archivo Excel de CONTRATO ABIERTO.
      *

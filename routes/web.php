@@ -32,7 +32,7 @@ use App\Http\Controllers\Admin\Level1CatalogCodeController;
 use App\Http\Controllers\Admin\Level5CatalogCodeController;
 
 use App\Http\Controllers\Order\OrdersController;
-use App\Http\Controllers\Order\ItemsController;
+// use App\Http\Controllers\Order\ItemsController;
 use App\Http\Controllers\Order\ItemsAdjudicaController;
 use App\Http\Controllers\Order\ItemAwardHistoriesController;
 use App\Http\Controllers\Order\BudgetRequestProvidersController;
@@ -50,6 +50,7 @@ use App\Http\Controllers\Award\AwardsController;
 
 use App\Http\Controllers\Contract\ContractsController;
 use App\Http\Controllers\Contract\ContractsFilesController;
+use App\Http\Controllers\Contract\ItemsController;
 
 use App\Http\Controllers\Exception\ExceptionsController;
 
@@ -117,6 +118,8 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     Route::resource('dependency_types', DependencyTypesController::class);
     Route::resource('uoc_types', UocTypesController::class);
 
+    Route::resource('contracts.items', ItemsContractsController::class); //Recurso anidado, es igual a /orders/{order_id}/items/{item_id}
+
     //MOSTRAR EN EXCEL DEPENDENCIAS
     Route::get('/dependencies/exportarexcel', [DependenciesController::class, 'exportarExcel']);
     Route::resource('dependencies', DependenciesController::class);
@@ -149,9 +152,16 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
 
 
     //RECURSOS ANIDADOS
-    Route::resource('orders.items', ItemsController::class); //Recurso anidado, es igual a /orders/{order_id}/items/{item_id}
-    Route::resource('orders.items_adjudica', ItemsAdjudicaController::class); //Recurso anidado, es igual a /orders/{order_id}/items/{item_id}
-    Route::resource('orders.items_budget', BudgetRequestProvidersController::class); //Recurso anidado, es igual a /orders/{order_id}/items/{item_id}
+    // Route::resource('orders.items', ItemsController::class); //Recurso anidado, es igual a /orders/{order_id}/items/{item_id}
+    // Route::resource('orders.items_adjudica', ItemsAdjudicaController::class); //Recurso anidado, es igual a /orders/{order_id}/items/{item_id}
+    // Route::resource('orders.items_budget', BudgetRequestProvidersController::class); //Recurso anidado, es igual a /orders/{order_id}/items/{item_id}
+
+    //RECURSOS DE CONTRACTS PARA MANEJAR ITEMS
+    Route::resource('contracts.items', ItemsController::class); //Recurso anidado, es igual a /orders/{order_id}/items/{item_id}
+
+
+
+
 
     //DESDE ACA PARA AGREGAR EMPRESAS ADJUDICADAS
     //Route::resource('orders.budget_request_providers', BudgetRequestProvidersController::class); //Recurso anidado, es igual a /orders/{order_id}/items/{item_id}

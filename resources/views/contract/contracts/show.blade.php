@@ -248,8 +248,9 @@ p.centrado {
                                                     {{-- Si pedido está anulado no muestra agregar ítems --}}
                                                     @if ($contract->contract_state_id == 0)
                                                     @else
-                                                        <a href="{{ route('contracts.create', $contract->id) }}" class="btn btn-primary">Agregar póliza</a>
-                                                        <a href="{{ route('contracts.create', $contract->id)}}" title="Cargar Archivo EXCEL" class="btn btn-success btn-icon">
+                                                        <a href="{{ route('contracts.items.create', $contract->id) }}" class="btn btn-primary">Agregar póliza</a>
+                                                        {{-- <a href="{{ route('orders.items.create', $order->id) }}" class="btn btn-primary">Agregar ítem</a> --}}
+                                                        {{-- <a href="{{ route('contracts.create', $contract->id)}}" title="Cargar Archivo EXCEL" class="btn btn-success btn-icon"> --}}
                                                         {{-- <a href="{{ route('admin.contracts.uploadExcel', $contract->id)}}" title="Cargar Archivo EXCEL" class="btn btn-success btn-icon"> --}}
                                                     @endif
                                                         <i class="fa fa-upload text-white"></i>
