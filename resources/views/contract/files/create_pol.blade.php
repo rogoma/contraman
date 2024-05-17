@@ -36,7 +36,7 @@
                         <div class="col-sm-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5>Cargar Archivo</h5>
+                                    <h5>Cargar Archivo de Pólizas</h5>
                                 </div>
                                 <div class="col-sm-8 text-left">
                                     <h5>{{ $contract->description." - ".$contract->modality->description." N° ".$contract->number_year." - ".$contract->provider->description }}

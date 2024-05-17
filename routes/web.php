@@ -501,8 +501,16 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
 
     /********** MODULO CONTRACTS - CONTRATOS Y GARANTIAS **********/
     Route::post('contracts/create}', [ContractsController::class, 'calculo'])->name('contracts.calculo');
+    //carga archivos de pólizas
     Route::get('contracts/files/{contract_id}/create', [ContractsFilesController::class, 'create'])->name('contracts.files.create');
+    //carga archivos de contratos
+    Route::get('contracts/files/{contract_id}/create_con', [ContractsFilesController::class, 'create_con'])->name('contracts.files.create_con');
+
+    //almacena archivos de pólizas
     Route::post('contracts/files/{contract_id}/store', [ContractsFilesController::class, 'store'])->name('contracts.files.store');
+    //almacena archivos de contratos
+    Route::post('contracts/files/{contract_id}/store_con', [ContractsFilesController::class, 'store_con'])->name('contracts.files.store_con');
+
     Route::get('contracts/files/{file_id}/download', [ContractsFilesController::class, 'download'])->name('contracts.files.download');
     Route::delete('contracts/files/{file_id}/delete', [ContractsFilesController::class, 'destroy'])->name('contracts.files.delete');
 

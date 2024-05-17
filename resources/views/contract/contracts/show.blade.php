@@ -116,11 +116,11 @@ p.centrado {
                                             <div class="slide"></div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tab5" role="tab"><i class="fa fa-folder-open-o"></i> Archivos Pólizas (Ver en el Controller paramostrar por separado)</a>
+                                            <a class="nav-link" data-toggle="tab" href="#tab5" role="tab"><i class="fa fa-folder-open-o"></i> Archivos de Pólizas</a>
                                             <div class="slide"></div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tab6" role="tab"><i class="fa fa-file-archive-o"></i> Archivos Contratos</a>
+                                            <a class="nav-link" data-toggle="tab" href="#tab6" role="tab"><i class="fa fa-file-archive-o"></i> Archivos de Contratos</a>
                                             <div class="slide"></div>
                                         </li>
                                     </ul>
@@ -241,7 +241,7 @@ p.centrado {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                    {
+
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -315,29 +315,29 @@ p.centrado {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                    @for ($i=0; $i < count($user_files); $i++)
+                                                    @for ($i=0; $i < count($user_files_pol); $i++)
                                                     <tr>
                                                         <td>{{ $i+1 }}</td>
-                                                        <td>{{ $user_files[$i]->description }}</td>
-                                                        <td>{{ $user_files[$i]->dependency->description }}</td>
-                                                        <td>{{ $user_files[$i]->updated_atDateFormat() }}</td>
+                                                        <td>{{ $user_files_pol[$i]->description }}</td>
+                                                        <td>{{ $user_files_pol[$i]->dependency->description }}</td>
+                                                        <td>{{ $user_files_pol[$i]->updated_atDateFormat() }}</td>
                                                         <td>
-                                                            <a href="{{ asset('storage/files/'.$user_files[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
-                                                            <a href="{{ route('contracts.files.download', $user_files[$i]->id) }}" title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a>
-                                                            <button title="Eliminar Archivo" onclick="deleteFile({{ $user_files[$i]->id }})" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                                                            <a href="{{ asset('storage/files/'.$user_files_pol[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                                                            <a href="{{ route('contracts.files.download', $user_files_pol[$i]->id) }}" title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a>
+                                                            <button title="Eliminar Archivo" onclick="deleteFile({{ $user_files_pol[$i]->id }})" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                                                         </td>
                                                     </tr>
                                                     @endfor
 
-                                                    @for ($i=0; $i < count($other_files); $i++)
+                                                    @for ($i=0; $i < count($other_files_pol); $i++)
                                                     <tr>
                                                         <td>{{ $i+1 }}</td>
-                                                        <td>{{ $other_files[$i]->description }}</td>
-                                                        <td>{{ $other_files[$i]->dependency->description }}</td>
-                                                        <td>{{ $other_files[$i]->updated_atDateFormat() }}</td>
+                                                        <td>{{ $other_files_pol[$i]->description }}</td>
+                                                        <td>{{ $other_files_pol[$i]->dependency->description }}</td>
+                                                        <td>{{ $other_files_pol[$i]->updated_atDateFormat() }}</td>
                                                         <td>
-                                                            <a href="{{ asset('storage/files/'.$other_files[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
-                                                            <a href="{{ route('contracts.files.download', $other_files[$i]->id) }}" title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a>
+                                                            <a href="{{ asset('storage/files/'.$other_files_pol[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                                                            <a href="{{ route('contracts.files.download', $other_files_pol[$i]->id) }}" title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a>
                                                     </td>
                                                 </tr>
                                                 @endfor
@@ -363,29 +363,29 @@ p.centrado {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                        @for ($i=0; $i < count($user_files); $i++)
+                                                        @for ($i=0; $i < count($user_files_con); $i++)
                                                         <tr>
                                                             <td>{{ $i+1 }}</td>
-                                                            <td>{{ $user_files[$i]->description }}</td>
-                                                            <td>{{ $user_files[$i]->dependency->description }}</td>
-                                                            <td>{{ $user_files[$i]->updated_atDateFormat() }}</td>
+                                                            <td>{{ $user_files_con[$i]->description }}</td>
+                                                            <td>{{ $user_files_con[$i]->dependency->description }}</td>
+                                                            <td>{{ $user_files_con[$i]->updated_atDateFormat() }}</td>
                                                             <td>
-                                                                <a href="{{ asset('storage/files/'.$user_files[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
-                                                                <a href="{{ route('contracts.files.download', $user_files[$i]->id) }}" title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a>
-                                                                <button title="Eliminar Archivo" onclick="deleteFile({{ $user_files[$i]->id }})" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                                                                <a href="{{ asset('storage/files/'.$user_files_con[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                                                                <a href="{{ route('contracts.files.download', $user_files_con[$i]->id) }}" title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a>
+                                                                <button title="Eliminar Archivo" onclick="deleteFile({{ $user_files_con[$i]->id }})" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                                                             </td>
                                                         </tr>
                                                         @endfor
 
-                                                        @for ($i=0; $i < count($other_files); $i++)
+                                                        @for ($i=0; $i < count($other_files_con); $i++)
                                                         <tr>
                                                             <td>{{ $i+1 }}</td>
-                                                            <td>{{ $other_files[$i]->description }}</td>
-                                                            <td>{{ $other_files[$i]->dependency->description }}</td>
-                                                            <td>{{ $other_files[$i]->updated_atDateFormat() }}</td>
+                                                            <td>{{ $other_files_con[$i]->description }}</td>
+                                                            <td>{{ $other_files_con[$i]->dependency->description }}</td>
+                                                            <td>{{ $other_files_con[$i]->updated_atDateFormat() }}</td>
                                                             <td>
-                                                                <a href="{{ asset('storage/files/'.$other_files[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
-                                                                <a href="{{ route('contracts.files.download', $other_files[$i]->id) }}" title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a>
+                                                                <a href="{{ asset('storage/files/'.$other_files_con[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                                                                <a href="{{ route('contracts.files.download', $other_files_con[$i]->id) }}" title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a>
                                                         </td>
                                                     </tr>
                                                     @endfor
@@ -393,7 +393,7 @@ p.centrado {
                                             </table>
                                             <div class="text-right">
                                                 @if (in_array($contract->contract_state_id, [1,2]))
-                                                    <a href="{{ route('contracts.files.create', $contract->id) }}" class="btn btn-primary">Cargar Contratos</a>
+                                                    <a href="{{ route('contracts.files.create_con', $contract->id) }}" class="btn btn-primary">Cargar Contratos</a>
                                                 @endif
                                             </div>
                                         </div>

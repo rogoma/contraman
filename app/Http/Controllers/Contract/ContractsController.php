@@ -428,39 +428,38 @@ class ContractsController extends Controller
         $contract = Contract::findOrFail($contract_id);
         $user_dependency = $request->user()->dependency_id;
         $role_user = $request->user()->role_id;
-        // Obtenemos los simese cargados por otras dependencias
-        // $related_simese = $contract->simese()->where('dependency_id', '!=', $user_dependency)->get();
-        // Obtenemos los simese cargados por la dependencia del usuario
-        // $related_simese_user = $contract->simese()->where('dependency_id', $user_dependency)->get();
 
-        // Obtenemos los archivos cargados por otras dependencias y que no sean de reparo
-        $other_files = $contract->files()->where('dependency_id', '!=', $user_dependency)
-        // ->whereIn('file_type', [0,3, 4, 5, 7])//0-antecedentes 3-contratos 4-addendas  5-dictamenes
-        ->orderBy('created_at','asc')
-        ->get();
-
-        // PARA MOSTRAR ARCHIVOS DE PÓLIZAS SE FILTRA POR TIPO DE ARCHIVO
-        // $other_files = $contract->files()->where('dependency_id', '!=', $user_dependency)
-        // ->whereIn('file_type', [0, 3, 4, 5])//0-antecedentes 3-contratos 4-addendas  5-dictamenes
-        // ->orderBy('created_at','asc')
-        // ->get();
-
-        // ROL ADMINSTRADOR Obtenemos los archivos cargados por otras dependencias
-        if($role_user == 1){
-            $other_files = $contract->files()->where('dependency_id', '!=', $user_dependency)
-            // ->whereIn('file_type', [0,3, 4, 5, 7])//0-antecedentes 3-contratos 4-addendas  5-dictamenes
+        // Obtenemos los archivos cargados por usuarios con tipo de archivos 1 pólizas
+        $user_files_pol = $contract->files()->where('dependency_id', $user_dependency)
+            ->whereIn('file_type', [1])//1-polizas 3-contratos 4-addendas  5-dictamenes
             ->orderBy('created_at','asc')
             ->get();
-        }
 
-        // Obtenemos los archivos cargados por usuario con tipo de archivos que no sean 1 (reparos dncp)z
-        // $user_files = $contract->files()->where('dependency_id', $user_dependency)->where('file_type', '=', 0)->get();
-        $user_files = $contract->files()->where('dependency_id', $user_dependency)->get();
+        // ROL ADMINISTRADOR Obtenemos los archivos cargados por otras dependencias
+        // if($role_user == 1){
+            $other_files_pol = $contract->files()->where('dependency_id', '!=', $user_dependency)
+            ->whereIn('file_type', [1])//1-polizas 3-contratos 4-addendas  5-dictamenes
+            ->orderBy('created_at','asc')
+            ->get();
+        // }
+
+        // Obtenemos los archivos cargados por usuarios con tipo de archivos 3 contratos
+        $user_files_con = $contract->files()->where('dependency_id', $user_dependency)
+            ->whereIn('file_type', [3])//1-polizas 3-contratos 4-addendas  5-dictamenes
+            ->orderBy('created_at','asc')
+            ->get();
+
+        // if($role_user == 1){
+            $other_files_con = $contract->files()->where('dependency_id', '!=', $user_dependency)
+            ->whereIn('file_type', [3])//1-polizas 3-contratos 4-addendas  5-dictamenes
+            ->orderBy('created_at','asc')
+            ->get();
+        // }
 
         // chequeamos que el usuario tenga permisos para visualizar el pedido
         if($request->user()->hasPermission(['admin.contracts.show', 'process_contracts.contracts.show',
         'contracts.contracts.index','derive_contracts.contracts.index']) || $contract->dependency_id == $request->user()->dependency_id){
-            return view('contract.contracts.show', compact('contract','other_files','user_files'));
+            return view('contract.contracts.show', compact('contract','user_files_pol','user_files_con','other_files_pol','other_files_con'));
         }else{
             return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
         }

@@ -140,7 +140,19 @@ class ContractsFilesController extends Controller
     {
         $contract = Contract::findOrFail($contract_id);
         $post_max_size = $this->postMaxSize;
-        return view('contract.files.create', compact('contract', 'post_max_size'));
+        return view('contract.files.create_pol', compact('contract', 'post_max_size'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create_con(Request $request, $contract_id)
+    {
+        $contract = Contract::findOrFail($contract_id);
+        $post_max_size = $this->postMaxSize;
+        return view('contract.files.create_con', compact('contract', 'post_max_size'));
     }
 
     /**
@@ -220,29 +232,7 @@ class ContractsFilesController extends Controller
         $file = new File;
         $file->description = $request->input('description');
         $file->file = $fileName;
-        $file->file_type = 3;//contratos
-
-        // if ($request->user()->dependency->id <> 57){
-        //     $file->file_type = 0;
-        // }
-        // // *** Usuario Asesoría Jurídica  tipo 5 = dictamenes***
-        // if ($request->user()->dependency->id == 57){
-        //     $file->file_type = 5;
-        // }
-        // *** Usuario Contratos tipo 3 = contrataciones***
-        // if ($request->user()->dependency->id == 60){
-        //     $file->file_type = 3;
-        // }
-
-        // *** Usuario Licitaciones, Compras Menores y Excepciones tipo 7 = Cuadros comparativos***
-        // if (in_array($request->user()->dependency->id, [61,62,63])){
-        //     // Ver bandera para preguntar si es cuadro comparativo o archivo normal
-        //     $file->file_type = 7;
-        // }
-        // if($request->user()->hasPermission(['admin.contracts.update']) || $request->user()->dependency_id == 55){
-        // @if (in_array($contract->contractState->id, [105]))
-
-
+        $file->file_type = 1;//pólizas
         $file->contract_id = $contract_id;
         $file->contract_state_id = $contract->contract_state_id;
         $file->creator_user_id = $request->user()->id;  // usuario logueado
@@ -250,37 +240,57 @@ class ContractsFilesController extends Controller
         $file->save();
 
         return redirect()->route('contracts.show', $contract_id);
-
-        // Dependiendo del modulo direccionamos a la vista del pedido
-        // if($request->user()->hasPermission(['plannings.files.create'])){
-        //     return redirect()->route('plannings.show', $contract_id)->with('success', 'Archivo agregado correctamente');
-        // }elseif($request->user()->hasPermission(['tenders.files.create'])){
-        //     return redirect()->route('tenders.show', $contract_id);
-        // }elseif($request->user()->hasPermission(['minor_purchases.files.create'])){
-        //     return redirect()->route('minor_purchases.show', $contract_id);
-        // }elseif($request->user()->hasPermission(['awards.files.create'])){
-        //     return redirect()->route('awards.show', $contract_id);
-        // }elseif($request->user()->hasPermission(['exceptions.files.create'])){
-        //     return redirect()->route('exceptions.show', $contract_id);
-        // }elseif($request->user()->hasPermission(['contracts.files.create'])){
-        //     return redirect()->route('contracts.show', $contract_id);
-        // }elseif($request->user()->hasPermission(['utas.files.create'])){
-        //     return redirect()->route('utas.show', $contract_id);
-        // }elseif($request->user()->hasPermission(['legal_advices.files.create'])){
-        //     return redirect()->route('legal_advices.show', $contract_id);
-        // }elseif($request->user()->hasPermission(['comites.files.create'])){
-        //     return redirect()->route('comites.show', $contract_id);
-        // }elseif($request->user()->hasPermission(['coordinations.files.create'])){
-        //     return redirect()->route('coordinations.show', $contract_id);
-        // }elseif($request->user()->hasPermission(['dgafs.files.create'])){
-        //     return redirect()->route('dgafs.show', $contract_id);
-        // }elseif($request->user()->hasPermission(['documentals.files.create'])){
-        //     return redirect()->route('documentals.show', $contract_id);
-        // }else{
-        //     return redirect()->route('contracts.show', $contract_id)->with('success', 'Archivo agregado correctamente');
-        // }
     }
 
+    /**
+     * Funcionalidad de agregar de archivo.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function store_con(Request $request, $contract_id)
+    {
+        $contract = Contract::findOrFail($contract_id);
+
+        $rules = array(
+            'description' => 'string|required|max:100',
+        );
+
+        $validator =  Validator::make($request->input(), $rules);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        if(!$request->hasFile('file')){
+            $validator = Validator::make($request->input(), []);
+            $validator->errors()->add('file', 'El campo es requerido, debe ingresar un archivo WORD, PDF o EXCEL.');
+            return back()->withErrors($validator)->withInput();
+        }
+
+        // chequeamos la extension del archivo subido
+        $extension = $request->file('file')->getClientOriginalExtension();
+        if(!in_array($extension, array('doc', 'docx', 'pdf', 'xls', 'xlsx'))){
+            $validator = Validator::make($request->input(), []); // Creamos un objeto validator
+            $validator->errors()->add('file', 'El archivo introducido debe corresponder a alguno de los siguientes formatos: doc, docx, pdf, xls, xlsx.'); // Agregamos el error
+            return back()->withErrors($validator)->withInput();
+        }
+
+        // Pasó todas las validaciones, guardamos el archivo
+        $fileName = time().'-contract-file.'.$extension; // nombre a guardar
+        // Cargamos el archivo (ruta storage/app/public/files, enlace simbólico desde public/files)
+        $path = $request->file('file')->storeAs('public/files', $fileName);
+
+        $file = new File;
+        $file->description = $request->input('description');
+        $file->file = $fileName;
+        $file->file_type = 3;//contratos
+        $file->contract_id = $contract_id;
+        $file->contract_state_id = $contract->contract_state_id;
+        $file->creator_user_id = $request->user()->id;  // usuario logueado
+        $file->dependency_id = $request->user()->dependency_id;  // dependencia del usuario
+        $file->save();
+
+        return redirect()->route('contracts.show', $contract_id);
+    }
     /**
      * Funcionalidad de agregar de archivo.
      *
