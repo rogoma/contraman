@@ -110,7 +110,7 @@ p.centrado {
                                             <div class="slide"></div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tab4" role="tab"><i class="fa fa-file-pdf-o"></i> Reportes (VER FORMATO)</a>
+                                            <a class="nav-link" data-toggle="tab" href="#tab4" role="tab"><i class="fa fa-file-pdf-o"></i> Reportes</a>
                                             <div class="slide"></div>
                                         </li>
                                         <li class="nav-item">
@@ -229,16 +229,40 @@ p.centrado {
                                                     <thead>
                                                         <tr>
                                                             <th>#</th>
-                                                            <th>Lote</th>
-                                                            <th>Ítem</th>
-                                                            <th>Cód. de Catál.</th>
-                                                            <th>Descripción</th>
-                                                            <th>EETT</th>
-                                                            <th>Present.</th>
-                                                            <th>U.M.</th>
+                                                            <th>Póliza</th>
+                                                            <th>N° de Póliza</th>
+                                                            <th>Vigencia Desde</th>
+                                                            <th>Vigencia Hasta</th>
+                                                            <th>Monto</th>
+                                                            <th>Comentarios</th>
+                                                            <th>Acciones</th>                                                            
                                                         </tr>
                                                     </thead>
                                                     <tbody>
+                                                        @for ($i = 0; $i < count($contract->items); $i++)
+                                                            <tr>
+                                                                <td>{{ ($i+1) }}</td>
+                                                                <td>{{ $contract->items[$i]->policy->description }}</td>
+                                                                <td>{{ $contract->items[$i]->number_policy }}</td>
+                                                                <td>{{ $contract->items[$i]->itemFromDateFormat() }}</td>                                                                
+                                                                <td>{{ $contract->items[$i]->itemToDateFormat() }}</td>                                                                
+                                                                <td>{{ $contract->items[$i]->AmountFormat()}} </td>                                                                
+                                                                <td>{{ $contract->items[$i]->comments }}</td>
+                                                                
+                                                                <td>
+                                                                    @if (Auth::user()->hasPermission(['admin.items.update']) || $contract->dependency_id == Auth::user()->dependency_id)
+                                                                    <button type="button" title="Editar" class="btn btn-warning btn-icon" onclick="updateItem({{ $contract->items[$i]->id }})">
+                                                                        <i class="fa fa-pencil"></i>
+                                                                    </button>
+                                                                @endif
+                                                                @if (Auth::user()->hasPermission(['admin.items.delete']) || $contract->dependency_id == Auth::user()->dependency_id)
+                                                                    <button type="button" title="Borrar" class="btn btn-danger btn-icon" onclick="deleteItem({{ $contract->items[$i]->id }})">
+                                                                        <i class="fa fa-trash"></i>
+                                                                    </button>
+                                                                @endif
+                                                                </td>
+                                                            </tr>
+                                                        @endfor
 
                                                     </tbody>
                                                 </table>
@@ -246,18 +270,19 @@ p.centrado {
                                             <div class="text-right">
                                                 @if (Auth::user()->hasPermission(['contracts.contracts.create','admin.orders.create']))
                                                     {{-- Si pedido está anulado no muestra agregar ítems --}}
-                                                    @if ($contract->contract_state_id == 0)
+                                                    @if (in_array($contract->contract_state_id, [1,2]))
+                                                    <a href="{{ route('contracts.items.create', $contract->id) }}" class="btn btn-primary">Agregar Pólizas</a>
+                                                    @endif
+
+                                                    {{-- @if ($contract->contract_state_id == 0)
                                                     @else
-                                                        <a href="{{ route('contracts.items.create', $contract->id) }}" class="btn btn-primary">Agregar póliza</a>
-                                                        {{-- <a href="{{ route('orders.items.create', $order->id) }}" class="btn btn-primary">Agregar ítem</a> --}}
-                                                        {{-- <a href="{{ route('contracts.create', $contract->id)}}" title="Cargar Archivo EXCEL" class="btn btn-success btn-icon"> --}}
-                                                        {{-- <a href="{{ route('admin.contracts.uploadExcel', $contract->id)}}" title="Cargar Archivo EXCEL" class="btn btn-success btn-icon"> --}}
+                                                        <a href="{{ route('contracts.items.create', $contract->id) }}" class="btn btn-primary">Agregar Pólizas</a>
                                                     @endif
                                                         <i class="fa fa-upload text-white"></i>
-                                                    </a>
+                                                    </a> --}}
                                                 @endif
                                             </div>
-                                        <span style="font-size: 16px; font-weight: bold; color:red;background-color:yellow;" >MONTO TOTAL DEL LLAMADO: {{ $contract->totalAmountFormat() }}</span>
+                                        {{-- <span style="font-size: 16px; font-weight: bold; color:red;background-color:yellow;" >MONTO TOTAL DEL LLAMADO: {{ $contract->totalAmountFormat() }}</span> --}}
                                     </div>
 
                                     <div class="tab-pane" id="tab4" role="tabpanel">
@@ -272,12 +297,11 @@ p.centrado {
                                             <tbody>
                                                 <tr>
                                                     <td>1</td>
-                                                    <td>Reporte 1</td>
-                                                    <td><a href="/pdf/panel_contracts" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Total Llamados</a></td>
-                                                    {{-- DEBE SER ASÍ EL REPORTE POR EL LLAMADO ESPECÍFICO --}}
-                                                    {{-- <td><a href="/pdf/reporte1/{{ $order->id }}" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Ver Formulario 1</a></td> --}}
+                                                    <td>Reporte Pólizas del Llamado</td>
+                                                    <td><a href="/pdf/panel_contracts/{{ $contract->id }}" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Total Llamados</a></td>
+                                                    {{-- <td><a href="/pdf/reporte4/{{ $order->id }}" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Ver Formulario 4</a></td>                                                     --}}
                                                 </tr>
-                                                <tr>
+                                                {{-- <tr>
                                                     <td>2</td>
                                                     <td>Reporte 2</td>
                                                     <td><a href="/pdf/panel_contracts1" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Llamados en curso</a></td>
@@ -296,7 +320,7 @@ p.centrado {
                                                     <td>5</td>
                                                     <td>Reporte 5</td>
                                                     <td><a href="/pdf/panel_contracts4" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Detalle de pólizas</a></td>
-                                                </tr>
+                                                </tr> --}}
                                             </tbody>
                                         </table>
                                     </div>

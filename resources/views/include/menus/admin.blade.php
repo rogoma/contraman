@@ -134,6 +134,11 @@
                                     <span class="pcoded-mtext">Listado de Llamados</span>
                                     </a>
                                 </li>
+                                <li class="@if(Route::currentRouteName() == 'contracts.create') active @endif">
+                                    <a href="{{ route('contracts.create') }}" class="waves-effect waves-dark">
+                                    <span class="pcoded-mtext">Agregar Llamado</span>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     </ul>

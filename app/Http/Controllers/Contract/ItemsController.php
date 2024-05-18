@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Order;
+namespace App\Http\Controllers\Contract;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -119,22 +119,24 @@ class ItemsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request, $order_id)
+    public function create(Request $request, $contract_id)
     {
-        $contract = Contract::findOrFail($order_id);
+        $contract = Contract::findOrFail($contract_id);
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
-        if(!$request->user()->hasPermission(['admin.items.create']) &&
-        $contract->dependency_id != $request->user()->dependency_id){
+        if($request->user()->hasPermission(['admin.items.create', 'contracts.items.create']) || $contract->dependency_id == $request->user()->dependency_id){
+            // return view('contract.contracts.show', compact('contract','user_files_pol','user_files_con','other_files_pol','other_files_con'));
+        }else{
             return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
         }
+        
+        // if(!$request->user()->hasPermission(['admin.items.create']) && $contract->dependency_id != $request->user()->dependency_id){
+        //     return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
+        // }
 
         $policies = Policy::all();
-        // $level5_catalog_codes = Level5CatalogCode::all();
-        // $order_presentations = OrderPresentation::all();
-        // $order_measurement_units = OrderMeasurementUnit::all();
-
-        return view('order.items.create', compact('contract','level5_catalog_codes', 'order_presentations', 'order_measurement_units'));
+        
+        return view('contract.items.create', compact('contract','policies'));
     }
 
     /**
@@ -162,20 +164,15 @@ class ItemsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $order_id)
+    public function store(Request $request, $contract_id)
     {
-        $rules = array(
-            'batch' => 'numeric|nullable|max:2147483647',
-            'item_number' => 'numeric|nullable|max:2147483647',
-            'level5_catalog_code_id' => 'numeric|required|max:2147483647',
-            'technical_specifications' => 'string|required|max:100',
-            'order_presentation_id' => 'numeric|required|max:32767',
-            'order_measurement_unit_id' => 'numeric|required|max:32767',
-            'unit_price' => 'numeric|required|max:2147483647',
-            'min_quantity' => 'numeric|required|max:2147483647',
-            'max_quantity' => 'numeric|required|max:2147483647',
-            'total_amount_min' => 'numeric|required|max:9223372036854775807',
-            'total_amount' => 'numeric|required|max:9223372036854775807',
+        $rules = array(            
+            'policy_id' => 'numeric|required|max:2147483647',
+            'number_policy' => 'string|required',
+            'item_from' => 'nullable|date_format:d/m/Y',
+            'item_to' => 'nullable|required|date_format:d/m/Y',            
+            'amount' => 'string|required|max:9223372036854775807',
+            'comments' => 'nullable|max:300'
         );
 
         $validator =  Validator::make($request->input(), $rules);
@@ -184,22 +181,68 @@ class ItemsController extends Controller
         }
 
         $item = new Item;
-        $item->order_id = $order_id;
-        $item->batch = $request->input('batch');
-        $item->item_number = $request->input('item_number');
-        $item->level5_catalog_code_id = $request->input('level5_catalog_code_id');
-        $item->technical_specifications = $request->input('technical_specifications');
-        $item->order_presentation_id = $request->input('order_presentation_id');
-        $item->order_measurement_unit_id = $request->input('order_measurement_unit_id');
-        $item->unit_price = $request->input('unit_price');
-        $item->min_quantity = $item['min_quantity'];
-        $item->max_quantity = $item['max_quantity'];
-        $item->total_amount_min = $item['total_amount_min'];
-        $item->total_amount = $item['total_amount'];
+        $item->contract_id = $contract_id;
+        $item->policy_id = $request->input('policy_id');
+        $item->number_policy = $request->input('number_policy');
+        $item->item_from = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_from'))));
+        $item->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));        
+        
+        $amount = str_replace('.', '',($request->input('amount')));
+        if ($amount <= 0 ) {
+            $validator->errors()->add('amount', 'Monto no puede ser cero ni negativo');
+            return back()->withErrors($validator)->withInput();
+        }else{
+            $item->amount = $amount;
+        }       
+        $item->comments = $request->input('comments');        
         $item->creator_user_id = $request->user()->id;  // usuario logueado
         $item->save();
+        return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza agregada correctamente'); // Caso usuario posee rol pedidos
+    }
 
-        return redirect()->route('orders.show', $order_id)->with('success', 'Ítem agregado correctamente'); // Caso usuario posee rol pedidos
+    /**
+     * Funcionalidad de modificacion del pedido CUANDO ESTIPO CONTRATO 2 = CERRADO
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $contract_id, $item_id)
+    {
+        $contract = Contract::findOrFail($contract_id);
+        $item = Item::findOrFail($item_id);        
+
+        $rules = array(            
+            'policy_id' => 'numeric|required|max:2147483647',
+            'number_policy' => 'string|required',
+            'item_from' => 'nullable|date_format:d/m/Y',
+            'item_to' => 'nullable|required|date_format:d/m/Y',            
+            'amount' => 'string|required|max:9223372036854775807',
+            'comments' => 'nullable|max:300'
+        );
+
+        $validator =  Validator::make($request->input(), $rules);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $item = new Item;
+        $item->contract_id = $contract_id;
+        $item->policy_id = $request->input('policy_id');
+        $item->number_policy = $request->input('number_policy');
+        $item->item_from = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_from'))));
+        $item->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));        
+        
+        $amount = str_replace('.', '',($request->input('amount')));
+        if ($amount <= 0 ) {
+            $validator->errors()->add('amount', 'Monto no puede ser cero ni negativo');
+            return back()->withErrors($validator)->withInput();
+        }else{
+            $item->amount = $amount;
+        }       
+        $item->comments = $request->input('comments');        
+        $item->creator_user_id = $request->user()->id;  // usuario logueado
+        $item->save();
+        return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza modificada correctamente'); // Caso usuario posee rol pedidos
     }
 
 
@@ -712,274 +755,8 @@ class ItemsController extends Controller
         $order_measurement_units = OrderMeasurementUnit::all();
         return view('order.items.update', compact('order', 'item','level5_catalog_codes', 'order_presentations','order_measurement_units'));
     }
-
-    /**
-     * Funcionalidad de modificacion del pedido CUANDO ESTIPO CONTRATO 1 = ABIERTO
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function update1(Request $request, $order_id, $item_id)
-    {
-        $order = Order::findOrFail($order_id);
-        $item = Item::findOrFail($item_id);
-
-        $rules = array(
-            'batch' => 'numeric|nullable|max:2147483647',
-            'item_number' => 'numeric|nullable|max:2147483647',
-            'level5_catalog_code_id' => 'numeric|required|max:2147483647',
-            'technical_specifications' => 'string|required|max:250',
-            'order_presentation_id' => 'numeric|required|max:32767',
-            'order_measurement_unit_id' => 'numeric|required|max:32767',
-            'unit_price' => 'numeric|required|max:2147483647',
-            'min_quantity' => 'numeric|required|max:2147483647',
-            'max_quantity' => 'numeric|required|max:2147483647',
-            'total_amount_min' => 'numeric|required|max:9223372036854775807',
-            'total_amount' => 'numeric|required|max:9223372036854775807',
-        );
-        $validator =  Validator::make($request->input(), $rules);
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
-
-        $item->batch = $request->input('batch');
-        $item->item_number = $request->input('item_number');
-        $item->level5_catalog_code_id = $request->input('level5_catalog_code_id');
-        $item->technical_specifications = $request->input('technical_specifications');
-        $item->order_presentation_id = $request->input('order_presentation_id');
-        $item->order_measurement_unit_id = $request->input('order_measurement_unit_id');
-        $item->unit_price = $request->input('unit_price');
-        $item->min_quantity = $request->input('min_quantity');
-        $item->max_quantity = $request->input('max_quantity');
-        $item->total_amount_min = $request->input('total_amount_min');
-        $item->total_amount = $request->input('total_amount');
-        $item->modifier_user_id = $request->user()->id;  // usuario logueado
-        $item->save();
-
-        // Si usuario es de Plannings direcciona a plannings.show sino direcciona a orders
-        if(($request->user()->dependency_id == 59)){
-            return redirect()->route('plannings.show', $order_id)->with('success', 'Ítem modificado correctamente'); // Caso usuario posee rol pedidos
-        }else{
-            return redirect()->route('orders.show', $order_id)->with('success', 'Ítem modificado correctamente'); // Caso usuario posee rol pedidos
-        }
-    }
-
-    /**
-     * Funcionalidad de modificacion del pedido CUANDO ESTIPO CONTRATO 2 = CERRADO
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $order_id, $item_id)
-    {
-        $order = Order::findOrFail($order_id);
-        $item = Item::findOrFail($item_id);
-
-        //CONTROLAR SI AL CAMBIAR EL MONTO DE ITEM A MODIFICAR SOBREPASA MONTO CDP (SI YA TIENE CDP)
-        // $cdp_amount = $order->cdp_amount;
-        // if ($total_amountitems > $cdp_amount) {
-        //     $validator = Validator::make($request->input(), []); // Creamos un objeto validator
-        //     $validator->errors()->add('order_measurement_unit', 'Con este cambio Monto total de Ítems: '.$total_amountitems.', es MAYOR a: '.$cdp_amount.' monto de CDP del Pedido, VERIFIQUE...');
-        //     return back()->withErrors($validator)->withInput();
-        // }
-
-
-        // ACTUALIZA TIPO DE CONTRATO 1 ABIERTO
-        if ($order->open_contract == 1){
-            $rules = array(
-                'batch' => 'numeric|nullable|max:2147483647',
-                'item_number' => 'numeric|nullable|max:2147483647',
-                'level5_catalog_code_id' => 'numeric|required|max:2147483647',
-                'technical_specifications' => 'string|required|max:250',
-                'order_presentation_id' => 'numeric|required|max:32767',
-                'order_measurement_unit_id' => 'numeric|required|max:32767',
-                'min_quantity' => 'numeric|required|max:2147483647',
-                'max_quantity' => 'numeric|required|max:2147483647',
-                'total_amount_min' => 'numeric|required|max:9223372036854775807',
-                'unit_price' => 'numeric|required|max:2147483647',
-                'total_amount' => 'numeric|required|max:9223372036854775807'
-            );
-            $validator =  Validator::make($request->input(), $rules);
-            if ($validator->fails()) {
-                return back()->withErrors($validator)->withInput();
-            }
-
-            $item->batch = $request->input('batch');
-            $item->item_number = $request->input('item_number');
-            $item->level5_catalog_code_id = $request->input('level5_catalog_code_id');
-            $item->technical_specifications = $request->input('technical_specifications');
-            $item->order_presentation_id = $request->input('order_presentation_id');
-            $item->order_measurement_unit_id = $request->input('order_measurement_unit_id');
-
-            $item->min_quantity = $request->input('min_quantity');
-            $item->max_quantity = $request->input('max_quantity');
-            $item->total_amount_min = $request->input('total_amount_min');
-            $item->unit_price = $request->input('unit_price');
-            $item->total_amount = $request->input('total_amount');
-
-            $item->modifier_user_id = $request->user()->id;  // usuario logueado
-            $item->save();
-        }
-
-        // ACTUALIZA TIPO DE CONTRATO 2 CERRADO
-        if ($order->open_contract == 2){
-            $rules = array(
-                'batch' => 'numeric|nullable|max:2147483647',
-                'item_number' => 'numeric|nullable|max:2147483647',
-                'level5_catalog_code_id' => 'numeric|required|max:2147483647',
-                'technical_specifications' => 'string|required|max:250',
-                'order_presentation_id' => 'numeric|required|max:32767',
-                'order_measurement_unit_id' => 'numeric|required|max:32767',
-                // 'min_quantity' => 'numeric|required|max:2147483647',
-                // 'max_quantity' => 'numeric|required|max:2147483647',
-                // 'total_amount_min' => 'numeric|required|max:9223372036854775807',
-                'quantity' => 'numeric|required|max:2147483647',
-                'unit_price' => 'numeric|required|max:2147483647',
-                'total_amount' => 'numeric|required|max:9223372036854775807'
-            );
-            $validator =  Validator::make($request->input(), $rules);
-            if ($validator->fails()) {
-                return back()->withErrors($validator)->withInput();
-            }
-
-            $item->batch = $request->input('batch');
-            $item->item_number = $request->input('item_number');
-            $item->level5_catalog_code_id = $request->input('level5_catalog_code_id');
-            $item->technical_specifications = $request->input('technical_specifications');
-            $item->order_presentation_id = $request->input('order_presentation_id');
-            $item->order_measurement_unit_id = $request->input('order_measurement_unit_id');
-            // $item->min_quantity = $request->input('min_quantity');
-            // $item->max_quantity = $request->input('max_quantity');
-            // $item->total_amount_min = $request->input('total_amount_min');
-            $item->quantity = $request->input('quantity');
-            $item->unit_price = $request->input('unit_price');
-            $item->total_amount = $request->input('total_amount');
-            $item->modifier_user_id = $request->user()->id;  // usuario logueado
-            $item->save();
-        }
-
-        // ACTUALIZA TIPO DE CONTRATO 3 ABIERTOMM
-        if ($order->open_contract == 3){
-            $rules = array(
-                'batch' => 'numeric|nullable|max:2147483647',
-                'item_number' => 'numeric|nullable|max:2147483647',
-                'level5_catalog_code_id' => 'numeric|required|max:2147483647',
-                'technical_specifications' => 'string|required|max:250',
-                'order_presentation_id' => 'numeric|required|max:32767',
-                'order_measurement_unit_id' => 'numeric|required|max:32767',
-
-                'quantity' => 'numeric|required|max:2147483647',
-                'unit_price' => 'numeric|required|max:2147483647',
-                // 'min_quantity' => 'numeric|required|max:2147483647',
-                // 'max_quantity' => 'numeric|required|max:2147483647',
-                'total_amount_min' => 'numeric|required|max:9223372036854775807',
-                'total_amount' => 'numeric|required|max:9223372036854775807'
-            );
-            $validator =  Validator::make($request->input(), $rules);
-            if ($validator->fails()) {
-                return back()->withErrors($validator)->withInput();
-            }
-
-            $item->batch = $request->input('batch');
-            $item->item_number = $request->input('item_number');
-            $item->level5_catalog_code_id = $request->input('level5_catalog_code_id');
-            $item->technical_specifications = $request->input('technical_specifications');
-            $item->order_presentation_id = $request->input('order_presentation_id');
-            $item->order_measurement_unit_id = $request->input('order_measurement_unit_id');
-
-            $item->quantity = $request->input('quantity');
-            $item->unit_price = $request->input('unit_price');
-            // $item->min_quantity = $request->input('min_quantity');
-            // $item->max_quantity = $request->input('max_quantity');
-            $item->total_amount_min = $request->input('total_amount_min');
-            $item->total_amount = $request->input('total_amount');
-            $item->modifier_user_id = $request->user()->id;  // usuario logueado
-            $item->save();
-        }
-
-
-        // AQUI RECORRER LOS ITEMS DEL PEDIDO Y CARGAR COMO NUEVO TOTAL_AMOUNT EN ORDERS COMO PLURIANUAL
-        $total_amountitems = 0;
-        for ($i = 0; $i < count($order->items); $i++){
-            $total_amountitems += $order->items[$i]->total_amount;
-        }
-
-        //CERAMOS VALOR DEL MONTO DE ORDER Y CARGAMOS VALOR NUEVO
-        $order->total_amount = 0;
-        $order->total_amount = $total_amountitems;
-        $order->save();
-
-
-        //CONTROLAMOS PARA AVISAR QUE MONTO DE SUMATORIA DE ITEMS SOBREPASA MONTO CDP (SI YA TIENE CDP)
-        $cdp_amount = $order->cdp_amount;
-        if ($cdp_amount > 0) {
-            if ($total_amountitems > $cdp_amount) {
-                $validator = Validator::make($request->input(), []); // Creamos un objeto validator
-                $validator->errors()->add('order_measurement_unit', 'Con este cambio Monto total de Ítems: '.$total_amountitems.', es MAYOR a: '.$cdp_amount.' monto de CDP del Pedido, DEBE ACTUALIZAR CDP...');
-                return back()->withErrors($validator)->withInput();
-            }
-        }
-
-
-        // Si usuario es de Plannings direcciona a plannings.show sino direcciona a orders
-        if(($request->user()->dependency_id == 59)){
-            return redirect()->route('plannings.show', $order_id)->with('success', 'Ítem modificado en PAC correctamente'); // Caso usuario posee rol pedidos
-        }else{
-            return redirect()->route('orders.show', $order_id)->with('success', 'Ítem modificado en PEDIDOS correctamente'); // Caso usuario posee rol pedidos
-        }
-    }
-
-
-    /**
-     * Funcionalidad de modificacion del pedido CUANDO ESTIPO CONTRATO 3 = ABIERTO MM
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function update3(Request $request, $order_id, $item_id)
-    {
-        $order = Order::findOrFail($order_id);
-        $item = Item::findOrFail($item_id);
-
-        $rules = array(
-            'batch' => 'numeric|nullable|max:2147483647',
-            'item_number' => 'numeric|nullable|max:2147483647',
-            'level5_catalog_code_id' => 'numeric|required|max:2147483647',
-            'technical_specifications' => 'string|required|max:250',
-            'order_presentation_id' => 'numeric|required|max:32767',
-            'order_measurement_unit_id' => 'numeric|required|max:32767',
-            'unit_price' => 'numeric|required|max:2147483647',
-            'min_quantity' => 'numeric|required|max:2147483647',
-            'max_quantity' => 'numeric|required|max:2147483647',
-            'total_amount_min' => 'numeric|required|max:9223372036854775807',
-            'total_amount' => 'numeric|required|max:9223372036854775807',
-        );
-        $validator =  Validator::make($request->input(), $rules);
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
-
-        $item->batch = $request->input('batch');
-        $item->item_number = $request->input('item_number');
-        $item->level5_catalog_code_id = $request->input('level5_catalog_code_id');
-        $item->technical_specifications = $request->input('technical_specifications');
-        $item->order_presentation_id = $request->input('order_presentation_id');
-        $item->order_measurement_unit_id = $request->input('order_measurement_unit_id');
-        $item->unit_price = $request->input('unit_price');
-        $item->min_quantity = $request->input('min_quantity');
-        $item->max_quantity = $request->input('max_quantity');
-        $item->total_amount_min = $request->input('total_amount_min');
-        $item->total_amount = $request->input('total_amount');
-        $item->modifier_user_id = $request->user()->id;  // usuario logueado
-        $item->save();
-
-        // Si usuario es de Plannings direcciona a plannings.show sino direcciona a orders
-        if(($request->user()->dependency_id == 59)){
-            return redirect()->route('plannings.show', $order_id)->with('success', 'Ítem modificado correctamente'); // Caso usuario posee rol pedidos
-        }else{
-            return redirect()->route('orders.show', $order_id)->with('success', 'Ítem modificado correctamente'); // Caso usuario posee rol pedidos
-        }
-    }
+    
+    
 
     /**
      * Remove the specified resource from storage.

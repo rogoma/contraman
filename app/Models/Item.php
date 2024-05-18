@@ -19,6 +19,33 @@ class Item extends Model
     /**
      * Para obtener el vinculo con la tabla level5_catalog_codes
      */
+    public function policy(){
+        return $this->belongsTo('App\Models\Policy');
+    }
+
+    public function itemFromDateFormat(){
+        if(empty($this->item_from)){
+            return "";
+        }else{
+            return date('d/m/Y', strtotime($this->item_from));
+        }
+    }
+
+    public function itemToDateFormat(){
+        if(empty($this->item_to)){
+            return "";
+        }else{
+            return date('d/m/Y', strtotime($this->item_to));
+        }
+    }
+    
+    public function AmountFormat(){
+        return number_format($this->amount,0,",",".");
+    }
+
+    /**
+     * Para obtener el vinculo con la tabla level5_catalog_codes
+     */
     public function level5CatalogCode(){
         return $this->belongsTo('App\Models\Level5CatalogCode');
     }
@@ -75,9 +102,9 @@ class Item extends Model
     public function unitPriceFormat(){
         return number_format($this->unit_price,0,",",".");
     }
-    public function totalAmount_min_Format(){
-        return number_format($this->total_amount_min,0,",",".");
-    }
+    
+    
+    
     public function totalAmountFormat(){
         return number_format($this->total_amount,0,",",".");
     }

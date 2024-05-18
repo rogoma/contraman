@@ -47,8 +47,8 @@ class Contract extends Model
     /**
      * Para obtener el vinculo con la tabla items
      */
-    public function item_contracts(){
-        return $this->hasMany('App\Models\Item_contracts');
+    public function items(){
+        return $this->hasMany('App\Models\Item');
     }
 
     /**

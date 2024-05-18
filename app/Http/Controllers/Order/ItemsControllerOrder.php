@@ -17,7 +17,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use Illuminate\Support\Facades\DB;
 
-class ItemsController extends Controller
+class ItemsControllerOrder extends Controller
 {
     /**
      * Create a new controller instance.

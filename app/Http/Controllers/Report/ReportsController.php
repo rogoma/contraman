@@ -42,25 +42,35 @@ class ReportsController extends Controller{
 
 
     // Para mostrar todos los llamados que tienen contratos
-    public function generarContracts()
+    public function generarContracts($contract_id)
     {
-        //capturamos el nombre del método para poder cambiar el título del reporte en la vista
-        $nombreMetodo = __METHOD__;
-
         //Donde contracts es una vista
-        $contracts = DB::table('vista_contracts')//vista que muestra los datos
-        ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
-        'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
-        'contract_end_date', 'total_amount', 'advance_validity_to','fidelity_validity_to','accidents_validity_to',
-        'risks_validity_to','civil_resp_validity_to','comentarios'])
-        // ->where('actual_state', '>', 1)
+        $contracts = DB::table('vista_contracts_full')//vista que muestra los datos
+        ->select(['iddncp','number_year','year_adj','estado', 'modalidad', 'polizas', 'number_policy',
+        'tipo_contrato','item_from','item_to', 'amount', 'comments', 'contratista', 'dependencia'])
+        ->where('contract_id', '=', $contract_id)  
+        // ->where('actual_state', '>', 1)        
         ->get();
 
-        $view = View::make('reports.contracts', compact('contracts', 'nombreMetodo'))->render();
+        //SELECCIONAR POR SEPARADO PARA REPORTE
+        // $f4_1 = DB::table('vista_form4_1')//vista que muestra los datos        
+        // ->select (['form4_city','form4_date','providers_description','ruc']) 
+        // ->where('order_id', '=', $order_id)     
+        // ->whereIn('request_provider_type', [1])//EMPRESAS PARTICIPANTES
+        // ->get(); 
+
+        // $f4_2 = DB::table('vista_form4_2')//vista que muestra los datos        
+        // ->select (['order_id','item_number','providers_description','level5_catalog_codes_description','dncp_pac_id','amount']) 
+        // ->where('order_id', '=', $order_id)
+        // ->get();
+
+
+
+        $view = View::make('reports.contracts_items', compact('contracts'))->render();
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML($view);
         $pdf->setPaper('A4', 'landscape');//coloca en apaisado
-        return $pdf->stream('LLAMADO-CONTRATOS'.'.pdf');
+        return $pdf->stream('LLAMADO-POLIZAS'.'.pdf');
     }
 
     // Para mostrar todos los llamados que estan en curso (estado = 1)

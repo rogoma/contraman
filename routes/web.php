@@ -118,8 +118,6 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     Route::resource('dependency_types', DependencyTypesController::class);
     Route::resource('uoc_types', UocTypesController::class);
 
-    Route::resource('contracts.items', ItemsContractsController::class); //Recurso anidado, es igual a /orders/{order_id}/items/{item_id}
-
     //MOSTRAR EN EXCEL DEPENDENCIAS
     Route::get('/dependencies/exportarexcel', [DependenciesController::class, 'exportarExcel']);
     Route::resource('dependencies', DependenciesController::class);
@@ -158,9 +156,8 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
 
     //RECURSOS DE CONTRACTS PARA MANEJAR ITEMS
     Route::resource('contracts.items', ItemsController::class); //Recurso anidado, es igual a /orders/{order_id}/items/{item_id}
-
-
-
+    //GRABAR PÓLIZAS
+    Route::post('/contracts/{id}/store', [ItemsController::class, 'store'])->name('contracts.items.store');
 
 
     //DESDE ACA PARA AGREGAR EMPRESAS ADJUDICADAS
@@ -355,12 +352,12 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     // Route::get('pdf/generar','PdfsController@getGenerar');
     // Route::get('pdf/pdf', [PdfsController::class, 'getIndex'])->name('pdf.pdf');
     // Route::get('pdf/generarPDF', [PdfsController::class, 'generarPDF'])->name('pdf.generarPDF');
-    // Route::get('pdf/tipres2', [ReportsController::class, 'pdfMPDF'])->name('pdf.ptipres2');
+    // Route::get('pdf/tipres2', [ReportsContropdf/panel_contractsller::class, 'pdfMPDF'])->name('pdf.ptipres2');
 
 
     /*************** REPORTES DOMPDF **************/
     //REPORTE DE CONTRATOS TODOS
-    Route::get('pdf/panel_contracts', [ReportsController::class, 'generarContracts'])->name('pdf.panel_contracts');
+    Route::get('pdf/panel_contracts/{contractr_id}', [ReportsController::class, 'generarContracts'])->name('pdf.panel_contracts');
     //REPORTE DE CONTRATOS EN CURSO
     Route::get('pdf/panel_contracts1', [ReportsController::class, 'generarContracts1'])->name('pdf.panel_contracts1');
     //REPORTE DE CONTRATOS RESCINDIDOS
@@ -406,6 +403,7 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     Route::get('pdf/reporte31/{order_id}', [ReportsController::class, 'generarForm31'])->name('pdf.form31');
 
     Route::get('pdf/reporte4/{order_id}', [ReportsController::class, 'generarForm4'])->name('pdf.form4');
+
     Route::get('pdf/prefs/{order_id}', [ReportsController::class, 'pdfPrefs'])->name('pdf.prefs');
 
     //SECUENCIA LICITACIONES
