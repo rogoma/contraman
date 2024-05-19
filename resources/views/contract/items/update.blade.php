@@ -19,8 +19,8 @@
                         <li class="breadcrumb-item">
                             <a><i class="feather icon-home"></i></a>
                         </li>
-                        <li class="breadcrumb-item">                           
-                            <a href="{{ route('contracts.show', $contract->id) }}">Pedido Nº {{ $contract->id }}</a>                            
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('contracts.show', $contract->id) }}">Llamados {{ $contract->number_year }}</a>
                         </li>
                     </ul>
                 </div>
@@ -36,257 +36,117 @@
                         <div class="col-sm-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5>Modificar Ítem al pedido Nº {{ $contract->id }}</h5>
-                                        @if ($contract->open_contract == 1)
+                                    <h5>Modificar Póliza al Llamado Nº {{ $contract->number_year }}</h5>
+                                        {{-- @if ($contract->open_contract == 1)
                                             <h5><a style="font-size: 15px; font-weight: bold; color:red"> Tipo Contrato: Abierto</a></h5>
                                         @else
                                             @if ($contract->open_contract == 2)
                                                 <h5><a style="font-size: 15px; font-weight: bold; color:red"> Tipo Contrato: Cerrado</a></h5>
                                             @else
                                                 <h5><a style="font-size: 15px; font-weight: bold; color:red"> Tipo Contrato: Abierto con MontoMin y MontoMáx</a></h5>
-                                            @endif        
-                                        @endif
+                                            @endif
+                                        @endif --}}
                                 </div>
                                 <div class="card-block">
                                         <form method="POST" action="{{ route('contracts.items.update', [$contract->id, $item->id]) }}">
                                         @csrf
                                         @method('PUT')
 
-                                        {{-- CÓDIGO PARA MOSTRAR ERRORES --}}
+                                        <div class="container">
+                                            <h3 style="text-align: center;">Modificar Póliza</h3>
+                                            <br>
+                                            <div class="form-group row @error('policy_id') has-danger @enderror">
+                                                <label class="col-sm-2 col-form-label">Póliza</label>
+                                                <div class="col-sm-10">
+                                                    <select id="policy_id" name="policy_id" class="form-control">
+                                                        <option value="">--- Seleccionar Tipo de Póliza ---</option>
+                                                        @foreach ($policies as $policie)
+                                                            <option value="{{ $policie ->id }}" @if ($policie-> id == old('policy_id'  , $item->policy_id)) selected @endif>{{ $policie->description }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                    @error('policy_id')
+                                                        <div class="col-form-label">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="form-group row @error('number_policy') has-danger @enderror">
+                                                <label class="col-sm-2 col-form-label">N° de Póliza</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" id="number_policy" name="number_policy" maxlength="300" value="{{ old('number_policy',$item->number_policy) }}" class="form-control">
+                                                    @error('number_policy')
+                                                        <div class="col-form-label">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                        <label class="col-form-label @error('item_from') has-danger @enderror">Vigencia Desde</label>
+                                                        <div class="input-group @error('item_from') has-danger @enderror">
+                                                            <input type="text" id="item_from" name="item_from" value="{{ old('item_from',date('d/m/Y', strtotime($item->item_from))) }}" class="form-control text-align: left" autocomplete="off">
+                                                            <span class="input-group-append" id="basic-addon">
+                                                                <label class="input-group-text" onclick="show('item_from');"><i class="fa fa-calendar"></i></label>
+                                                            </span>
+                                                        </div>
+                                                        @error('item_from')
+                                                        <div class="has-danger">
+                                                            <div class="col-form-label">{{ $message }}</div>
+                                                        </div>
+                                                        @enderror
+                                                </div>
+                                                <div class="col-md-3">
+                                                        <label class="col-form-label @error('item_to') has-danger @enderror">Vigencia Hasta</label>
+                                                        <div class="input-group @error('item_to') has-danger @enderror">
+                                                            {{-- <input type="text" id="item_to" name="item_to" value="{{ old('item_to') }}" class="form-control" autocomplete="off"> --}}
+                                                            <input type="text" id="item_to" name="item_to" value="{{ old('item_to',date('d/m/Y', strtotime($item->item_to))) }}" class="form-control text-align: left" autocomplete="off">
+                                                            <span class="input-group-append" id="basic-addon">
+                                                                <label class="input-group-text" onclick="show('item_to');"><i class="fa fa-calendar"></i></label>
+                                                            </span>
+                                                        </div>
+                                                        @error('item_to')
+                                                        <div class="has-danger">
+                                                            <div class="col-form-label">{{ $message }}</div>
+                                                        </div>
+                                                        @enderror
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    <div class="form-group @error('control_1') has-danger @enderror">
+                                                        <label class="col-form-label">Días Vigencia</label>
+                                                        <input type="text" id="control_1" readonly name="control_1" value="{{ old('control_1') }}" class="form-control">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    <div class="form-group @error('control_a') has-danger @enderror">
+                                                        <label class="col-form-label">Días para Vencer</label>
+                                                        <input type="text" id="control_a" readonly name="control_a" value="{{ old('control_a') }}" class="form-control">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row @error('amount') has-danger @enderror">
+                                                <label class="col-sm-2 col-form-label">Monto</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" id="amount" name="amount" value="{{ old('amount', number_format($item->amount, 0, ',', '.')) }}" class="form-control @error('amount') form-control-danger @enderror">
+                                                    @error('amount')
+                                                        <div class="col-form-label">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="form-group row @error('comments') has-danger @enderror">
+                                                <label class="col-sm-2 col-form-label">Comentarios</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" id="comments" name="comments" maxlength="300" value="{{ old('comments',$item->comments) }}" class="form-control">
+                                                    @error('comments')
+                                                        <div class="col-form-label">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="col-sm-12">
-                                            @if ($errors->any())
-                                           <div class="alert alert-danger">
-                                           <ul>
-                                               @foreach ($errors->all() as $error)
-                                                 <li>{{ $error }}</li>
-                                               @endforeach
-                                           </ul>
-                                           </div>
-                                           @endif
-                                        </div>
-
-                                        <div class="form-group row @error('batch') has-danger @enderror">
-                                            <label class="col-sm-2 col-form-label">Lote</label>
-                                            <div class="col-sm-10">
-                                                <input type="number" id="batch" name="batch" value="{{ old('batch', $item->batch) }}" class="form-control @error('batch') form-control-danger @enderror">
-                                                @error('batch')
-                                                    <div class="col-form-label">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-                                        
-                                        <div class="form-group row @error('item_number') has-danger @enderror">
-                                            <label class="col-sm-2 col-form-label">Ítem</label>
-                                            <div class="col-sm-10">
-                                                    {{-- Si usuario es de Plannings se muestra sólo lectura     --}}
-                                                    @if ((Auth::user()->dependency->id == 59))
-                                                        <input type="number" id="item_number" name="item_number" value="{{ old('item_number', $item->item_number)}}" class="form-control @error('item_number') form-control-danger @enderror" readonly>
-                                                    @else
-                                                        <input type="number" id="item_number" name="item_number" value="{{ old('item_number', $item->item_number)}}" class="form-control @error('item_number') form-control-danger @enderror">
-                                                    @endif
-                                                @error('item_number')
-                                                    <div class="col-form-label">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row @error('level5_catalog_code_id') has-danger @enderror">
-                                            <label class="col-sm-2 col-form-label">Código de Catálogo Nivel 5</label>
-                                            <div class="col-sm-6">
-                                                <input type="text" id="level5_catalog_code" name="level5_catalog_code" value="{{ old('level5_catalog_code', $item->level5CatalogCode->code) }}" class="form-control @error('level5_catalog_code_id') form-control-danger @enderror">
-                                                <small id="level5_catalog_description">{{ old('level5_catalog_description', $item->level5CatalogCode->description) }}</small>
-                                                <input type="hidden" id="level5_catalog_code_id" name="level5_catalog_code_id" value="{{ old('level5_catalog_code_id', $item->level5_catalog_code_id) }}">
-                                                <input type="hidden" name="level5_catalog_description" value={{ old('level5_catalog_description', $item->level5CatalogCode->description) }}>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <button id="search_level5" type="button" class="btn btn-info">Buscar coincidencias</button>
-                                            </div>
-                                            @error('level5_catalog_code_id')
-                                                <div class="col-form-label">{{ $message }}</div>
-                                            @enderror
-                                            <div id="codes_result" class="offset-sm-2 col-sm-8"></div>
-                                        </div>
-
-                                        <div class="form-group row @error('technical_specifications') has-danger @enderror">
-                                            <label class="col-sm-2 col-form-label">EETT (250 caracteres máx)</label>
-                                            <div class="col-sm-10">                                                    
-                                                <textarea id="technical_specifications" name="technical_specifications" class="form-control @error('technical_specifications') form-control-danger @enderror">{{ old('technical_specifications', $item->technical_specifications) }}</textarea>                                                    
-                                                @error('technical_specifications')
-                                                    <div class="col-form-label">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row @error('order_presentation_id') has-danger @enderror">
-                                            <label class="col-sm-2 col-form-label">Presentación</label>
-                                            <div class="col-sm-10">
-                                                <select id="order_presentation_id" name="order_presentation_id" class="form-control">
-                                                    <option value="">--- Seleccionar Presentación ---</option>
-                                                    @foreach ($contract_presentations as $contract_presentation)
-                                                        {{-- Si usuario es de Plannings se muestra sólo lectura     --}}
-                                                        {{-- @if ((Auth::user()->dependency->id == 59))
-                                                            <option disabled="disabled" value="{{ $contract_presentation->id }}" @if ($contract_presentation->id == old('order_presentation_id', $item->order_presentation_id)) selected @endif>{{ $contract_presentation->description }}</option>
-                                                        @else --}}
-                                                            <option value="{{ $contract_presentation->id }}" @if ($contract_presentation->id == old('order_presentation_id', $item->order_presentation_id)) selected @endif>{{ $contract_presentation->description }}</option>
-                                                        {{-- @endif  --}}                                            
-                                                    @endforeach
-                                                </select>
-                                                @error('order_presentation_id')
-                                                    <div class="col-form-label">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row @error('order_measurement_unit_id') has-danger @enderror">
-                                            <label class="col-sm-2 col-form-label">Unidad de Medida</label>
-                                            <div class="col-sm-10">
-                                                <select id="order_measurement_unit_id" name="order_measurement_unit_id" class="form-control">
-                                                    <option value="">--- Seleccionar Unidad de Medida ---</option>
-                                                    @foreach ($contract_measurement_units as $contract_measurement_unit)
-                                                        {{-- Si usuario es de Plannings se muestra sólo lectura     --}}
-                                                        {{-- @if ((Auth::user()->dependency->id == 59))                                                            
-                                                            <option disabled="disabled" value="{{ $contract_measurement_unit->id }}" @if ($contract_measurement_unit->id == old('order_measurement_unit_id', $item->order_measurement_unit_id)) selected @endif>{{ $contract_measurement_unit->description }}</option>
-                                                        @else --}}
-                                                            <option value="{{ $contract_measurement_unit->id }}" @if ($contract_measurement_unit->id == old('order_measurement_unit_id', $item->order_measurement_unit_id)) selected @endif>{{ $contract_measurement_unit->description }}</option>
-                                                        {{-- @endif --}}                                                        
-                                                    @endforeach
-                                                </select>
-                                                @error('order_measurement_unit_id')
-                                                    <div class="col-form-label">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        
-                                        {{-- MUESTRA CAMPOS DE ACUERDO AL TIPO DE CONTRATO --}}
-                                        @if ($contract->open_contract == 1)
-                                                {{-- Tipo de Contrato Abierto --}}
-                                                <div class="form-group row @error('unit_price') has-danger @enderror">
-                                                    <label class="col-sm-2 col-form-label">Precio Unitario</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="number" id="unit_price" name="unit_price" value="{{ old('unit_price', $item->unit_price) }}" class="form-control @error('unit_price') form-control-danger @enderror">
-                                                        @error('unit_price')
-                                                            <div class="col-form-label">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row @error('min_quantity') has-danger @enderror">
-                                                    <label class="col-sm-2 col-form-label">Pedido Mínimo</label>
-                                                    <div class="col-sm-10">
-                                                        {{-- Si usuario es de Plannings se muestra sólo lectura --}}
-                                                        @if ((Auth::user()->dependency->id == 59))                                                    
-                                                            <input type="number" id="min_quantity" name="min_quantity" value="{{ old('min_quantity', $item->min_quantity) }}" class="form-control @error('min_quantity') form-control-danger @enderror">
-                                                        @else
-                                                            <input type="number" id="min_quantity" name="min_quantity" value="{{ old('min_quantity', $item->min_quantity) }}" class="form-control @error('min_quantity') form-control-danger @enderror">
-                                                        @endif
-                                                        
-                                                        @error('min_quantity')
-                                                            <div class="col-form-label">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row @error('max_quantity') has-danger @enderror">
-                                                    <label class="col-sm-2 col-form-label">Pedido Máximo</label>
-                                                    <div class="col-sm-10">
-                                                        {{-- Si usuario es de Plannings se muestra sólo lectura --}}
-                                                        @if ((Auth::user()->dependency->id == 59))                                                    
-                                                            <input type="number" id="max_quantity" name="max_quantity" value="{{ old('max_quantity', $item->max_quantity) }}" class="form-control @error('max_quantity') form-control-danger @enderror">
-                                                        @else
-                                                            <input type="number" id="max_quantity" name="max_quantity" value="{{ old('max_quantity', $item->max_quantity) }}" class="form-control @error('max_quantity') form-control-danger @enderror">
-                                                        @endif
-                                                        
-                                                        @error('max_quantity')
-                                                            <div class="col-form-label">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 col-form-label">Monto Mínimo</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="number" id="total_amount_min" name="total_amount_min" value="{{ $item->total_amount_min }}" class="form-control" readonly>
-                                                    </div>
-                                                </div>                    
-
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 col-form-label">Monto Máximo</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="number" id="total_amount" name="total_amount" value="{{ $item->total_amount }}" class="form-control" readonly>
-                                                    </div>
-                                                </div>                                      
-                                        @else
-                                            @if ($contract->open_contract == 2)
-                                                {{-- Tipo de Contrato Cerrado --}}
-                                                <div class="form-group row @error('quantity') has-danger @enderror">
-                                                    <label class="col-sm-2 col-form-label">Cantidad</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="number" id="quantity2" name="quantity" value="{{ old('quantity', $item->quantity) }}" class="form-control @error('quantity') form-control-danger @enderror">
-                                                        @error('quantity')
-                                                            <div class="col-form-label">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row @error('unit_price') has-danger @enderror">
-                                                    <label class="col-sm-2 col-form-label">Precio Unitario</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="number" id="unit_price2" name="unit_price" value="{{ old('unit_price', $item->unit_price) }}" class="form-control @error('unit_price') form-control-danger @enderror">
-                                                        @error('unit_price')
-                                                            <div class="col-form-label">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 col-form-label">Monto Total</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="number" id="total_amount2" name="total_amount" value="{{ $item->total_amount }}" class="form-control" readonly>
-                                                    </div>
-                                                </div>   
-                                            @else
-                                                {{-- Tipo de Contrato Abierto MM $contract->open_contract == 3--}}
-                                                <div class="form-group row @error('quantity') has-danger @enderror">
-                                                    <label class="col-sm-2 col-form-label">Cantidad</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="number" id="quantity3" name="quantity" value="{{ old('quantity', $item->quantity) }}" class="form-control @error('quantity') form-control-danger @enderror">
-                                                        @error('quantity')
-                                                            <div class="col-form-label">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row @error('unit_price') has-danger @enderror">
-                                                    <label class="col-sm-2 col-form-label">Precio Unitario (IVA INCL.)</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="number" id="unit_price3" name="unit_price" value="{{ old('unit_price', $item->unit_price) }}" class="form-control @error('unit_price') form-control-danger @enderror">
-                                                        @error('unit_price')
-                                                            <div class="col-form-label">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 col-form-label">Monto Mínimo</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="number" id="total_amount_min3" name="total_amount_min" value="{{ $item->total_amount_min }}" class="form-control">
-                                                    </div>
-                                                </div>                                        
-                                                
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 col-form-label">Monto Máximo</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="number" id="total_amount3" name="total_amount" value="{{ $item->total_amount }}" class="form-control" readonly>
-                                                    </div>
-                                                </div> 
-                                            @endif        
-                                        @endif
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2"></label>
-                                            <div class="col-sm-10">
-                                                <button type="submit" class="btn btn-warning m-b-0">Modificar Item</button>
+                                            <br>
+                                            <div class="form-group text-center">
+                                                <button type="submit" class="btn btn-warning m-b-0 f-12">Modificar Póliza</button>
                                             </div>
                                         </div>
                                     </form>
@@ -304,175 +164,130 @@
 @push('scripts')
 <script type="text/javascript">
 $(document).ready(function(){
-    
-    //PARA DAR FORMATO A COMBOS
-    $('#order_presentation_id').select2();
-    $('#order_measurement_unit_id').select2();
 
-    //****************************************************************************************
-    //Original-PARA TIPO CONTRATO CERRADO
-    $('#quantity2').keyup(function(){
-        if( $(this).val() != "" && $('#unit_price2').val() != "" ){
-            $('#total_amount2').val( $(this).val() * $('#unit_price2').val() );
-        }else{
-            $('#total_amount2').val('');
-        }
+    $('#policy_id').select2();
+
+    // Script para formatear el valor con separador de miles mientras se ingresa Monto
+    document.getElementById('amount').addEventListener('input', function(event) {
+        // Obtenemos el valor ingresado y eliminamos los separadores de miles existentes
+        let monto = event.target.value.replace(/\./g, '');
+        // Formateamos el valor con separador de miles
+        monto = parseFloat(monto).toLocaleString('es-ES');
+        // Actualizamos el valor en el input text
+        event.target.value = monto;
     });
 
-    $('#unit_price2').keyup(function(){
-        if( $(this).val() != "" && $('#quantity2').val() != "" ){
-            $('#total_amount2').val( $(this).val() * $('#quantity2').val() );
-        }else{
-            $('#total_amount2').val('');
-        }
-    });
-    
-    //****************************************************************************************
-
-    $('#unit_price').keyup(function(){
-        if( $(this).val() != "" && $('#max_quantity').val() != "" ){
-            $('#total_amount').val( $(this).val() * $('#max_quantity').val() );
-        }else{
-            $('#total_amount2').val('');
-        }
+    $('#item_from').datepicker({
+        language: 'es',
+        format: 'dd/mm/yyyy',
+        autoclose: true,
+        todayHighlight: true,
     });
 
-    $('#unit_price').keyup(function(){
-        if( $(this).val() != "" && $('#min_quantity').val() != "" ){
-            $('#total_amount_min').val( $(this).val() * $('#min_quantity').val() );
-        }else{
-            $('#total_amount_min').val('');
-        }
+    $('#item_to').datepicker({
+        language: 'es',
+        format: 'dd/mm/yyyy',
+        autoclose: true,
+        todayHighlight: true,
     });
 
-    
-    $('#min_quantity').keyup(function(){
-        if( $(this).val() != "" && $('#unit_price').val() != "" ){
-            $('#total_amount_min').val( $(this).val() * $('#unit_price').val() );
+    //VALIDACIÓN DE FECHAS DE ANTICIPOS
+    $('#item_from').on('changeDate', function() {
+        var fechaInicio = $(this).datepicker('getDate').getTime();
+        var fechaFin = $('#item_to').datepicker('getDate').getTime();
+
+        if (fechaInicio === fechaFin){
+            alert('La fecha final debe ser mayor a fecha de inicio');
+            $('#item_to').datepicker('date', null); // Limpiar el datapicker
+            $('#item_to').val('');
+            $('#control_1').val('');
+            $('#control_a').val('');
+            return;
+        }
+
+        if (fechaFin == null){
+
         }else{
-            $('#total_amount_min').val('');
-        }
-        
-        // Verificamos que pedido mínimo no sea mayor a pedido máximo
-        if( parseInt($(this).val()) > parseInt($('#max_quantity').val())){           
-            $(this).val('');
-            $('#total_amount_min').val('');
+            if (fechaInicio > fechaFin) {
+                alert('La fecha de inicio no puede ser mayor a la fecha final.');
+                $('#item_to').datepicker('date', null); // Limpiar el datapicker
+                $('#item_to').val('');
+                $('#control_1').val('');
+                $('#control_a').val('');
+            }else{
+                $('#item_to').datepicker('date', null); // Limpiar el datapicker
+                $('#item_to').val('');
+                $('#control_1').val('');
+                $('#control_a').val('');
 
-            swal({
-            title: "Atención",
-            text: "Pedido Mínimo no puede ser mayor a Pedido Máximo",
-            type: "warning",            
-            confirmButtonColor: "#DD6B55",            
-            });            
-        }
-    });
-
-    $('#max_quantity').keyup(function(){
-        if( $(this).val() != "" && $('#unit_price').val() != "" ){
-            $('#total_amount').val( $(this).val() * $('#unit_price').val() );
-        }else{
-            $('#total_amount').val('');
-        }
-    });
-        
-
-    //Original-PARA TIPO CONTRATO 3 ABIERTO MM
-    // $('#quantity3').keyup(function(){
-    //     if( $(this).val() != "" && $('#unit_price3').val() != "" ){
-    //         $('#total_amount3').val( $(this).val() * $('#unit_price3').val() );
-    //     }else{
-    //         $('#total_amount3').val('');
-    //     }
-        
-    //     if( parseInt($('#total_amount_min3').val()) > parseInt($('#total_amount3').val())){           
-    //         $(this).val('');
-    //         $('#total_amount_min3').val('');
-
-    //         swal({
-    //         title: "Atención",
-    //         text: "Monto Mínimo no puede ser mayor a Monto Máximo",
-    //         type: "warning",            
-    //         confirmButtonColor: "#DD6B55",            
-    //         });            
-    //     }
-    // });
-
-    // $('#unit_price3').keyup(function(){
-    //     if( $(this).val() != "" && $('#quantity3').val() != "" ){
-    //         $('#total_amount3').val( $(this).val() * $('#quantity3').val() );
-    //     }else{
-    //         $('#total_amount3').val('');
-    //     }
-
-    //     if( parseInt($('#total_amount_min3').val()) > parseInt($('#total_amount3').val())){           
-    //         $(this).val('');
-    //         $('#total_amount_min3').val('');
-
-    //         swal({
-    //         title: "Atención",
-    //         text: "Monto Mínimo no puede ser mayor a Monto Máximo",
-    //         type: "warning",            
-    //         confirmButtonColor: "#DD6B55",            
-    //         });            
-    //     }
-    // });
-
-
-    // $('#total_amount_min3').keyup(function(){        
-    //     // Verificamos que pedido mínimo no sea mayor a pedido máximo
-    //     if( parseInt($(this).val()) > parseInt($('#total_amount3').val())){           
-    //         $(this).val('');
-    //         $('#total_amount_min3').val('');
-
-    //         swal({
-    //         title: "Atención",
-    //         text: "Monto Mínimo no puede ser mayor a Monto Máximo",
-    //         type: "warning",            
-    //         confirmButtonColor: "#DD6B55",            
-    //         });            
-    //     }
-    // });
-
-    $('#search_level5').click(function(){
-        $('#search_level5').attr("disabled", true);
-        $.ajax({
-            url : '/items/search',
-            method : 'GET',
-            data: { search: $('#level5_catalog_code').val(),  _token: '{{ csrf_token() }}'},
-            success: function(data){
-                try{
-                    $('#search_level5').removeAttr("disabled");
-                    let table_start = '<table class="table table-striped table-bordered table-sm"><tbody>'
-                    let thead = '<thead><th>Código</th><th>Descripción</th><th>Acción</th></thead>'
-                    let rows = data.map(row => '<tr><td>'+row.code+'</td>'+'<td>'+row.description+'</td>'+'<td><button type="button" onclick="seleccionar(\''+row.id+'\',\''+row.code+'\',\''+row.description+'\');" class="btn btn-primary">Seleccionar</button></td></tr>' );
-                    let table_end = '</tbody></table>'
-                    $('#codes_result').html(table_start + thead + rows.join('') + table_end);
-                }catch(error){
-                    swal("Error!", "Ocurrió un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
-                    console.log(error);
+                //controla días para vigencia
+                restaFechas = function(f1,f2)
+                {
+                    var aFecha1 = f1.split('/');
+                    var aFecha2 = f2.split('/');
+                    var fFecha1 = Date.UTC(aFecha1[2],aFecha1[1]-1,aFecha1[0]);
+                    var fFecha2 = Date.UTC(aFecha2[2],aFecha2[1]-1,aFecha2[0]);
+                    var dif = fFecha2 - fFecha1;
+                    var dias = Math.floor(dif / (1000 * 60 * 60 * 24));
+                    return dias;
                 }
-            },
-            error: function(error){
-                swal("Error!", "Ocurrió un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
-                $('#search_level5').removeAttr("disabled");
-                console.log(error);
+
+                $('#control_1').val(restaFechas(f1,f2));
             }
-        });
+        }
     });
 
-    seleccionar = function(id, code, description){
-        $('#level5_catalog_code_id').val(id);
-        $('#level5_catalog_code').val(code);
-        $('#level5_catalog_description').html('Ìtem seleccionado: ' + description);
-        $('input[name=level5_catalog_description]').val('Ìtem seleccionado: ' + description);
-        $('#codes_result').html('');
-    }
+    $('#item_to').on('changeDate', function() {
+        var fechaInicio = $('#item_from').datepicker('getDate').getTime();
+        var fechaFin = $(this).datepicker('getDate').getTime();
 
-    $('#level5_catalog_code').keyup(function(){
-        $('#level5_catalog_code_id').val('');
-        $('#level5_catalog_description').html('');
-        $('input[name=level5_catalog_description]').val('');
-    });        
+        if (fechaInicio === fechaFin) {
+            alert('La fecha final debe ser mayor a fecha de inicio');
+            $('#item_to').datepicker('date', null); // Limpiar el datapicker
+            $('#item_to').val('');
+            $('#control_1').val('');
+            $('#control_a').val('');
+            return;
+        }
+
+        if (fechaInicio > fechaFin) {
+            alert('La fecha de inicio no puede ser mayor a la fecha final.');
+            $('#item_to').datepicker('date', null); // Limpiar el datapicker
+            $('#item_to').val('');
+            $('#control_1').val('');
+            $('#control_a').val('');
+        }else{
+            ///calcula dias de vigencia
+            restaFechas = function(f1,f2)
+            {
+                var aFecha1 = f1.split('/');
+                var aFecha2 = f2.split('/');
+                var fFecha1 = Date.UTC(aFecha1[2],aFecha1[1]-1,aFecha1[0]);
+                var fFecha2 = Date.UTC(aFecha2[2],aFecha2[1]-1,aFecha2[0]);
+                var dif = fFecha2 - fFecha1;
+                var dias = Math.floor(dif / (1000 * 60 * 60 * 24));
+                return dias;
+            }
+
+            ///calcula dias que faltan para vencer
+            restaFechas2 = function(f2,f3)
+            {
+                var aFecha1 = f3.split('/');
+                var aFecha2 = f2.split('/');
+                var fFecha1 = Date.UTC(aFecha1[2],aFecha1[1]-1,aFecha1[0]);
+                var fFecha2 = Date.UTC(aFecha2[2],aFecha2[1]-1,aFecha2[0]);
+                var dif = fFecha2 - fFecha1;
+                var dias = Math.floor(dif / (1000 * 60 * 60 * 24));
+                return dias;
+            }
+
+            var f1 = $('#item_from').val();//fecha dtpicker inicio
+            var f2=  $('#item_to').val(); //fecha dtpicker final
+            var f3= $('#fecha_actual').text();//fecha actual
+            $('#control_1').val(restaFechas(f1,f2));//resultado fecha vigencia
+            $('#control_a').val(restaFechas2(f2,f3));//resultado fecha días para vencer
+        }
+    });
 
 });
 </script>

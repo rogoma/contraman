@@ -155,7 +155,7 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     // Route::resource('orders.items_budget', BudgetRequestProvidersController::class); //Recurso anidado, es igual a /orders/{order_id}/items/{item_id}
 
     //RECURSOS DE CONTRACTS PARA MANEJAR ITEMS
-    Route::resource('contracts.items', ItemsController::class); //Recurso anidado, es igual a /orders/{order_id}/items/{item_id}
+    Route::resource('contracts.items', ItemsController::class); //Recurso anidado, es igual a /contracts/{contract_id}/items/{item_id}
     //GRABAR PÓLIZAS
     Route::post('/contracts/{id}/store', [ItemsController::class, 'store'])->name('contracts.items.store');
 
@@ -357,7 +357,7 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
 
     /*************** REPORTES DOMPDF **************/
     //REPORTE DE CONTRATOS TODOS
-    Route::get('pdf/panel_contracts/{contractr_id}', [ReportsController::class, 'generarContracts'])->name('pdf.panel_contracts');
+    Route::get('pdf/panel_contracts/{contract_id}', [ReportsController::class, 'generarContracts'])->name('pdf.panel_contracts');
     //REPORTE DE CONTRATOS EN CURSO
     Route::get('pdf/panel_contracts1', [ReportsController::class, 'generarContracts1'])->name('pdf.panel_contracts1');
     //REPORTE DE CONTRATOS RESCINDIDOS

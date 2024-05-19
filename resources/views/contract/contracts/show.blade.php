@@ -235,7 +235,7 @@ p.centrado {
                                                             <th>Vigencia Hasta</th>
                                                             <th>Monto</th>
                                                             <th>Comentarios</th>
-                                                            <th>Acciones</th>                                                            
+                                                            <th>Acciones</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -244,11 +244,11 @@ p.centrado {
                                                                 <td>{{ ($i+1) }}</td>
                                                                 <td>{{ $contract->items[$i]->policy->description }}</td>
                                                                 <td>{{ $contract->items[$i]->number_policy }}</td>
-                                                                <td>{{ $contract->items[$i]->itemFromDateFormat() }}</td>                                                                
-                                                                <td>{{ $contract->items[$i]->itemToDateFormat() }}</td>                                                                
-                                                                <td>{{ $contract->items[$i]->AmountFormat()}} </td>                                                                
+                                                                <td>{{ $contract->items[$i]->itemFromDateFormat() }}</td>
+                                                                <td>{{ $contract->items[$i]->itemToDateFormat() }}</td>
+                                                                <td>{{ $contract->items[$i]->AmountFormat()}} </td>
                                                                 <td>{{ $contract->items[$i]->comments }}</td>
-                                                                
+
                                                                 <td>
                                                                     @if (Auth::user()->hasPermission(['admin.items.update']) || $contract->dependency_id == Auth::user()->dependency_id)
                                                                     <button type="button" title="Editar" class="btn btn-warning btn-icon" onclick="updateItem({{ $contract->items[$i]->id }})">
@@ -273,13 +273,6 @@ p.centrado {
                                                     @if (in_array($contract->contract_state_id, [1,2]))
                                                     <a href="{{ route('contracts.items.create', $contract->id) }}" class="btn btn-primary">Agregar Pólizas</a>
                                                     @endif
-
-                                                    {{-- @if ($contract->contract_state_id == 0)
-                                                    @else
-                                                        <a href="{{ route('contracts.items.create', $contract->id) }}" class="btn btn-primary">Agregar Pólizas</a>
-                                                    @endif
-                                                        <i class="fa fa-upload text-white"></i>
-                                                    </a> --}}
                                                 @endif
                                             </div>
                                         {{-- <span style="font-size: 16px; font-weight: bold; color:red;background-color:yellow;" >MONTO TOTAL DEL LLAMADO: {{ $contract->totalAmountFormat() }}</span> --}}
@@ -464,14 +457,56 @@ p.centrado {
 <script type="text/javascript">
 $(document).ready(function(){
 
+
+    updateItem = function(item){
+        //llamar a Función JS que está en H:\Proyectos\sistedoc\public\js\guardar-tab.js
+        // persistirTab();
+        location.href = '/contracts/{{ $contract->id }}/items/'+item+'/edit/';
+    }
+
+    deleteItem = function(item){
+      swal({
+            title: "Atención",
+            text: "Está seguro que desea eliminar el registro?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Sí, eliminar",
+            cancelButtonText: "Cancelar",
+        },
+        function(isConfirm){
+          if(isConfirm){
+            $.ajax({
+              url : '/contracts/{{ $contract->id }}/items/'+item,
+              method : 'POST',
+              data: {_method: 'DELETE', _token: '{{ csrf_token() }}'},
+              success: function(data){
+                try{
+                    response = (typeof data == "object") ? data : JSON.parse(data);
+                    if(response.status == "success"){
+                        location.reload();
+                    }else{
+                        swal("Error!", response.message, "error");
+                    }
+                }catch(error){
+                    swal("Error!", "Ocurrió un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
+                    console.log(error);
+                }
+              },
+              error: function(error){
+                swal("Error!", "Ocurrió un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
+                console.log(error);
+              }
+            });
+          }
+        }
+      );
+    };
+
+
     updateContracts = function(budget){
         // persistirTab();
         location.href = '/contracts/{{ $contract->id }}/items_budget/'+budget+'/edit/';
-
-        // location.href = '/contracts/{{ $contract->id }}/budget_request_providers/'+budget+'/edit_providers_contracts/';
-
-        //  /items_budget = Route::resource('contracts.items_budget', BudgetRequestProvidersController::class);
-        //  /edit = public function edit(Request $request, $contract_id) de BudgetRequestProvidersController
     }
 
     recibecontract = function(contract_id){

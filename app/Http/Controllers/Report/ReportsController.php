@@ -45,28 +45,23 @@ class ReportsController extends Controller{
     public function generarContracts($contract_id)
     {
         //Donde contracts es una vista
-        $contracts = DB::table('vista_contracts_full')//vista que muestra los datos
-        ->select(['iddncp','number_year','year_adj','estado', 'modalidad', 'polizas', 'number_policy',
-        'tipo_contrato','item_from','item_to', 'amount', 'comments', 'contratista', 'dependencia'])
-        ->where('contract_id', '=', $contract_id)  
-        // ->where('actual_state', '>', 1)        
+        $contracts1 = DB::table('vista_contracts')//vista que muestra los datos
+        ->select(['iddncp','llamado','number_year','year_adj','estado', 'modalidad', 'tipo_contrato',
+        'total_amount', 'comentarios', 'contratista', 'dependencia'])
+        ->where('contract_id', '=', $contract_id)
+        // ->where('actual_state', '>', 1)
         ->get();
 
-        //SELECCIONAR POR SEPARADO PARA REPORTE
-        // $f4_1 = DB::table('vista_form4_1')//vista que muestra los datos        
-        // ->select (['form4_city','form4_date','providers_description','ruc']) 
-        // ->where('order_id', '=', $order_id)     
-        // ->whereIn('request_provider_type', [1])//EMPRESAS PARTICIPANTES
-        // ->get(); 
-
-        // $f4_2 = DB::table('vista_form4_2')//vista que muestra los datos        
-        // ->select (['order_id','item_number','providers_description','level5_catalog_codes_description','dncp_pac_id','amount']) 
-        // ->where('order_id', '=', $order_id)
-        // ->get();
+        //Donde contracts_full es una vista
+        $contracts2 = DB::table('vista_contracts_full')//vista que muestra los datos
+        ->select(['polizas', 'number_policy','tipo_contrato','item_from','item_to',
+        'amount', 'comments', 'contratista', 'dependencia'])
+        ->where('contract_id', '=', $contract_id)
+        // ->where('actual_state', '>', 1)
+        ->get();
 
 
-
-        $view = View::make('reports.contracts_items', compact('contracts'))->render();
+        $view = View::make('reports.contracts_items', compact('contracts1','contracts2'))->render();
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML($view);
         $pdf->setPaper('A4', 'landscape');//coloca en apaisado
@@ -193,7 +188,7 @@ class ReportsController extends Controller{
         'vcto_adv','dias_advance','fecha_tope_fidelity','vcto_fid','dias_fidelity','fecha_tope_accidents',
         'vcto_acc','dias_accidents','fecha_tope_risks','vcto_ris','dias_risks','fecha_tope_civil_resp',
         'vcto_civ','dias_civil_resp'])
-        ->where('dias_advance', '<=', 0) 
+        ->where('dias_advance', '<=', 0)
         ->orWhere('dias_fidelity', '<=', 0)
         ->orWhere('dias_accidents', '<=', 0)
         ->orWhere('dias_risks', '<=', 0)
@@ -207,7 +202,7 @@ class ReportsController extends Controller{
         return $pdf->stream('DETALLES ALERTA VENCIMIENTOS DE PÓLIZAS'.'.pdf');
     }
 
-    
+
     // function to display preview
     public function generarModalities()
     {

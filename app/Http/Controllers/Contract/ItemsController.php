@@ -29,14 +29,14 @@ class ItemsController extends Controller
     public function __construct()
     {
         $index_permissions = ['admin.items.index',
-                            'orders.items.index',
-                            'process_orders.items.index',
-                            'derive_orders.items.index',
+                            'contracts.items.index',
+                            'process_contracts.items.index',
+                            'derive_contracts.items.index',
                             'plannings.items.index'];
         $create_permissions = ['admin.items.create',
-                            'orders.items.create'];
+                            'contracts.items.create'];
         $update_permissions = ['admin.items.update',
-                            'orders.items.update'];
+                            'contracts.items.update'];
 
         $this->middleware('checkPermission:'.implode(',',$index_permissions))->only('index'); // Permiso para index
         $this->middleware('checkPermission:'.implode(',',$create_permissions))->only(['create', 'store']);   // Permiso para create
@@ -127,15 +127,11 @@ class ItemsController extends Controller
         if($request->user()->hasPermission(['admin.items.create', 'contracts.items.create']) || $contract->dependency_id == $request->user()->dependency_id){
             // return view('contract.contracts.show', compact('contract','user_files_pol','user_files_con','other_files_pol','other_files_con'));
         }else{
-            return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
+            return back()->with('error', 'No tiene los suficientes permisos para agregar pólizas.');
         }
-        
-        // if(!$request->user()->hasPermission(['admin.items.create']) && $contract->dependency_id != $request->user()->dependency_id){
-        //     return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
-        // }
 
         $policies = Policy::all();
-        
+
         return view('contract.items.create', compact('contract','policies'));
     }
 
@@ -166,11 +162,11 @@ class ItemsController extends Controller
      */
     public function store(Request $request, $contract_id)
     {
-        $rules = array(            
+        $rules = array(
             'policy_id' => 'numeric|required|max:2147483647',
             'number_policy' => 'string|required',
             'item_from' => 'nullable|date_format:d/m/Y',
-            'item_to' => 'nullable|required|date_format:d/m/Y',            
+            'item_to' => 'nullable|required|date_format:d/m/Y',
             'amount' => 'string|required|max:9223372036854775807',
             'comments' => 'nullable|max:300'
         );
@@ -185,16 +181,16 @@ class ItemsController extends Controller
         $item->policy_id = $request->input('policy_id');
         $item->number_policy = $request->input('number_policy');
         $item->item_from = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_from'))));
-        $item->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));        
-        
+        $item->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));
+
         $amount = str_replace('.', '',($request->input('amount')));
         if ($amount <= 0 ) {
             $validator->errors()->add('amount', 'Monto no puede ser cero ni negativo');
             return back()->withErrors($validator)->withInput();
         }else{
             $item->amount = $amount;
-        }       
-        $item->comments = $request->input('comments');        
+        }
+        $item->comments = $request->input('comments');
         $item->creator_user_id = $request->user()->id;  // usuario logueado
         $item->save();
         return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza agregada correctamente'); // Caso usuario posee rol pedidos
@@ -209,13 +205,13 @@ class ItemsController extends Controller
     public function update(Request $request, $contract_id, $item_id)
     {
         $contract = Contract::findOrFail($contract_id);
-        $item = Item::findOrFail($item_id);        
+        $item = Item::findOrFail($item_id);
 
-        $rules = array(            
+        $rules = array(
             'policy_id' => 'numeric|required|max:2147483647',
             'number_policy' => 'string|required',
             'item_from' => 'nullable|date_format:d/m/Y',
-            'item_to' => 'nullable|required|date_format:d/m/Y',            
+            'item_to' => 'nullable|required|date_format:d/m/Y',
             'amount' => 'string|required|max:9223372036854775807',
             'comments' => 'nullable|max:300'
         );
@@ -230,16 +226,16 @@ class ItemsController extends Controller
         $item->policy_id = $request->input('policy_id');
         $item->number_policy = $request->input('number_policy');
         $item->item_from = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_from'))));
-        $item->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));        
-        
+        $item->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));
+
         $amount = str_replace('.', '',($request->input('amount')));
         if ($amount <= 0 ) {
             $validator->errors()->add('amount', 'Monto no puede ser cero ni negativo');
             return back()->withErrors($validator)->withInput();
         }else{
             $item->amount = $amount;
-        }       
-        $item->comments = $request->input('comments');        
+        }
+        $item->comments = $request->input('comments');
         $item->creator_user_id = $request->user()->id;  // usuario logueado
         $item->save();
         return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza modificada correctamente'); // Caso usuario posee rol pedidos
@@ -739,24 +735,24 @@ class ItemsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $order_id, $item_id)
+    public function edit(Request $request, $contract_id, $item_id)
     {
-        $order = Order::findOrFail($order_id);
+        $contract = Contract::findOrFail($contract_id);
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
-        if(!$request->user()->hasPermission(['admin.items.update']) &&
-        $order->dependency_id != $request->user()->dependency_id){
+        if(!$request->user()->hasPermission(['admin.items.update','contracts.items.update']) &&  $contract->dependency_id != $request->user()->dependency_id){
             return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
         }
 
         $item = Item::findOrFail($item_id);
-        $level5_catalog_codes = Level5CatalogCode::all();
-        $order_presentations = OrderPresentation::all();
-        $order_measurement_units = OrderMeasurementUnit::all();
-        return view('order.items.update', compact('order', 'item','level5_catalog_codes', 'order_presentations','order_measurement_units'));
+        $policies = Policy::all();
+        // $level5_catalog_codes = Level5CatalogCode::all();
+        // $contract_presentations = contractPresentation::all();
+        // $contract_measurement_units = contractMeasurementUnit::all();
+        return view('contract.items.update', compact('contract','item','policies'));
     }
-    
-    
+
+
 
     /**
      * Remove the specified resource from storage.

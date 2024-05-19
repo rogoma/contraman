@@ -37,6 +37,15 @@
     body{
         /* background:#f2f2f2; */
     }
+
+    #providers, #providers tr, #providers tr td {
+        border: none;
+    }
+    #providers tr td {
+        font-weight: bolder;
+        padding: 4px;
+    }
+
     .section{
         margin-top:30px;
         padding:50px;
@@ -73,48 +82,53 @@
 
 
     {{-- <h2>LLAMADOS</h2> --}}
-        <table>
-            {{-- <tr>|| |
-                <th>#</th>
-                <th>Llamado N°</th>
-                <th>IDDNCP</th>
-                <th>N°Contrato</th>
-                <th>Año adjud.</th>
-                <th>Fecha Firma Contr.</th>
-                <th>Contratista</th>
-                <th>Estado</th>
-                <th>Modalidad</th>
-                <th>Monto total LLAMADO</th>
-                <th>Comentarios</th>
-            </tr> --}}
+    <table id="providers">
+        @for ($i = 0; $i < count($contracts1); $i = $i+3)
+        <tr>
+            <td> Llamado N°: {{ $contracts1[$i]->iddncp }}  -  N°Contrato: {{ $contracts1[$i]->number_year }}</td>
+        </tr>
+        @endfor
+        @for ($i = 0; $i < count($contracts1); $i = $i+3)
+        <tr>
+            <th> Descripción de la obra: {{ $contracts1[$i]->llamado }}</th>
+        </tr>
+        @endfor
+        @for ($i = 0; $i < count($contracts1); $i = $i+3)
+        <tr>
+            <th> Empresa Contratista: {{ $contracts1[$i]->contratista }}</th>
+        </tr>
+        @endfor
+        @for ($i = 0; $i < count($contracts1); $i = $i+3)
+        <tr>
+            <th> Dependencia Responsable: {{ $contracts1[$i]->dependencia }}</th>
+        </tr>
+        @endfor
+    </table>
+    <br>
+    <table>
+        <tr>
+            <th>Tipo Póliza</th>
+            <th>N° Póliza</th>
+            <th>Vencimiento</th>
+            <th>Cumple1</th>
+            <th>Cumple2</th>
+            <th>Cumple3</th>
+            <th>Comentarios</th>
+        </tr>
 
-            {{-- <td> Llamado N°: {{ $contracts->iddncp }} N°Contrato: {{ $contracts->number_year }}</td></td> --}}
+        @for ($i = 0; $i < count($contracts2); $i++)
+        <tr>
+            <td> {{ $contracts2[$i]->polizas }}</td>
+            <td> {{ $contracts2[$i]->number_policy }}</td>
+            {{-- <td> {{ $contracts2[$i]->year_adj }}</td> --}}
+            <td> {{ date('d/m/Y', strtotime($contracts2[$i]->item_to )) }}</td>
+            <td> {{ $contracts2[$i]->comments}}</td>
+            <td> {{ $contracts2[$i]->comments}}</td>
+            <td> {{ $contracts2[$i]->comments}}</td>
+            <td> {{ $contracts2[$i]->comments}}</td>
+        </tr>
+        @endfor
 
-            {{-- <td>N°Contrato: {{ $contracts->number_year }}</td></td> --}}
-            <td> {{ $contracts[$i]->number_year }} 
-
-            {{-- <td> Descripción Obra: {{ $contracts->contrato }} 
-            <td> Contratista: {{ $contracts->contratista }}</td>
-            <td> Dependencia Responsable: {{ $contracts->dependencia }}</td> --}}
-
-            <tr>                
-                <th>Tipo de Póliza</th>                
-                <th>N° Póliza</th>
-                <th>Vencimiento</th>
-                <th>Comentarios</th>
-            </tr>
-
-            @for ($i = 0; $i < count($contracts); $i++)
-            <tr>
-                <td> {{ $contracts[$i]->polizas }}</td>                
-                <td> {{ $contracts[$i]->number_policy }}</td>
-                <td> {{ $contracts[$i]->year_adj }}</td>                
-                <td> {{ date('d/m/Y', strtotime($contracts[$i]->item_to )) }}</td>
-                <td> {{ $contracts[$i]->comments}}</td>
-            </tr>
-            @endfor
-            {{-- @endforeach --}}
-        </table>
-    </div>
+    </table>
 </body>
 </html>
