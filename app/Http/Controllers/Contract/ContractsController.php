@@ -937,16 +937,11 @@ class ContractsController extends Controller
 
 public function getNotifications(Request $request)
 {
-
-     // obtenemos los pedidos que se han recibido en Contratos (ESTADO = 75)
-        // $orders = Contract::where('contract_state_id', [1])
-        //                 ->get();
-
-        $orders = DB::table('vista_contracts')//vista que muestra los datos
-                        ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
-                        'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
-                        'contract_end_date', 'total_amount', 'advance_validity_to','fidelity_validity_to','accidents_validity_to',
-                        'risks_validity_to','civil_resp_validity_to','comentarios'])
+     
+        $orders = DB::table('vista_contracts_full')//vista que muestra los datos
+                        ->select(['contrato', 'iddncp','number_year','year_adj','contratista',
+                        'estado', 'modalidad', 'tipo_contrato','amount', 'item_from',
+                        'item_to','comments'])
                         ->where('state_id', '=', 1)
                         ->get();
 
@@ -954,11 +949,8 @@ public function getNotifications(Request $request)
         // Por cada orden verificamos fecha tope y consultas sin responder
 
         $alerta_advance = array();
-        $alerta_fidelity = array();
-	    $alerta_accidents = array();
-        $alerta_risks= array();
-	    $civil_resp = array();
-
+        // $alerta_fidelity = array();
+	    
         $tope_recepcion_consultas = 0;
         $dias_tope_consultas = 0;
 
@@ -968,12 +960,12 @@ public function getNotifications(Request $request)
             $tope_recepcion_consultas = 0;
 
             // definimos proceso para generar datos de poliza de anticipos
-            if(empty($order->advance_validity_to)){
+            if(empty($order->item_to)){
                 // continue;
             }else{
-                $limite_mayor_consultas = strtotime($order->advance_validity_to . ' +'.$tope_recepcion_consultas.' days');
+                $limite_mayor_consultas = strtotime($order->item_to . ' +'.$tope_recepcion_consultas.' days');
                 $dias_aviso = $tope_recepcion_consultas - 60;
-                $limite_menor_consultas = strtotime($order->advance_validity_to . ' +'.$dias_aviso.' days');
+                $limite_menor_consultas = strtotime($order->item_to . ' +'.$dias_aviso.' days');
 
                 if($hoy <= $limite_mayor_consultas && $hoy >= $limite_menor_consultas){
                     $segundos_llegar_tope = $limite_mayor_consultas - $hoy;
@@ -987,27 +979,26 @@ public function getNotifications(Request $request)
             }
 
             // definimos proceso para generar datos de poliza de anticipos
-            if(empty($order->fidelity_validity_to)){
-                // continue;
-            }else{
-                $limite_mayor_consultas1 = strtotime($order->fidelity_validity_to . ' +'.$tope_recepcion_consultas.' days');
-                $dias_aviso = $tope_recepcion_consultas - 60;
-                $limite_menor_consultas1 = strtotime($order->fidelity_validity_to . ' +'.$dias_aviso.' days');
+            // if(empty($order->item_to)){
+            //     // continue;
+            // }else{
+            //     $limite_mayor_consultas1 = strtotime($order->item_to . ' +'.$tope_recepcion_consultas.' days');
+            //     $dias_aviso = $tope_recepcion_consultas - 60;
+            //     $limite_menor_consultas1 = strtotime($order->item_to . ' +'.$dias_aviso.' days');
 
-                if($hoy <= $limite_mayor_consultas1 && $hoy >= $limite_menor_consultas1){
-                    $segundos_llegar_tope1 = $limite_mayor_consultas1 - $hoy;
-                    $dias_tope_consultas = floor(abs($segundos_llegar_tope1 / 60 / 60 / 24 ));
-                    $pac_id = number_format($order->iddncp,0,",",".");
-                    $contratista = $order->contratista;
-                    $fecha_ini1 = date("d-m-Y", $limite_menor_consultas1);
-                    $fecha_fin1 = date("d-m-Y", $limite_mayor_consultas1);
-                    array_push($alerta_fidelity, array('pac_id' => $pac_id,'llamado' => $order->number_year, 'contratista' => $contratista, 'dias' => $dias_tope_consultas, 'fecha_fin' => $fecha_fin1, 'fecha_ini' => $fecha_ini1));
-                }
-            }
-
+            //     if($hoy <= $limite_mayor_consultas1 && $hoy >= $limite_menor_consultas1){
+            //         $segundos_llegar_tope1 = $limite_mayor_consultas1 - $hoy;
+            //         $dias_tope_consultas = floor(abs($segundos_llegar_tope1 / 60 / 60 / 24 ));
+            //         $pac_id = number_format($order->iddncp,0,",",".");
+            //         $contratista = $order->contratista;
+            //         $fecha_ini1 = date("d-m-Y", $limite_menor_consultas1);
+            //         $fecha_fin1 = date("d-m-Y", $limite_mayor_consultas1);
+            //         array_push($alerta_fidelity, array('pac_id' => $pac_id,'llamado' => $order->number_year, 'contratista' => $contratista, 'dias' => $dias_tope_consultas, 'fecha_fin' => $fecha_fin1, 'fecha_ini' => $fecha_ini1));
+            //     }
+            // }
         }
-
-        return response()->json(['status' => 'success', 'alerta_advance' => $alerta_advance,'alerta_fidelity' => $alerta_fidelity], 200);
+        // return response()->json(['status' => 'success', 'alerta_advance' => $alerta_advance,'alerta_fidelity' => $alerta_fidelity], 200);
+        return response()->json(['status' => 'success', 'alerta_advance' => $alerta_advance], 200);
 }
 
 

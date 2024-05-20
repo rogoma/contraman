@@ -366,7 +366,7 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     Route::get('pdf/panel_contracts3', [ReportsController::class, 'generarContracts3'])->name('pdf.panel_contracts3');
     //REPORTE DE DETALLE DE PÓLIZAS
     Route::get('pdf/panel_contracts4', [ReportsController::class, 'generarContracts4'])->name('pdf.panel_contracts4');
-    //REPORTE DE DETALLE DE PÓLIZAS
+    //REPORTE DE ALERTAS DE VENCIMIENTOS DE PÓLIZAS
     Route::get('pdf/panel_contracts5', [ReportsController::class, 'generarContracts5'])->name('pdf.panel_contracts5');
 
     //REPORTE DE UN CONTRATO ESPECÍFICO
