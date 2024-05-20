@@ -340,7 +340,7 @@
                         </li>
                         <li class="pcoded-hasmenu">
                             <a href="javascript:void(0)" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="fa fa-map"></i></span>
+                            <span class="pcoded-micon"><i class="fa fa-folder-open"></i></span>
                             <span class="pcoded-mtext">Admin. Contratos</span>
                             </a>
                             <ul class="pcoded-submenu">
