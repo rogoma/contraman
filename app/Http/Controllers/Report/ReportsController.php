@@ -76,7 +76,7 @@ class ReportsController extends Controller{
         $contracts = DB::table('vista_contracts')//vista que muestra los datos
         ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
         'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
-        'contract_end_date', 'total_amount', 'comentarios'])        
+        'contract_end_date', 'total_amount', 'comentarios'])
         ->get();
 
         $view = View::make('reports.contracts', compact('contracts', 'nombreMetodo'))->render();
@@ -191,7 +191,7 @@ class ReportsController extends Controller{
         return $pdf->stream('LLAMADOS-DETALLES DE PÓLIZAS'.'.pdf');
     }
 
-    // Para mostrar detalles de las pólizas
+    // Para mostrar alertas de vencimiento de las pólizas
     public function generarContracts5()
     {
         //capturamos el nombre del método para poder cambiar el título del reporte en la vista
@@ -200,14 +200,8 @@ class ReportsController extends Controller{
         //Donde contracts es una vista
         $contracts = DB::table('vista_contracts_vctos')//vista que muestra los datos
         ->select(['iddncp','number_year','contratista','tipo_contrato','total_amount','fecha_tope_advance',
-        'vcto_adv','dias_advance','fecha_tope_fidelity','vcto_fid','dias_fidelity','fecha_tope_accidents',
-        'vcto_acc','dias_accidents','fecha_tope_risks','vcto_ris','dias_risks','fecha_tope_civil_resp',
-        'vcto_civ','dias_civil_resp'])
+        'vcto_adv','dias_advance', 'llamado', 'polizas', 'number_policy', 'modalidad', 'comentarios'])
         ->where('dias_advance', '<=', 0)
-        ->orWhere('dias_fidelity', '<=', 0)
-        ->orWhere('dias_accidents', '<=', 0)
-        ->orWhere('dias_risks', '<=', 0)
-        ->orWhere('dias_civil_resp', '<=', 0)
         ->get();
 
         $view = View::make('reports.contracts_vctos_polizas', compact('contracts', 'nombreMetodo'))->render();

@@ -42,7 +42,7 @@ p.centrado {
                         <span>Llamado Nº {{ $contract->number_year }}</span>
                         <br><br>
                         {{-- <h6>Estado Actual: {{ $contract->contractstate->id." - ".$contract->contractstate->description }}</h6> --}}
-                        <h5><p style="font-size: 17px; font-weight: bold; color:#FF0000">Estado Actual: {{ $contract->contractState->id." - ".$contract->contractState->description }}</p></h5>                        
+                        <h5><p style="font-size: 17px; font-weight: bold; color:#FF0000">Estado Actual: {{ $contract->contractState->id." - ".$contract->contractState->description }}</p></h5>
                     </div>
                 </div>
             </div>
@@ -292,7 +292,7 @@ p.centrado {
                                                 <tr>
                                                     <td>1</td>
                                                     <td>Reporte Pólizas del Llamado</td>
-                                                    <td><a href="/pdf/panel_contracts/{{ $contract->id }}" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Total Llamados</a></td>
+                                                    <td><a href="/pdf/panel_contracts/{{ $contract->id }}" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Informe de Pólizas</a></td>
                                                     {{-- <td><a href="/pdf/reporte4/{{ $order->id }}" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Ver Formulario 4</a></td>                                                     --}}
                                                 </tr>
                                                 {{-- <tr>
@@ -485,8 +485,8 @@ $(document).ready(function(){
               success: function(data){
                 try{
                     response = (typeof data == "object") ? data : JSON.parse(data);
-                    if(response.status == "success"){                        
-                        location.reload();                        
+                    if(response.status == "success"){
+                        location.reload();
                     }else{
                         swal("Error!", response.message, "error");
                     }
