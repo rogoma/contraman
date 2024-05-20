@@ -1,5 +1,17 @@
 @extends('layouts.app')
 
+{{-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Tu Aplicación</title>
+    <!-- Incluye jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Incluye jQuery UI -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <!-- Otros scripts y estilos -->
+</head> --}}
+
 @section('content')
 <div class="pcoded-content">
     <div class="page-header card">
@@ -9,7 +21,7 @@
                     <i class="fa fa-sitemap bg-c-blue"></i>
                     <div class="d-inline">
                         <h5>Pólizas</h5>
-                        <span>Modificar Póliza</span>
+                        <span>Modificar Póliza</span>                        
                     </div>
                 </div>
             </div>
@@ -37,15 +49,8 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h5>Modificar Póliza al Llamado Nº {{ $contract->number_year }}</h5>
-                                        {{-- @if ($contract->open_contract == 1)
-                                            <h5><a style="font-size: 15px; font-weight: bold; color:red"> Tipo Contrato: Abierto</a></h5>
-                                        @else
-                                            @if ($contract->open_contract == 2)
-                                                <h5><a style="font-size: 15px; font-weight: bold; color:red"> Tipo Contrato: Cerrado</a></h5>
-                                            @else
-                                                <h5><a style="font-size: 15px; font-weight: bold; color:red"> Tipo Contrato: Abierto con MontoMin y MontoMáx</a></h5>
-                                            @endif
-                                        @endif --}}
+                                    <label id="fecha_actual" name="fecha_actual"  style="font-size: 20px;color: #FF0000;float: right;" for="fecha_actual">{{ Carbon\Carbon::now()->format('d/m/Y') }}</label>
+                                    <label style="font-size: 20px;color: #FF0000;float: right;">FECHA: </label>                                        
                                 </div>
                                 <div class="card-block">
                                         <form method="POST" action="{{ route('contracts.items.update', [$contract->id, $item->id]) }}">
@@ -164,6 +169,37 @@
 @push('scripts')
 <script type="text/javascript">
 $(document).ready(function(){
+
+    // ***** CALCULA DIAS VIGENCIA Y DIAS PARA VENCER DE LA PÓLIZA ****   
+    restaFechas = function(f1,f2)
+            {
+                var aFecha1 = f1.split('/');
+                var aFecha2 = f2.split('/');
+                var fFecha1 = Date.UTC(aFecha1[2],aFecha1[1]-1,aFecha1[0]);
+                var fFecha2 = Date.UTC(aFecha2[2],aFecha2[1]-1,aFecha2[0]);
+                var dif = fFecha2 - fFecha1;
+                var dias = Math.floor(dif / (1000 * 60 * 60 * 24));
+                return dias;
+            }
+
+            ///calcula dias que faltan para vencer
+            restaFechas2 = function(f2,f3)
+            {
+                var aFecha1 = f3.split('/');
+                var aFecha2 = f2.split('/');
+                var fFecha1 = Date.UTC(aFecha1[2],aFecha1[1]-1,aFecha1[0]);
+                var fFecha2 = Date.UTC(aFecha2[2],aFecha2[1]-1,aFecha2[0]);
+                var dif = fFecha2 - fFecha1;
+                var dias = Math.floor(dif / (1000 * 60 * 60 * 24));
+                return dias;
+            }
+
+            var f1 = $('#item_from').val();//fecha dtpicker inicio
+            var f2=  $('#item_to').val(); //fecha dtpicker final
+            var f3= $('#fecha_actual').text();//fecha actual
+            $('#control_1').val(restaFechas(f1,f2));//resultado fecha vigencia
+            $('#control_a').val(restaFechas2(f2,f3));//resultado fecha días para vencer
+    //*******************************
 
     $('#policy_id').select2();
 
@@ -287,8 +323,9 @@ $(document).ready(function(){
             $('#control_1').val(restaFechas(f1,f2));//resultado fecha vigencia
             $('#control_a').val(restaFechas2(f2,f3));//resultado fecha días para vencer
         }
-    });
-
+    });  
+    
+    $('#item_to').datepicker('date', null); // Limpiar el datapicker
 });
 </script>
 @endpush

@@ -67,7 +67,7 @@
 <p class="centrado"> <img src="img/logoVI.png"> </p>
 
 {{-- SE PREGUNTA POR EL NOMBRE DEL METODO DE ACUERDO A ESO SE ESCOGE EL TITULO DEL REPORTE --}}
-@if ($nombreMetodo == "App\Http\Controllers\Report\ReportsController::generarContracts")
+@if ($nombreMetodo == "App\Http\Controllers\Report\ReportsController::generarContracts0")
     <h2 style="color:#ff0000">LISTADO TOTAL DE LLAMADOS</h2>
 @endif
 
@@ -80,7 +80,7 @@
 @endif
 
 @if ($nombreMetodo == "App\Http\Controllers\Report\ReportsController::generarContracts2")
-    <h2>LISTADO DE LLAMADOS RESCINDIDOS</h2>
+    <h2 style="color:#ff0000">LISTADO DE LLAMADOS RESCINDIDOS</h2>
 @endif
 
 

@@ -30,6 +30,7 @@ p.centrado {
 @endpush
 
 @section('content')
+{{-- <div class="container"> --}}
 <div class="pcoded-content">
     <div class="page-header card">
         <div class="row align-items-end">
@@ -41,7 +42,7 @@ p.centrado {
                         <span>Llamado Nº {{ $contract->number_year }}</span>
                         <br><br>
                         {{-- <h6>Estado Actual: {{ $contract->contractstate->id." - ".$contract->contractstate->description }}</h6> --}}
-                        <h5><p style="font-size: 17px; font-weight: bold; color:#FF0000">Estado Actual: {{ $contract->contractState->id." - ".$contract->contractState->description }}</p></h5>
+                        <h5><p style="font-size: 17px; font-weight: bold; color:#FF0000">Estado Actual: {{ $contract->contractState->id." - ".$contract->contractState->description }}</p></h5>                        
                     </div>
                 </div>
             </div>
@@ -275,7 +276,7 @@ p.centrado {
                                                     @endif
                                                 @endif
                                             </div>
-                                        {{-- <span style="font-size: 16px; font-weight: bold; color:red;background-color:yellow;" >MONTO TOTAL DEL LLAMADO: {{ $contract->totalAmountFormat() }}</span> --}}
+                                        <span style="font-size: 16px; font-weight: bold; color:red;background-color:yellow;" >MONTO TOTAL DEL LLAMADO: {{ $contract->totalAmountFormat() }}</span>
                                     </div>
 
                                     <div class="tab-pane" id="tab4" role="tabpanel">
@@ -451,6 +452,7 @@ p.centrado {
         </div>
     </div>
 </div>
+{{-- </div> --}}
 @endsection
 
 @push('scripts')
@@ -467,7 +469,7 @@ $(document).ready(function(){
     deleteItem = function(item){
       swal({
             title: "Atención",
-            text: "Está seguro que desea eliminar el registro?",
+            text: "Está seguro que desea eliminar la póliza?",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
@@ -483,18 +485,18 @@ $(document).ready(function(){
               success: function(data){
                 try{
                     response = (typeof data == "object") ? data : JSON.parse(data);
-                    if(response.status == "success"){
-                        location.reload();
+                    if(response.status == "success"){                        
+                        location.reload();                        
                     }else{
                         swal("Error!", response.message, "error");
                     }
                 }catch(error){
-                    swal("Error!", "Ocurrió un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
+                    swal("Error!", "Ocurrió1 un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
                     console.log(error);
                 }
               },
               error: function(error){
-                swal("Error!", "Ocurrió un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
+                swal("Error!", "Ocurrió2 un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
                 console.log(error);
               }
             });

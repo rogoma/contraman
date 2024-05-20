@@ -355,9 +355,9 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     // Route::get('pdf/tipres2', [ReportsContropdf/panel_contractsller::class, 'pdfMPDF'])->name('pdf.ptipres2');
 
 
-    /*************** REPORTES DOMPDF **************/
+    /*************** REPORTES DOMPDF **************/    
     //REPORTE DE CONTRATOS TODOS
-    Route::get('pdf/panel_contracts/{contract_id}', [ReportsController::class, 'generarContracts'])->name('pdf.panel_contracts');
+    Route::get('pdf/panel_contracts0', [ReportsController::class, 'generarContracts0'])->name('pdf.panel_contracts0');
     //REPORTE DE CONTRATOS EN CURSO
     Route::get('pdf/panel_contracts1', [ReportsController::class, 'generarContracts1'])->name('pdf.panel_contracts1');
     //REPORTE DE CONTRATOS RESCINDIDOS
@@ -368,6 +368,9 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     Route::get('pdf/panel_contracts4', [ReportsController::class, 'generarContracts4'])->name('pdf.panel_contracts4');
     //REPORTE DE DETALLE DE PÓLIZAS
     Route::get('pdf/panel_contracts5', [ReportsController::class, 'generarContracts5'])->name('pdf.panel_contracts5');
+
+    //REPORTE DE UN CONTRATO ESPECÍFICO
+    Route::get('pdf/panel_contracts/{contract_id}', [ReportsController::class, 'generarContracts'])->name('pdf.panel_contracts');
 
     //REPORTE DE DETALLE DE PÓLIZAS EN EXCEL
     Route::get('/contracts/exportarexcel6', [ContractsController::class, 'exportarExcel6']);

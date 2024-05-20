@@ -68,6 +68,24 @@ class ReportsController extends Controller{
         return $pdf->stream('LLAMADO-POLIZAS'.'.pdf');
     }
 
+    public function generarContracts0()
+    {
+        //capturamos el nombre del método para poder cambiar el título del reporte en la vista
+        $nombreMetodo = __METHOD__;
+        //Donde contracts es una vista
+        $contracts = DB::table('vista_contracts')//vista que muestra los datos
+        ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
+        'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
+        'contract_end_date', 'total_amount', 'comentarios'])        
+        ->get();
+
+        $view = View::make('reports.contracts', compact('contracts', 'nombreMetodo'))->render();
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML($view);
+        $pdf->setPaper('A4', 'landscape');//coloca en apaisado
+        return $pdf->stream('LLAMADO-CONTRATOS'.'.pdf');
+    }
+
     // Para mostrar todos los llamados que estan en curso (estado = 1)
     public function generarContracts1()
     {
@@ -78,8 +96,7 @@ class ReportsController extends Controller{
         $contracts = DB::table('vista_contracts')//vista que muestra los datos
         ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
         'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
-        'contract_end_date', 'total_amount', 'advance_validity_to','fidelity_validity_to','accidents_validity_to',
-        'risks_validity_to','civil_resp_validity_to','comentarios'])
+        'contract_end_date', 'total_amount', 'comentarios'])
         ->where('state_id', '=', 1)
         ->get();
 
@@ -100,8 +117,7 @@ class ReportsController extends Controller{
         $contracts = DB::table('vista_contracts')//vista que muestra los datos
         ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
         'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
-        'contract_end_date', 'total_amount', 'advance_validity_to','fidelity_validity_to','accidents_validity_to',
-        'risks_validity_to','civil_resp_validity_to','comentarios'])
+        'contract_end_date', 'total_amount', 'comentarios'])
         ->where('state_id', '=', 2)
         ->get();
 
@@ -122,8 +138,7 @@ class ReportsController extends Controller{
         $contracts = DB::table('vista_contracts')//vista que muestra los datos
         ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
         'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
-        'contract_end_date', 'total_amount', 'advance_validity_to','fidelity_validity_to','accidents_validity_to',
-        'risks_validity_to','civil_resp_validity_to','comentarios'])
+        'contract_end_date', 'total_amount', 'comentarios'])
         ->where('state_id', '=', 3)
         ->get();
 

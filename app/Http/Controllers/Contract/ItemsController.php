@@ -221,8 +221,8 @@ class ItemsController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        $item = new Item;
-        $item->contract_id = $contract_id;
+        // $item = new Item;
+        // $item->contract_id = $contract_id;
         $item->policy_id = $request->input('policy_id');
         $item->number_policy = $request->input('number_policy');
         $item->item_from = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_from'))));
@@ -760,60 +760,30 @@ class ItemsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $order_id, $item_id)
+    public function destroy(Request $request, $contract_id, $item_id)
     {
-        $order = Order::findOrFail($order_id);
+        $contract = Contract::findOrFail($contract_id);
         $item = Item::find($item_id);
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
-        if(!$request->user()->hasPermission(['admin.items.delete']) &&
-        $item->order->dependency_id != $request->user()->dependency_id){
-            return response()->json(['status' => 'error', 'message' => 'No posee los suficientes permisos para realizar esta acción.', 'code' => 200], 200);
+        if(!$request->user()->hasPermission(['admin.items.delete','contracts.items.delete']) && $item->contract->dependency_id != $request->user()->dependency_id){
+            return response()->json(['status' => 'error', 'message' => 'No posee los suficientes permisos para eliminar la póliza.', 'code' => 200], 200);
         }
 
         // Chequeamos si existen item_award_histories referenciando al item
-        if($item->itemAwardHistories->count() > 0){
-            return response()->json(['status' => 'error', 'message' => 'No se ha podido eliminar el item debido a que se encuentra vinculado con históricos de precios referenciales, debe eliminarlos primero para continuar. ', 'code' => 200], 200);
-        }
+        // if($item->itemAwardHistories->count() > 0){
+        //     return response()->json(['status' => 'error', 'message' => 'No se ha podido eliminar el item debido a que se encuentra vinculado con históricos de precios referenciales, debe eliminarlos primero para continuar. ', 'code' => 200], 200);
+        // }
 
         // Eliminamos en caso de no existir registros referenciando al item
         $item->delete();
+        session()->flash('status', 'success');
+        session()->flash('message', 'Se ha eliminado la póliza ' . $item->number_policy);
 
-        // AQUI RECORRER LOS ITEMS DEL PEDIDO Y CARGAR COMO NUEVO TOTAL_AMOUNT
-        $total_amountitems = 0;
-        for ($i = 0; $i < count($order->items); $i++){
-            $total_amountitems += $order->items[$i]->total_amount;
-        }
-
-        // AQUI RECORRER LOS ITEMS DEL PEDIDO Y CARGAR COMO NUEVO TOTAL_AMOUNT EN ORDERS COMO PLURIANUAL
-
-        //CONTROLAMOS SI MONTO DE SUMATORIA DE ITEMS NO SOBREPASA MONTO CDP (SI YA TIENE CDP)
-        // $validator = Validator::make($request->input(), []);
-        // $cdp_amount = $order->cdp_amount;
-        // if ($total_amountitems > $cdp_amount) {
-        //     $validator->errors()->add('order_measurement_unit', 'Monto de Ítems: '.$total_amountitems.', es MAYOR a monto de CDP del Pedido, VERIFIQUE...');
-        //     return back()->withErrors($validator)->withInput();
-        // }
-
-
-
-        //CONTROLAMOS PARA AVISAR QUE MONTO DE SUMATORIA DE ITEMS SOBREPASA MONTO CDP (SI YA TIENE CDP)
-        $cdp_amount = $order->cdp_amount;
-        if ($cdp_amount > 0) {
-            if ($total_amountitems > $cdp_amount) {
-                $validator = Validator::make($request->input(), []); // Creamos un objeto validator
-                $validator->errors()->add('order_measurement_unit', 'Con este cambio Monto total de Ítems: '.$total_amountitems.', es MAYOR a: '.$cdp_amount.' monto de CDP del Pedido, DEBE ACTUALIZAR CDP...');
-                return back()->withErrors($validator)->withInput();
-            }
-        }
-
-
-        //CERAMOS VALOR DEL MONTO DE ORDER Y CARGAMOS VALOR NUEVO
-        $order->total_amount = 0;
-        $order->total_amount = $total_amountitems;
-
-        $order->save();
-
-        return response()->json(['status' => 'success', 'message' => 'Se ha eliminado el ítem ', 'code' => 200], 200);
+        return response()->json([
+            'status' => 'success', 
+            'message' => 'Se ha eliminado la póliza'. $item->number_policy, 
+            'code' => 200
+        ], 200);                        
     }
 }
