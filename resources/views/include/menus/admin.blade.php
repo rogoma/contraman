@@ -349,9 +349,9 @@
                                     <span class="pcoded-mtext">Tipos de Contratos</span>
                                     </a>
                                 </li>
-                                <li class="@if(Route::currentRouteName() == 'regions.index') active @endif">
-                                    <a href="{{ route('regions.index') }}" class="waves-effect waves-dark">
-                                    <span class="pcoded-mtext">Tipos de Modalidades</span>
+                                <li class="@if(Route::currentRouteName() == 'modalities.index') active @endif">
+                                    <a href="{{ route('modalities.index') }}" class="waves-effect waves-dark">
+                                    <span class="pcoded-mtext">Modalidades</span>
                                     </a>
                                 </li>
                                 <li class="@if(Route::currentRouteName() == 'districts.index') active @endif">

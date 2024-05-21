@@ -217,6 +217,21 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group @error('contract_admin_id') has-danger @enderror">
+                                                <label class="col-form-label">Administrador del Contrato</label>
+                                                <select id="contract_admin_id" name="contract_admin_id" class="form-control">
+                                                    <option value="">Seleccionar</option>
+                                                @foreach ($dependencies as $dependency)
+                                                    <option value="{{ $dependency->id    }}" @if ($dependency->id    == old('contract_admin_id', $contract->dependency_id      )) selected @endif>{{$dependency->description }}</option>
+                                                    {{-- <option value="{{ $contract_type->id }}" @if ($contract_type->id == old('contract_type_id', $contract->contract_type_id)) selected @endif>{{$contract_type->description }}</option> --}}
+                                                @endforeach
+                                                </select>
+                                                @error('contract_admin_id')
+                                                    <div class="col-form-label">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
                                         <div class="col-sm-12">
                                             <div class="form-group @error('comments') has-danger @enderror">
                                                 <label class="col-form-label">Comentarios</label>
@@ -226,8 +241,8 @@
                                                 @enderror
                                             </div>
                                         </div>
-                                        <div class="container">                                            
-                                            
+                                        <div class="container">
+
                                         <br>
                                         <div class="col-sm-12">
                                             <div class="form-group text-center">
@@ -282,6 +297,7 @@ $(document).ready(function(){
     $('#funding_source_id').select2();
     $('#financial_organism_id').select2();
     $('#dependency_id').select2();
+    $('#contract_admin_id').select2();
 
 
     $('#sign_date').datepicker({

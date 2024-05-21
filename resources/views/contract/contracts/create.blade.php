@@ -227,6 +227,20 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group @error('contract_admin_id') has-danger @enderror">
+                                                <label class="col-form-label">Administrador del Contrato</label>
+                                                <select id="contract_admin_id" name="contract_admin_id" class="form-control">
+                                                    <option value="">Seleccionar</option>
+                                                @foreach ($dependencies as $dependency)
+                                                    <option value="{{ $dependency->id }}" @if ($dependency->id == old('contract_admin_id')) selected @endif>{{ $dependency->description }}</option>
+                                                @endforeach
+                                                </select>
+                                                @error('dependency_id')
+                                                    <div class="col-form-label">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
                                         {{-- #13 --}}
                                         <div class="col-sm-12">
                                             <div class="form-group @error('comments') has-danger @enderror">
@@ -239,7 +253,7 @@
                                         </div>
 
                                         <div class="container">
-                                            
+
                                         <div class="col-sm-12">
                                             <br>
                                             <div class="form-group text-center">
@@ -292,6 +306,8 @@ $(document).ready(function(){
     $('#funding_source_id').select2();
     $('#financial_organism_id').select2();
     $('#dependency_id').select2();
+    $('#contract_admin_id').select2();
+
 
     // $('#expenditure_object').select2();
 
