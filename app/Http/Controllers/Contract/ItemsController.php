@@ -167,7 +167,7 @@ class ItemsController extends Controller
             'number_policy' => 'string|required',
             'item_from' => 'nullable|date_format:d/m/Y',
             'item_to' => 'nullable|required|date_format:d/m/Y',
-            'amount' => 'string|required|max:9223372036854775807',
+            'amount' => 'nullable|string|max:9223372036854775807',
             'comments' => 'nullable|max:300'
         );
 
@@ -184,8 +184,13 @@ class ItemsController extends Controller
         $item->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));
 
         $amount = str_replace('.', '',($request->input('amount')));
-        if ($amount <= 0 ) {
-            $validator->errors()->add('amount', 'Monto no puede ser cero ni negativo');
+        if ($amount === '' ) {
+            $validator->errors()->add('amount', 'Ingrese Monto');
+            return back()->withErrors($validator)->withInput();
+        }
+
+        if ($amount < 0 ) {
+            $validator->errors()->add('amount', 'Monto no puede ser negativo');
             return back()->withErrors($validator)->withInput();
         }else{
             $item->amount = $amount;
@@ -212,7 +217,7 @@ class ItemsController extends Controller
             'number_policy' => 'string|required',
             'item_from' => 'nullable|date_format:d/m/Y',
             'item_to' => 'nullable|required|date_format:d/m/Y',
-            'amount' => 'string|required|max:9223372036854775807',
+            'amount' => 'nullable|string|max:9223372036854775807',
             'comments' => 'nullable|max:300'
         );
 
@@ -229,8 +234,13 @@ class ItemsController extends Controller
         $item->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));
 
         $amount = str_replace('.', '',($request->input('amount')));
-        if ($amount <= 0 ) {
-            $validator->errors()->add('amount', 'Monto no puede ser cero ni negativo');
+        if ($amount === '') {
+            $validator->errors()->add('amount', 'Ingrese Monto');
+            return back()->withErrors($validator)->withInput();
+        }
+
+        if ($amount < 0 ) {
+            $validator->errors()->add('amount', 'Monto no puede ser negativo');
             return back()->withErrors($validator)->withInput();
         }else{
             $item->amount = $amount;
@@ -781,9 +791,9 @@ class ItemsController extends Controller
         session()->flash('message', 'Se ha eliminado la póliza ' . $item->number_policy);
 
         return response()->json([
-            'status' => 'success', 
-            'message' => 'Se ha eliminado la póliza'. $item->number_policy, 
+            'status' => 'success',
+            'message' => 'Se ha eliminado la póliza'. $item->number_policy,
             'code' => 200
-        ], 200);                        
+        ], 200);
     }
 }

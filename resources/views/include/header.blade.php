@@ -107,6 +107,8 @@
             @include('include.menus.documentals')
         @elseif(Auth::user()->role_id == 27)
             @include('include.menus.admin_users')
+        @elseif(Auth::user()->role_id == 30)
+            @include('include.menus.uoc2')
         @endif
 
         {{-- Si hay rol derivar pedidos y SI ES usuario de UTA     --}}

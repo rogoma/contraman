@@ -21,7 +21,7 @@
                     <i class="fa fa-sitemap bg-c-blue"></i>
                     <div class="d-inline">
                         <h5>Pólizas</h5>
-                        <span>Modificar Póliza</span>                        
+                        <span>Modificar Póliza</span>
                     </div>
                 </div>
             </div>
@@ -50,7 +50,7 @@
                                 <div class="card-header">
                                     <h5>Modificar Póliza al Llamado Nº {{ $contract->number_year }}</h5>
                                     <label id="fecha_actual" name="fecha_actual"  style="font-size: 20px;color: #FF0000;float: right;" for="fecha_actual">{{ Carbon\Carbon::now()->format('d/m/Y') }}</label>
-                                    <label style="font-size: 20px;color: #FF0000;float: right;">FECHA: </label>                                        
+                                    <label style="font-size: 20px;color: #FF0000;float: right;">FECHA: </label>
                                 </div>
                                 <div class="card-block">
                                         <form method="POST" action="{{ route('contracts.items.update', [$contract->id, $item->id]) }}">
@@ -170,7 +170,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-    // ***** CALCULA DIAS VIGENCIA Y DIAS PARA VENCER DE LA PÓLIZA ****   
+    // ***** CALCULA DIAS VIGENCIA Y DIAS PARA VENCER DE LA PÓLIZA ****
     restaFechas = function(f1,f2)
             {
                 var aFecha1 = f1.split('/');
@@ -205,12 +205,18 @@ $(document).ready(function(){
 
     // Script para formatear el valor con separador de miles mientras se ingresa Monto
     document.getElementById('amount').addEventListener('input', function(event) {
-        // Obtenemos el valor ingresado y eliminamos los separadores de miles existentes
-        let monto = event.target.value.replace(/\./g, '');
-        // Formateamos el valor con separador de miles
-        monto = parseFloat(monto).toLocaleString('es-ES');
-        // Actualizamos el valor en el input text
-        event.target.value = monto;
+    // Obtenemos el valor ingresado
+    let monto = event.target.value.replace(/\./g, '');
+    // Comprobamos si el valor es vacío
+    if (monto === '') {
+        event.target.value = '0';
+        return;
+    }
+    // Convertimos a número y formateamos el valor con separador de miles
+    monto = parseFloat(monto).toLocaleString('es-ES');
+
+    // Actualizamos el valor en el input text
+    event.target.value = monto;
     });
 
     $('#item_from').datepicker({
@@ -323,8 +329,8 @@ $(document).ready(function(){
             $('#control_1').val(restaFechas(f1,f2));//resultado fecha vigencia
             $('#control_a').val(restaFechas2(f2,f3));//resultado fecha días para vencer
         }
-    });  
-    
+    });
+
     $('#item_to').datepicker('date', null); // Limpiar el datapicker
 });
 </script>

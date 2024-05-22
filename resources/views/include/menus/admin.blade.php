@@ -181,7 +181,7 @@
                         <li class="pcoded-hasmenu">
                             <a href="javascript:void(0)" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="fa fa-users"></i></span>
-                            <span class="pcoded-mtext">Usuarios</span>
+                            <span class="pcoded-mtext">Admin. Usuarios</span>
                             </a>
                             <ul class="pcoded-submenu">
                                 <li class="@if(Route::currentRouteName() == 'users.index') active @endif">

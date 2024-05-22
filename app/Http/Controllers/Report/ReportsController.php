@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Report;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Support\Facades\DB;
@@ -42,24 +43,40 @@ class ReportsController extends Controller{
 
 
     // Para mostrar todos los llamados que tienen contratos
-    public function generarContracts($contract_id)
+    public function generarContracts(Request $request, $contract_id)
     {
-        //Donde contracts es una vista
-        $contracts1 = DB::table('vista_contracts')//vista que muestra los datos
-        ->select(['iddncp','llamado','number_year','year_adj','estado', 'modalidad', 'tipo_contrato',
-        'total_amount', 'comentarios', 'contratista', 'dependencia'])
-        ->where('contract_id', '=', $contract_id)
-        // ->where('actual_state', '>', 1)
-        ->get();
+        //No filtra por permiso si es rol admin y uoc2
+        if($request->user()->hasPermission(['admin.contracts.show'])){
+            //Donde contracts es una vista
+            $contracts1 = DB::table('vista_contracts')//vista que muestra los datos
+            ->select(['iddncp','llamado','number_year','year_adj','estado', 'modalidad', 'tipo_contrato',
+            'total_amount', 'comentarios', 'contratista', 'dependencia'])
+            ->where('contract_id', '=', $contract_id)
+            ->get();
 
-        //Donde contracts_full es una vista
-        $contracts2 = DB::table('vista_contracts_full')//vista que muestra los datos
-        ->select(['polizas', 'number_policy','tipo_contrato','item_from','item_to',
-        'amount', 'comments', 'contratista', 'dependencia'])
-        ->where('contract_id', '=', $contract_id)
-        // ->where('actual_state', '>', 1)
-        ->get();
+            //Donde contracts_full es una vista
+            $contracts2 = DB::table('vista_contracts_full')//vista que muestra los datos
+            ->select(['polizas', 'number_policy','tipo_contrato','item_from','item_to',
+            'amount', 'comments', 'contratista', 'dependencia'])
+            ->where('contract_id', '=', $contract_id)
+            ->get();
+        }else{
+            //Donde contracts es una vista
+            $contracts1 = DB::table('vista_contracts')//vista que muestra los datos
+            ->select(['iddncp','llamado','number_year','year_adj','estado', 'modalidad', 'tipo_contrato',
+            'total_amount', 'comentarios', 'contratista', 'dependencia'])
+            ->where('contract_id', '=', $contract_id)
+            ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
+            ->get();
 
+            //Donde contracts_full es una vista
+            $contracts2 = DB::table('vista_contracts_full')//vista que muestra los datos
+            ->select(['polizas', 'number_policy','tipo_contrato','item_from','item_to',
+            'amount', 'comments', 'contratista', 'dependencia'])
+            ->where('contract_id', '=', $contract_id)
+            ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
+            ->get();
+        }
 
         $view = View::make('reports.contracts_items', compact('contracts1','contracts2'))->render();
         $pdf = App::make('dompdf.wrapper');
@@ -68,16 +85,26 @@ class ReportsController extends Controller{
         return $pdf->stream('LLAMADO-POLIZAS'.'.pdf');
     }
 
-    public function generarContracts0()
+    public function generarContracts0(Request $request)
     {
         //capturamos el nombre del método para poder cambiar el título del reporte en la vista
         $nombreMetodo = __METHOD__;
-        //Donde contracts es una vista
-        $contracts = DB::table('vista_contracts')//vista que muestra los datos
-        ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
-        'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
-        'contract_end_date', 'total_amount', 'comentarios'])
-        ->get();
+
+        //No filtra por permiso si es rol admin y uoc2
+        if($request->user()->hasPermission(['admin.contracts.show'])){
+            $contracts = DB::table('vista_contracts')//vista que muestra los datos
+            ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
+            'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
+            'contract_end_date', 'total_amount', 'comentarios','dependencia'])
+            ->get();
+        }else{
+            $contracts = DB::table('vista_contracts')//vista que muestra los datos
+            ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
+            'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
+            'contract_end_date', 'total_amount', 'comentarios','dependencia'])
+            ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
+            ->get();
+        }
 
         $view = View::make('reports.contracts', compact('contracts', 'nombreMetodo'))->render();
         $pdf = App::make('dompdf.wrapper');
@@ -87,18 +114,28 @@ class ReportsController extends Controller{
     }
 
     // Para mostrar todos los llamados que estan en curso (estado = 1)
-    public function generarContracts1()
+    public function generarContracts1(Request $request)
     {
         //capturamos el nombre del método para poder cambiar el título del reporte en la vista
         $nombreMetodo = __METHOD__;
 
-        //Donde contracts es una vista
-        $contracts = DB::table('vista_contracts')//vista que muestra los datos
-        ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
-        'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
-        'contract_end_date', 'total_amount', 'comentarios'])
-        ->where('state_id', '=', 1)
-        ->get();
+        //No filtra por permiso si es rol admin y uoc2
+        if($request->user()->hasPermission(['admin.contracts.show'])){
+            $contracts = DB::table('vista_contracts')//vista que muestra los datos
+            ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
+            'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
+            'contract_end_date', 'total_amount', 'comentarios','dependencia'])
+            ->where('state_id', '=', 1)
+            ->get();
+        }else{
+            $contracts = DB::table('vista_contracts')//vista que muestra los datos
+            ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
+            'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
+            'contract_end_date', 'total_amount', 'comentarios','dependencia'])
+            ->where('state_id', '=', 1)
+            ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
+            ->get();
+        }
 
         $view = View::make('reports.contracts', compact('contracts', 'nombreMetodo'))->render();
         $pdf = App::make('dompdf.wrapper');
@@ -108,18 +145,29 @@ class ReportsController extends Controller{
     }
 
     // Para mostrar todos los llamados que estan rescindido (estado = 2)
-    public function generarContracts2()
+    public function generarContracts2(Request $request)
     {
         //capturamos el nombre del método para poder cambiar el título del reporte en la vista
         $nombreMetodo = __METHOD__;
 
-        //Donde contracts es una vista
-        $contracts = DB::table('vista_contracts')//vista que muestra los datos
-        ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
-        'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
-        'contract_end_date', 'total_amount', 'comentarios'])
-        ->where('state_id', '=', 2)
-        ->get();
+
+        //No filtra por permiso si es rol admin y uoc2
+        if($request->user()->hasPermission(['admin.contracts.show'])){
+            $contracts = DB::table('vista_contracts')//vista que muestra los datos
+            ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
+            'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
+            'contract_end_date', 'total_amount', 'comentarios','dependencia'])
+            ->where('state_id', '=', 2)
+            ->get();
+        }else{
+            $contracts = DB::table('vista_contracts')//vista que muestra los datos
+            ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
+            'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
+            'contract_end_date', 'total_amount', 'comentarios','dependencia'])
+            ->where('state_id', '=', 2)
+            ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
+            ->get();
+        }
 
         $view = View::make('reports.contracts', compact('contracts', 'nombreMetodo'))->render();
         $pdf = App::make('dompdf.wrapper');
@@ -129,18 +177,27 @@ class ReportsController extends Controller{
     }
 
     // Para mostrar todos los llamados que estan cerrados (estado = 3)
-    public function generarContracts3()
+    public function generarContracts3(Request $request)
     {
         //capturamos el nombre del método para poder cambiar el título del reporte en la vista
         $nombreMetodo = __METHOD__;
 
-        //Donde contracts es una vista
-        $contracts = DB::table('vista_contracts')//vista que muestra los datos
-        ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
-        'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
-        'contract_end_date', 'total_amount', 'comentarios'])
-        ->where('state_id', '=', 3)
-        ->get();
+        if($request->user()->hasPermission(['admin.contracts.show'])){
+            $contracts = DB::table('vista_contracts')//vista que muestra los datos
+            ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
+            'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
+            'contract_end_date', 'total_amount', 'comentarios','dependencia'])
+            ->where('state_id', '=', 3)
+            ->get();
+        }else{
+            $contracts = DB::table('vista_contracts')//vista que muestra los datos
+            ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
+            'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
+            'contract_end_date', 'total_amount', 'comentarios','dependencia'])
+            ->where('state_id', '=', 3)
+            ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
+            ->get();
+        }
 
         $view = View::make('reports.contracts', compact('contracts', 'nombreMetodo'))->render();
         $pdf = App::make('dompdf.wrapper');
@@ -149,60 +206,61 @@ class ReportsController extends Controller{
         return $pdf->stream('LLAMADO-CONTRATOS RESCINDIDOS'.'.pdf');
     }
 
-    // Para mostrar detalles de las pólizas
-    public function generarContracts4()
-    {
-        //capturamos el nombre del método para poder cambiar el título del reporte en la vista
-        $nombreMetodo = __METHOD__;
+    // // Para mostrar detalles de las pólizas
+    // public function generarContracts4(Request $request)
+    // {
+    //     //capturamos el nombre del método para poder cambiar el título del reporte en la vista
+    //     $nombreMetodo = __METHOD__;
 
-        //Donde contracts es una vista
-        $contracts = DB::table('vista_contracts')//vista que muestra los datos
-        ->select(['llamado','iddncp',
-        'number_year',
-        // 'year_adj',
-        // 'sign_date',
-        'contratista',
-        'estado',
-        // 'code',
-        // 'modalidad',
-        // 'org_financ',
-        // 'tipo_contrato',
-        // 'contract_begin_date',
-        // 'contract_end_date',
-        'total_amount',
-        'advance_validity_from',
-        'advance_validity_to',
-        'fidelity_validity_from',
-        'fidelity_validity_to',
-        'accidents_validity_from',
-        'accidents_validity_to',
-        'risks_validity_from',
-        'risks_validity_to',
-        'civil_resp_validity_from',
-        'civil_resp_validity_to',
-        'comentarios'])
-        // ->where('state_id', '=', 3)
-        ->get();
+    //     //Donde contracts es una vista
+    //     $contracts = DB::table('vista_contracts')//vista que muestra los datos
+    //     ->select(['llamado','iddncp',
+    //     'number_year',
+    //     'contratista',
+    //     'estado',
+    //     'total_amount',
+    //     'advance_validity_from',
+    //     'advance_validity_to',
+    //     'fidelity_validity_from',
+    //     'fidelity_validity_to',
+    //     'accidents_validity_from',
+    //     'accidents_validity_to',
+    //     'risks_validity_from',
+    //     'risks_validity_to',
+    //     'civil_resp_validity_from',
+    //     'civil_resp_validity_to',
+    //     'comentarios'])
+    //     // ->where('state_id', '=', 3)
+    //     ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
+    //     ->get();
 
-        $view = View::make('reports.contracts_polizas', compact('contracts', 'nombreMetodo'))->render();
-        $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML($view);
-        $pdf->setPaper('A4', 'landscape');//coloca en apaisado
-        return $pdf->stream('LLAMADOS-DETALLES DE PÓLIZAS'.'.pdf');
-    }
+    //     $view = View::make('reports.contracts_polizas', compact('contracts', 'nombreMetodo'))->render();
+    //     $pdf = App::make('dompdf.wrapper');
+    //     $pdf->loadHTML($view);
+    //     $pdf->setPaper('A4', 'landscape');//coloca en apaisado
+    //     return $pdf->stream('LLAMADOS-DETALLES DE PÓLIZAS'.'.pdf');
+    // }
 
     // Para mostrar alertas de vencimiento de las pólizas
-    public function generarContracts5()
+    public function generarContracts5(Request $request)
     {
         //capturamos el nombre del método para poder cambiar el título del reporte en la vista
         $nombreMetodo = __METHOD__;
 
-        //Donde contracts es una vista
-        $contracts = DB::table('vista_contracts_vctos')//vista que muestra los datos
-        ->select(['iddncp','number_year','contratista','tipo_contrato','total_amount','fecha_tope_advance',
-        'vcto_adv','dias_advance', 'llamado', 'polizas', 'number_policy', 'modalidad', 'comentarios'])
-        ->where('dias_advance', '<=', 0)
-        ->get();
+        if($request->user()->hasPermission(['admin.contracts.show'])){
+            $contracts = DB::table('vista_contracts_vctos')//vista que muestra los datos
+            ->select(['iddncp','number_year','contratista','tipo_contrato','total_amount','fecha_tope_advance',
+            'vcto_adv','dias_advance', 'llamado', 'polizas', 'number_policy', 'modalidad', 'comentarios','dependencia'])
+            ->where('dias_advance', '<=', 0)
+            ->get();
+        }else{
+            $contracts = DB::table('vista_contracts_vctos')//vista que muestra los datos
+            ->select(['iddncp','number_year','contratista','tipo_contrato','total_amount','fecha_tope_advance',
+            'vcto_adv','dias_advance', 'llamado', 'polizas', 'number_policy', 'modalidad', 'comentarios','dependencia'])
+            ->where('dias_advance', '<=', 0)
+            ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
+            ->get();
+        }
 
         $view = View::make('reports.contracts_vctos_polizas', compact('contracts', 'nombreMetodo'))->render();
         $pdf = App::make('dompdf.wrapper');

@@ -43,9 +43,9 @@ class ContractsController extends Controller
      */
     public function __construct()
     {
-        $index_permissions = ['admin.orders.index','contracts.contracts.index','derive_contracts.contracts.show'];
-        $create_permissions = ['admin.orders.create','contracts.contracts.create'];
-        $update_permissions = ['admin.orders.update', 'contracts.contracts.update'];
+        $index_permissions = ['admin.contracts.index','contracts.contracts.index','derive_contracts.contracts.show'];
+        $create_permissions = ['admin.contracts.create','contracts.contracts.create'];
+        $update_permissions = ['admin.contracts.update', 'contracts.contracts.update'];
 
         $this->middleware('checkPermission:'.implode(',',$index_permissions))->only('index'); // Permiso para index
         $this->middleware('checkPermission:'.implode(',',$create_permissions))->only(['create', 'store']);   // Permiso para create
@@ -65,14 +65,22 @@ class ContractsController extends Controller
      */
     public function index(Request $request)
     {
-        //Mostramos código >= 70 PROCESADO EN ADJUDICACIONES - 1RA ETAPA)
-        $contracts = Contract::where('contract_state_id', '>=', 1)
+        if($request->user()->hasPermission(['admin.contracts.index'])){
+            //NO SE MUESTRAN LOS PEDIDOS ANULADOS
+            $contracts = Contract::where('contract_state_id', '>=', 1)
                     ->orderBy('iddncp','asc')
                     ->get();
-        // $contracts = DB::select('Select * from  contracts  where contract_state_id > 0' orderby );
+            $dependency = $request->user()->dependency_id;
+        }else{
+            // Para los otros roles se visualizan los pedidos de la dependencia del usuario "NO MUESTRA PEDIDOS ANULADOS"
+            $contracts = Contract::where('dependency_id', $request->user()->dependency_id)
+                    ->where('contract_state_id', '>=', 1)
+                    ->orderBy('iddncp','asc')
+                    ->get();
+            //Se captura el id de de la dependencia para pasar este parámetro y así filtrar en Panel de llamados
+            $dependency = $request->user()->dependency_id;
+        }
         return view('contract.contracts.index', compact('contracts'));
-
-        $dependency = $request->user()->dependency_id;
     }
 
     //Para exportar a Excel pedidos encurso aún sn adjudicación
@@ -774,7 +782,7 @@ class ContractsController extends Controller
         //             $contract->control_e=$request->input('control_e');
         //         }
         //     }
-        // }        
+        // }
 
     }
 
@@ -937,7 +945,7 @@ class ContractsController extends Controller
 
 public function getNotifications(Request $request)
 {
-     
+
         $orders = DB::table('vista_contracts_full')//vista que muestra los datos
                         ->select(['contrato', 'iddncp','number_year','year_adj','contratista',
                         'estado', 'modalidad', 'tipo_contrato','amount', 'item_from',
@@ -950,7 +958,7 @@ public function getNotifications(Request $request)
 
         $alerta_advance = array();
         // $alerta_fidelity = array();
-	    
+
         $tope_recepcion_consultas = 0;
         $dias_tope_consultas = 0;
 

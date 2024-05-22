@@ -43,7 +43,7 @@
                                 <div class="card-block">
                                     <form method="POST" action="{{ route('contracts.items.store', $contract->id) }}">
                                         @csrf
-                                        <div class="container">                                            
+                                        <div class="container">
                                             <h3 style="text-align: center;">Agregar Póliza</h3>
                                             <br>
                                             <div class="form-group row @error('policy_id') has-danger @enderror">
@@ -70,8 +70,8 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row">                                                
-                                                <div class="col-md-3">                                                
+                                            <div class="row">
+                                                <div class="col-md-3">
                                                         <label class="col-form-label @error('item_from') has-danger @enderror">Vigencia Desde</label>
                                                         <div class="input-group @error('item_from') has-danger @enderror">
                                                             <input type="text" id="item_from" name="item_from" value="{{ old('item_from') }}" class="form-control text-align: left" autocomplete="off">
@@ -84,7 +84,7 @@
                                                             <div class="col-form-label">{{ $message }}</div>
                                                         </div>
                                                         @enderror
-                                                </div>                                                
+                                                </div>
                                                 <div class="col-md-3">
                                                         <label class="col-form-label @error('item_to') has-danger @enderror">Vigencia Hasta</label>
                                                         <div class="input-group @error('item_to') has-danger @enderror">
@@ -113,7 +113,7 @@
                                                         <input type="text" id="control_a" readonly name="control_a" value="{{ old('control_a') }}" class="form-control">
                                                     </div>
                                                 </div>
-                                            </div>                                            
+                                            </div>
                                             <div class="form-group row @error('amount') has-danger @enderror">
                                                 <label class="col-sm-2 col-form-label">Monto</label>
                                                 <div class="col-sm-10">
@@ -138,7 +138,7 @@
                                             <div class="form-group text-center">
                                                 <button type="submit" class="btn btn-primary m-b-0 f-12">Guardar</button>
                                             </div>
-                                        </div>                                        
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -155,17 +155,23 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-    $('#policy_id').select2();    
-    
+    $('#policy_id').select2();
+
     // Script para formatear el valor con separador de miles mientras se ingresa Monto
     document.getElementById('amount').addEventListener('input', function(event) {
-        // Obtenemos el valor ingresado y eliminamos los separadores de miles existentes
-        let monto = event.target.value.replace(/\./g, '');
-        // Formateamos el valor con separador de miles
-        monto = parseFloat(monto).toLocaleString('es-ES');
-        // Actualizamos el valor en el input text
-        event.target.value = monto;
-    });    
+    // Obtenemos el valor ingresado
+    let monto = event.target.value.replace(/\./g, '');
+    // Comprobamos si el valor es vacío
+    if (monto === '') {
+        event.target.value = '0';
+        return;
+    }
+    // Convertimos a número y formateamos el valor con separador de miles
+    monto = parseFloat(monto).toLocaleString('es-ES');
+
+    // Actualizamos el valor en el input text
+    event.target.value = monto;
+    });
 
     $('#item_from').datepicker({
         language: 'es',
@@ -277,7 +283,7 @@ $(document).ready(function(){
             $('#control_1').val(restaFechas(f1,f2));//resultado fecha vigencia
             $('#control_a').val(restaFechas2(f2,f3));//resultado fecha días para vencer
         }
-    });    
+    });
 
 });
 </script>
