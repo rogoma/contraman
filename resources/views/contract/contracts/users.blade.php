@@ -3,6 +3,7 @@
     <h2>ALERTA DE DETALLES DE PÓLIZAS</h2>
     <tr>
       <th>#</th>
+      <th>Dependencia</th>
       <th>Llamado</th>
       <th>IDDNCP</th>
       <th>N°Contrato</th>
@@ -20,6 +21,7 @@
         @for ($i = 0; $i < count($contracts); $i++)
             <tr>
                 <td>{{ ($i+1) }}</td>
+                <td> {{ $contracts[$i]->dependencia }}</td>
                 <td> {{ $contracts[$i]->llamado }}</td>
                 <td> {{ number_format($contracts[$i]->iddncp,'0', ',','.') }} </td>
                 <td> {{ $contracts[$i]->number_year }}</td>

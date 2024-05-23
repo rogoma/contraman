@@ -165,8 +165,8 @@ class ItemsController extends Controller
         $rules = array(
             'policy_id' => 'numeric|required|max:2147483647',
             'number_policy' => 'string|required',
-            'item_from' => 'nullable|date_format:d/m/Y',
-            'item_to' => 'nullable|required|date_format:d/m/Y',
+            'item_from' => 'date_format:d/m/Y',
+            'item_to' => 'required|date_format:d/m/Y',
             'amount' => 'nullable|string|max:9223372036854775807',
             'comments' => 'nullable|max:300'
         );
@@ -215,8 +215,8 @@ class ItemsController extends Controller
         $rules = array(
             'policy_id' => 'numeric|required|max:2147483647',
             'number_policy' => 'string|required',
-            'item_from' => 'nullable|date_format:d/m/Y',
-            'item_to' => 'nullable|required|date_format:d/m/Y',
+            'item_from' => 'date_format:d/m/Y',
+            'item_to' => 'required|date_format:d/m/Y',
             'amount' => 'nullable|string|max:9223372036854775807',
             'comments' => 'nullable|max:300'
         );

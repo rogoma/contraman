@@ -246,7 +246,15 @@ p.centrado {
                                                                 <td>{{ $contract->items[$i]->policy->description }}</td>
                                                                 <td>{{ $contract->items[$i]->number_policy }}</td>
                                                                 <td>{{ $contract->items[$i]->itemFromDateFormat() }}</td>
+
+                                                                {{-- $cal = $contract->items[$i]->item_to - 60 - CURRENT_DATE --}}
+                                                                {{-- @if ($contract->items[$i]->item_to > today()) --}}
+
+                                                                {{-- @if ((($contract->items[$i]->item_to)))
+                                                                    <td style="color:#ff0000">{{ $contract->items[$i]->itemToDateFormat() }}</td>
+                                                                @endif --}}
                                                                 <td>{{ $contract->items[$i]->itemToDateFormat() }}</td>
+
                                                                 <td>{{ $contract->items[$i]->AmountFormat()}} </td>
                                                                 <td>{{ $contract->items[$i]->comments }}</td>
 

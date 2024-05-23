@@ -946,13 +946,22 @@ class ContractsController extends Controller
 public function getNotifications(Request $request)
 {
 
+    if($request->user()->hasPermission(['admin.contracts.show'])){
         $orders = DB::table('vista_contracts_full')//vista que muestra los datos
-                        ->select(['contrato', 'iddncp','number_year','year_adj','contratista',
-                        'estado', 'modalidad', 'tipo_contrato','amount', 'item_from',
-                        'item_to','comments'])
-                        ->where('state_id', '=', 1)
-                        ->get();
-
+            ->select(['contrato', 'iddncp','number_year','year_adj','contratista',
+            'estado', 'modalidad', 'tipo_contrato','amount', 'item_from',
+            'item_to','comments'])
+            ->where('state_id', '=', 1)
+            ->get();
+    }else{
+        $orders = DB::table('vista_contracts_full')//vista que muestra los datos
+            ->select(['contrato', 'iddncp','number_year','year_adj','contratista',
+            'estado', 'modalidad', 'tipo_contrato','amount', 'item_from',
+            'item_to','comments'])
+            ->where('state_id', '=', 1)
+            ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
+            ->get();
+    }
 
         // Por cada orden verificamos fecha tope y consultas sin responder
 

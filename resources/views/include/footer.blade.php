@@ -15,20 +15,20 @@
 @endif
 
 @if(Auth::user()->role_id == 7)
-    @include('include.footers.awards')    
+    @include('include.footers.awards')
 @endif --}}
 
-{{-- ROL ADMINISTRADOR --}}
-@if(Auth::user()->role_id == 1)
+{{-- DESPLIEGA ALERTAS PARA: 1-ADMINISTRADOR 8-CONTRATOS 26-DERIVAR CONTRATOS 30-UOC2 --}}
+@if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 26 || Auth::user()->role_id == 30)
     @include('include.footers.contracts')
 @endif
 
 {{-- ROL CONTRATOS --}}
-@if(Auth::user()->role_id == 8)
+@if(Auth::user()->role_id == 330)
     @include('include.footers.contracts')
 @endif
 
 {{-- ROL DERIVAR CONTRATOS --}}
-@if(Auth::user()->role_id == 26)
+@if(Auth::user()->role_id == 826)
     @include('include.footers.contracts')
 @endif
