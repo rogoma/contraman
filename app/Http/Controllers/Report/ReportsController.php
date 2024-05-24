@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Report;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Provider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\App;
@@ -593,7 +594,7 @@ class ReportsController extends Controller{
     }
 
      //MUESTRA PROVIDERS
-    public function pdfProviders()
+    public function pdfContratistas()
     {
         //SE ORDENA POR CI SE CASTEA VARCHAR A INTEGER EN ORDERBYRAW
         $providers = DB::table('providers')
@@ -623,7 +624,7 @@ class ReportsController extends Controller{
         $view = View::make('reports.dependencies', compact('dependencies'))->render();
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML($view);
-        return $pdf->stream('Dependencies'.'.pdf');
+        return $pdf->stream('Dependencias'.'.pdf');
 
         // PARA MOSTRAR COMO VISTA EN HTML
         // return view('reports.users2', compact('users'));

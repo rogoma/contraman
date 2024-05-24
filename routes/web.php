@@ -355,7 +355,7 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     // Route::get('pdf/tipres2', [ReportsContropdf/panel_contractsller::class, 'pdfMPDF'])->name('pdf.ptipres2');
 
 
-    /*************** REPORTES DOMPDF **************/    
+    /*************** REPORTES DOMPDF **************/
     //REPORTE DE CONTRATOS TODOS
     Route::get('pdf/panel_contracts0', [ReportsController::class, 'generarContracts0'])->name('pdf.panel_contracts0');
     //REPORTE DE CONTRATOS EN CURSO
@@ -374,6 +374,9 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
 
     //REPORTE DE DETALLE DE PÓLIZAS EN EXCEL
     Route::get('/contracts/exportarexcel6', [ContractsController::class, 'exportarExcel6']);
+
+    //REPORTE DE CONTRATISTAS
+    Route::get('pdf/pdfContratistas', [ReportsController::class, 'pdfContratistas'])->name('pdf.contratistas');
 
 
     Route::get('pdf/users', [ReportsController::class, 'pdfUsers'])->name('pdf.users');
