@@ -19,14 +19,14 @@ $(document).ready(function(){
                             success: function(data){
                                 try{
                                     if(data.status == "success"){
-                                        notificaciones = '<li style="font-size: 18px;color:red;background-color:yellow"><h5>VENCIMIENTOS DE PÓLIZAS DE CONTRATOS</h5></li>';
+                                        notificaciones = '<li style="font-size: 18px;color:red;background-color:yellow"><h5>VENCIMIENTOS DE PÓLIZAS</h5></li>';
                                         parent = document.getElementById('alertas-notificaciones');
                                         alertas = 0;
 
                                         // LISTADO DE VENCIMIENTO EN PDF ESTIRA DE UNA VISTA
                                         // notificaciones += '<p><u style="font-size: 14px;color:red" target="_blank" href="pdf/panel_contracts4">**** REPORTE DE VENCIMIENTOS: ****</u></p>'
-                                        notificaciones += '<p><a style="font-size: 18px;color:BLUE" target="_blank" href="/pdf/panel_contracts5">REPORTE VENCIMIENTOS PDF</a></p>'
-                                        notificaciones += '<p><a style="font-size: 18px;color:GREEN" target="_blank" href="/contracts/exportarexcel6">REPORTE VENCIMIENTOS EXCEL</a></p>'
+                                        notificaciones += '<p><a style="font-size: 18px;color:BLUE" target="_blank" href="/pdf/panel_contracts5">REPORTE VCTOS PDF</a></p>'
+                                        notificaciones += '<p><a style="font-size: 18px;color:GREEN" target="_blank" href="/contracts/exportarexcel6">REPORTE VCTOS EXCEL</a></p>'
 
                                         // notificaciones pólizas anticipos
                                         if(data.alerta_advance.length > 0){

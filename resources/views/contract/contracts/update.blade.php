@@ -37,8 +37,9 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h5>Editar Llamado</h5>
-                                    <label id="fecha_actual" name="fecha_actual"  style="font-size: 20px;color: #FF0000;float: right;" for="fecha_actual">{{ Carbon\Carbon::now()->format('d/m/Y') }}</label>
-                                    <label style="font-size: 20px;color: #FF0000;float: right;">FECHA: </label>
+                                    <br>
+                                    <label id="fecha_actual" name="fecha_actual"  style="font-size: 20px;color: #FF0000;float: left;" for="fecha_actual">{{ Carbon\Carbon::now()->format('d/m/Y') }}</label>
+                                    {{-- <label style="font-size: 20px;color: #FF0000;float: left;">FECHA: </label> --}}                                    
                                 </div>
                                 <div class="card-block">
                                     <h3 class="text-center">Datos para editar Llamado</h3>

@@ -49,8 +49,11 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h5>Modificar Póliza al Llamado Nº {{ $contract->number_year }}</h5>
-                                    <label id="fecha_actual" name="fecha_actual"  style="font-size: 20px;color: #FF0000;float: right;" for="fecha_actual">{{ Carbon\Carbon::now()->format('d/m/Y') }}</label>
-                                    <label style="font-size: 20px;color: #FF0000;float: right;">FECHA: </label>
+                                    <br>
+                                    <label id="fecha_actual" name="fecha_actual"  style="font-size: 20px;color: #FF0000;float: left;" for="fecha_actual">{{ Carbon\Carbon::now()->format('d/m/Y') }}</label>
+                                    {{-- <label style="font-size: 20px;color: #FF0000;float: left;">FECHA: </label> --}}
+                                    {{-- <label id="fecha_actual" name="fecha_actual"  style="font-size: 20px;color: #FF0000;float: right;" for="fecha_actual">{{ Carbon\Carbon::now()->format('d/m/Y') }}</label>
+                                    <label style="font-size: 20px;color: #FF0000;float: right;">FECHA: </label> --}}
                                 </div>
                                 <div class="card-block">
                                         <form method="POST" action="{{ route('contracts.items.update', [$contract->id, $item->id]) }}">
