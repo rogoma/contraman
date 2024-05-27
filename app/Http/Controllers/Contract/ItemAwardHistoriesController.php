@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Order;
+// namespace App\Http\Controllers\contract;
+namespace App\Http\Controllers\Contract;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -18,18 +19,18 @@ class ItemAwardHistoriesController extends Controller
     public function __construct()
     {
         $index_permissions = ['admin.item_award_histories.index',
-                            'orders.item_award_histories.index',
-                            'process_orders.item_award_histories.index',
-                            'derive_orders.item_award_histories.index',
+                            'contracts.item_award_histories.index',
+                            'process_contracts.item_award_histories.index',
+                            'derive_contracts.item_award_histories.index',
                             'plannings.item_award_histories.index'];
         $create_permissions = ['admin.item_award_histories.create',
-                            'orders.item_award_histories.create',
+                            'contracts.item_award_histories.create',
                             'plannings.item_award_histories.create'];
         $update_permissions = ['admin.item_award_histories.update',
-                            'orders.item_award_histories.update',
+                            'contracts.item_award_histories.update',
                             'plannings.item_award_histories.update'];
 
-        $this->middleware('checkPermission:'.implode(',',$index_permissions))->only('index'); // Permiso para index 
+        $this->middleware('checkPermission:'.implode(',',$index_permissions))->only('index'); // Permiso para index
         $this->middleware('checkPermission:'.implode(',',$create_permissions))->only(['create', 'store']);   // Permiso para create
         $this->middleware('checkPermission:'.implode(',',$update_permissions))->only(['edit', 'update']);   // Permiso para update
     }
@@ -44,21 +45,21 @@ class ItemAwardHistoriesController extends Controller
         $item = Item::findOrFail($item_id);
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
-        if(!$request->user()->hasPermission(['admin.item_award_histories.index','process_orders.item_award_histories.index',
-        'derive_orders.item_award_histories.index','plannings.item_award_histories.index']) &&
-        $item->order->dependency_id != $request->user()->dependency_id){
+        if(!$request->user()->hasPermission(['admin.item_award_histories.index','process_contracts.item_award_histories.index',
+        'derive_contracts.item_award_histories.index','plannings.item_award_histories.index']) &&
+        $item->contract->dependency_id != $request->user()->dependency_id){
             return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
         }
 
         // Definimos la ruta para volver a la visualizacion del pedido
-        if( $request->user()->hasPermission(['plannings.item_award_histories.show']) == TRUE ){
-            $orders_route = route('plannings.show', $item->order_id);
-        }else{
-            $orders_route = route('orders.show', $item->order_id);
-        }
+        // if( $request->user()->hasPermission(['plannings.item_award_histories.show']) == TRUE ){
+        //     $contracts_route = route('plannings.show', $item->contract_id);
+        // }else{
+        //     $contracts_route = route('contracts.show', $item->contract_id);
+        // }
 
         $item_award_histories = $item->itemAwardHistories;
-        return view('order.item_award_histories.index', compact('item', 'item_award_histories', 'orders_route'));
+        return view('contract.item_award_histories.index', compact('item', 'item_award_histories'));
     }
 
     /**
@@ -72,12 +73,12 @@ class ItemAwardHistoriesController extends Controller
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
         if(!$request->user()->hasPermission(['admin.item_award_histories.create', 'plannings.item_award_histories.create']) &&
-        $item->order->dependency_id != $request->user()->dependency_id){
+        $item->contract->dependency_id != $request->user()->dependency_id){
             return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
         }
 
-        $budget_request_providers = $item->order->budgetRequestProviders;
-        return view('order.item_award_histories.create', compact('item', 'budget_request_providers'));
+        $budget_request_providers = $item->contract->budgetRequestProviders;
+        return view('contract.item_award_histories.create', compact('item', 'budget_request_providers'));
     }
 
     /**
@@ -93,7 +94,7 @@ class ItemAwardHistoriesController extends Controller
         $dncp_pac_ids = $request->input('dncp_pac_id');
         $budget_request_providers = $request->input('budget_request_provider');
         $amounts = $request->input('amount');
-        for ($i=0; $i < count($types); $i++) { 
+        for ($i=0; $i < count($types); $i++) {
             $item_award_history = new ItemAwardHistory;
             $item_award_history->item_id = $item->id;
             $item_award_history->dncp_pac_id = empty($dncp_pac_ids[$i]) ? NULL : str_replace('.', '', $dncp_pac_ids[$i]);
@@ -120,7 +121,7 @@ class ItemAwardHistoriesController extends Controller
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
         if(!$request->user()->hasPermission(['admin.item_award_histories.update', 'plannings.item_award_histories.update']) &&
-        $item->order->dependency_id != $request->user()->dependency_id){
+        $item->contract->dependency_id != $request->user()->dependency_id){
             return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
         }
 
@@ -130,8 +131,8 @@ class ItemAwardHistoriesController extends Controller
         // obtenemos los precios referenciales cargados por la dependencia actual
         $item_award_histories = $item->itemAwardHistories()
             ->where('creator_dependency_id', $request->user()->dependency_id)->get();
-        $budget_request_providers = $item->order->budgetRequestProviders;
-        return view('order.item_award_histories.update', compact('item', 'other_dependencies', 'item_award_histories', 'budget_request_providers'));
+        $budget_request_providers = $item->contract->budgetRequestProviders;
+        return view('contract.item_award_histories.update', compact('item', 'other_dependencies', 'item_award_histories', 'budget_request_providers'));
     }
 
     /**
@@ -156,8 +157,8 @@ class ItemAwardHistoriesController extends Controller
                         ->where('creator_dependency_id', $request->user()->dependency_id)
                         ->whereNotIn('id', $before_ids)->get()->pluck('id');
         ItemAwardHistory::destroy($deleted_items);
-        
-        for ($i=0; $i < count($types); $i++) { 
+
+        for ($i=0; $i < count($types); $i++) {
             // Los registros cargados anteriormente los modificamos
             if(is_array($before_ids) && $i < count($before_ids)){
                 $item_award_history = ItemAwardHistory::find($before_ids[$i]);
@@ -192,7 +193,7 @@ class ItemAwardHistoriesController extends Controller
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
         if(!$request->user()->hasPermission(['admin.item_award_histories.delete']) &&
-        ($item->order->dependency_id != $request->user()->dependency_id && $request->user()->hasPermission(['orders.item_award_histories.delete'])) ){
+        ($item->contract->dependency_id != $request->user()->dependency_id && $request->user()->hasPermission(['contracts.item_award_histories.delete'])) ){
             return response()->json(['status' => 'error', 'message' => 'No posee los suficientes permisos para realizar esta acción.', 'code' => 200], 200);
         }
 
@@ -200,7 +201,7 @@ class ItemAwardHistoriesController extends Controller
         foreach ($item->itemAwardHistories as $item_award_history) {
             $item_award_history->delete();
         }
-        
+
         $request->session()->flash('success', 'Se han eliminado los precios referenciales del ítem.');
         return response()->json(['status' => 'success', 'code' => 200], 200);
     }

@@ -72,7 +72,7 @@ p.centrado {
                                         <div class="col-sm-10 text-left">
                                             <h5>Llamado: {{ $contract->description." - ".$contract->modality->description." N° ".$contract->number_year." - ".$contract->provider->description }}</h5>
                                         </div>
-                                        <div class="col-sm-10 text-left">                                            
+                                        <div class="col-sm-10 text-left">
                                             <h5 style="font-size: 17px; font-weight: bold; color:#FF0000">Dependencia Responsable: {{ $contract->dependency->description }}</h5>
                                         </div>
                                             <div class="col-sm-2">
@@ -266,17 +266,20 @@ p.centrado {
                                                                     <button type="button" title="Editar" class="btn btn-warning btn-icon" onclick="updateItem({{ $contract->items[$i]->id }})">
                                                                         <i class="fa fa-pencil"></i>
                                                                     </button>
-                                                                @endif                                                                                                                                
+                                                                @endif
                                                                 @if (Auth::user()->hasPermission(['admin.items.delete','contracts.items.update']) || $contract->dependency_id == Auth::user()->dependency_id)
                                                                     <button type="button" title="Borrar" class="btn btn-danger btn-icon" onclick="deleteItem({{ $contract->items[$i]->id }})">
                                                                         <i class="fa fa-trash"></i>
                                                                     </button>
                                                                 @endif
-                                                                @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']) || $contract->dependency_id == Auth::user()->dependency_id)
+                                                                <button type="button" title="Endosos de Pólizas" class="btn btn-primary btn-icon" onclick="itemAwardHistories({{ $contract->items[$i]->id }})">
+                                                                    <i class="fa fa-list"></i>
+                                                                </button>
+                                                                {{-- @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']) || $contract->dependency_id == Auth::user()->dependency_id)
                                                                     <button type="button" title="Endosos" class="btn btn-success btn-icon" onclick="updateItem({{ $contract->items[$i]->id }})">
                                                                         <i class="fa fa-flag-o"></i>
                                                                     </button>
-                                                                @endif
+                                                                @endif --}}
                                                                 </td>
                                                             </tr>
                                                         @endfor

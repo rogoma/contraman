@@ -17,6 +17,14 @@ class Item extends Model
    }
 
     /**
+     * Para obtener el vinculo con la item_award_histories items
+     */
+    public function itemAwardHistories(){
+        return $this->hasMany('App\Models\ItemAwardHistory');
+    }
+
+
+    /**
      * Para obtener el vinculo con la tabla level5_catalog_codes
      */
     public function policy(){
@@ -38,7 +46,7 @@ class Item extends Model
             return date('d/m/Y', strtotime($this->item_to));
         }
     }
-    
+
     public function AmountFormat(){
         return number_format($this->amount,0,",",".");
     }
@@ -65,12 +73,7 @@ class Item extends Model
     }
 
 
-    /**
-     * Para obtener el vinculo con la item_award_histories items
-     */
-    public function itemAwardHistories(){
-        return $this->hasMany('App\Models\ItemAwardHistory');
-    }
+
 
     /**
      * Para obtener el vinculo con la tabla users
@@ -102,9 +105,9 @@ class Item extends Model
     public function unitPriceFormat(){
         return number_format($this->unit_price,0,",",".");
     }
-    
-    
-    
+
+
+
     public function totalAmountFormat(){
         return number_format($this->total_amount,0,",",".");
     }

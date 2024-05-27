@@ -45,10 +45,22 @@ class Contract extends Model
     }
 
     /**
-     * Para obtener el vinculo con la tabla items
+     * Para obtener el vinculo con la tabla items que equivalen a pólizas de cada llamado
      */
     public function items(){
         return $this->hasMany('App\Models\Item');
+    }
+
+    /**
+     * Para obtener el vinculo con la tabla itemsAwards que equivale a endosos de pólizas
+     */
+    public function itemAwards(){
+        return $this->hasMany('App\Models\ItemAwards');
+    }
+
+     /*** Para obtener el vinculo con la tabla awardhistories*/
+     public function itemAwardHistories(){
+        return $this->belongsToMany('App\Models\ItemAwardHistory');
     }
 
     /**

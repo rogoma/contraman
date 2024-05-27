@@ -34,7 +34,6 @@ use App\Http\Controllers\Admin\Level5CatalogCodeController;
 use App\Http\Controllers\Order\OrdersController;
 // use App\Http\Controllers\Order\ItemsController;
 use App\Http\Controllers\Order\ItemsAdjudicaController;
-use App\Http\Controllers\Order\ItemAwardHistoriesController;
 use App\Http\Controllers\Order\BudgetRequestProvidersController;
 use App\Http\Controllers\DeriveOrder\DeriveOrdersController;
 use App\Http\Controllers\Order\SimeseOrdersController;
@@ -51,6 +50,7 @@ use App\Http\Controllers\Award\AwardsController;
 use App\Http\Controllers\Contract\ContractsController;
 use App\Http\Controllers\Contract\ContractsFilesController;
 use App\Http\Controllers\Contract\ItemsController;
+use App\Http\Controllers\Contract\ItemAwardHistoriesController;
 
 use App\Http\Controllers\Exception\ExceptionsController;
 
