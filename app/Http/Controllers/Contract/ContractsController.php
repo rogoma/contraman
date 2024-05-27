@@ -943,138 +943,57 @@ class ContractsController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-public function getNotifications(Request $request)
-{
+    public function getNotifications(Request $request)
+    {
 
-    if($request->user()->hasPermission(['admin.contracts.show'])){
-        $orders = DB::table('vista_contracts_full')//vista que muestra los datos
-            ->select(['contrato', 'iddncp','number_year','year_adj','contratista',
-            'estado', 'modalidad', 'tipo_contrato','amount', 'item_from',
-            'item_to','comments'])
-            ->where('state_id', '=', 1)
-            ->get();
-    }else{
-        $orders = DB::table('vista_contracts_full')//vista que muestra los datos
-            ->select(['contrato', 'iddncp','number_year','year_adj','contratista',
-            'estado', 'modalidad', 'tipo_contrato','amount', 'item_from',
-            'item_to','comments'])
-            ->where('state_id', '=', 1)
-            ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
-            ->get();
-    }
+        if($request->user()->hasPermission(['admin.contracts.show'])){
+            $orders = DB::table('vista_contracts_full')//vista que muestra los datos
+                ->select(['contrato', 'iddncp','number_year','year_adj','contratista',
+                'estado', 'modalidad', 'tipo_contrato','amount', 'item_from',
+                'item_to','comments'])
+                ->where('state_id', '=', 1)
+                ->get();
+        }else{
+            $orders = DB::table('vista_contracts_full')//vista que muestra los datos
+                ->select(['contrato', 'iddncp','number_year','year_adj','contratista',
+                'estado', 'modalidad', 'tipo_contrato','amount', 'item_from',
+                'item_to','comments'])
+                ->where('state_id', '=', 1)
+                ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
+                ->get();       }
 
-        // Por cada orden verificamos fecha tope y consultas sin responder
+            // Por cada orden verificamos fecha tope y consultas sin responder
+            $alerta_advance = array();
+            // $alerta_fidelity = array();
 
-        $alerta_advance = array();
-        // $alerta_fidelity = array();
-
-        $tope_recepcion_consultas = 0;
-        $dias_tope_consultas = 0;
-
-        $hoy = strtotime(date('Y-m-d'));
-        foreach($orders as $order){
-            // definimos fecha de recepcion de consultas
             $tope_recepcion_consultas = 0;
+            $dias_tope_consultas = 0;
 
-            // definimos proceso para generar datos de poliza de anticipos
-            if(empty($order->item_to)){
-                // continue;
-            }else{
-                $limite_mayor_consultas = strtotime($order->item_to . ' +'.$tope_recepcion_consultas.' days');
-                $dias_aviso = $tope_recepcion_consultas - 60;
-                $limite_menor_consultas = strtotime($order->item_to . ' +'.$dias_aviso.' days');
+            $hoy = strtotime(date('Y-m-d'));
+            foreach($orders as $order){
+                // definimos fecha de recepcion de consultas
+                $tope_recepcion_consultas = 0;
 
-                if($hoy <= $limite_mayor_consultas && $hoy >= $limite_menor_consultas){
-                    $segundos_llegar_tope = $limite_mayor_consultas - $hoy;
-                    $dias_tope_consultas = floor(abs($segundos_llegar_tope / 60 / 60 / 24 ));
-                    $pac_id = number_format($order->iddncp,0,",",".");
-                    $contratista = $order->contratista;
-                    $fecha_ini = date("d-m-Y", $limite_menor_consultas);
-                    $fecha_fin = date("d-m-Y", $limite_mayor_consultas);
-                    array_push($alerta_advance, array('pac_id' => $pac_id,'llamado' => $order->number_year, 'contratista' => $contratista, 'dias' => $dias_tope_consultas, 'fecha_fin' => $fecha_fin, 'fecha_ini' => $fecha_ini));
+                // definimos proceso para generar datos de poliza de anticipos
+                if(empty($order->item_to)){
+                    // continue;
+                }else{
+                    $limite_mayor_consultas = strtotime($order->item_to . ' +'.$tope_recepcion_consultas.' days');
+                    $dias_aviso = $tope_recepcion_consultas - 60;
+                    $limite_menor_consultas = strtotime($order->item_to . ' +'.$dias_aviso.' days');
+
+                    if($hoy <= $limite_mayor_consultas && $hoy >= $limite_menor_consultas){
+                        $segundos_llegar_tope = $limite_mayor_consultas - $hoy;
+                        $dias_tope_consultas = floor(abs($segundos_llegar_tope / 60 / 60 / 24 ));
+                        $pac_id = number_format($order->iddncp,0,",",".");
+                        $contratista = $order->contratista;
+                        $fecha_ini = date("d-m-Y", $limite_menor_consultas);
+                        $fecha_fin = date("d-m-Y", $limite_mayor_consultas);
+                        array_push($alerta_advance, array('pac_id' => $pac_id,'llamado' => $order->number_year, 'contratista' => $contratista, 'dias' => $dias_tope_consultas, 'fecha_fin' => $fecha_fin, 'fecha_ini' => $fecha_ini));
+                    }
                 }
             }
-
-            // definimos proceso para generar datos de poliza de anticipos
-            // if(empty($order->item_to)){
-            //     // continue;
-            // }else{
-            //     $limite_mayor_consultas1 = strtotime($order->item_to . ' +'.$tope_recepcion_consultas.' days');
-            //     $dias_aviso = $tope_recepcion_consultas - 60;
-            //     $limite_menor_consultas1 = strtotime($order->item_to . ' +'.$dias_aviso.' days');
-
-            //     if($hoy <= $limite_mayor_consultas1 && $hoy >= $limite_menor_consultas1){
-            //         $segundos_llegar_tope1 = $limite_mayor_consultas1 - $hoy;
-            //         $dias_tope_consultas = floor(abs($segundos_llegar_tope1 / 60 / 60 / 24 ));
-            //         $pac_id = number_format($order->iddncp,0,",",".");
-            //         $contratista = $order->contratista;
-            //         $fecha_ini1 = date("d-m-Y", $limite_menor_consultas1);
-            //         $fecha_fin1 = date("d-m-Y", $limite_mayor_consultas1);
-            //         array_push($alerta_fidelity, array('pac_id' => $pac_id,'llamado' => $order->number_year, 'contratista' => $contratista, 'dias' => $dias_tope_consultas, 'fecha_fin' => $fecha_fin1, 'fecha_ini' => $fecha_ini1));
-            //     }
-            // }
-        }
-        // return response()->json(['status' => 'success', 'alerta_advance' => $alerta_advance,'alerta_fidelity' => $alerta_fidelity], 200);
-        return response()->json(['status' => 'success', 'alerta_advance' => $alerta_advance], 200);
-}
-
-
-
-    /**
-     * Obtener notificaciones de alertas
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function getNotifications3(Request $request)
-    {
-        // obtenemos los pedidos que se han recibido en Contratos (ESTADO = 75)
-        // $orders = Contract::where('contract_state_id', [1])
-        //                 ->get();
-
-        $orders = DB::table('vista_contracts')//vista que muestra los datos
-                        ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
-                        'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
-                        'contract_end_date', 'total_amount', 'advance_validity_to','fidelity_validity_to','accidents_validity_to',
-                        'risks_validity_to','civil_resp_validity_to','comentarios'])
-                        ->where('state_id', '=', 1)
-                        ->get();
-
-
-        // Por cada orden verificamos fecha tope y consultas sin responder
-        $alerta_consultas = array();
-        $alerta_advance = array();
-        $alerta_aclaraciones = array();
-        $tope_recepcion_consultas = 0;
-        $dias_tope_consultas = 0;
-        $dias_tope_aclaraciones = 0;
-        $hoy = strtotime(date('Y-m-d'));
-        foreach($orders as $order){
-            // en caso de no haber cargado la fecha tope continuamos con el siguiente pedido
-            if(empty($order->advance_validity_to)){
-                continue;
-            }
-
-            // definimos fecha de recepcion de consultas
-            $tope_recepcion_consultas = 0;
-
-            // definimos dias de aviso recepcion de consultas
-            $limite_mayor_consultas = strtotime($order->advance_validity_to . ' +'.$tope_recepcion_consultas.' days');
-            $dias_aviso = $tope_recepcion_consultas - 60;
-            $limite_menor_consultas = strtotime($order->advance_validity_to . ' +'.$dias_aviso.' days');
-
-            if($hoy <= $limite_mayor_consultas && $hoy >= $limite_menor_consultas){
-                $segundos_llegar_tope = $limite_mayor_consultas - $hoy;
-                $dias_tope_consultas = floor(abs($segundos_llegar_tope / 60 / 60 / 24 ));
-                $pac_id = number_format($order->iddncp,0,",",".");
-                $contratista = $order->contratista;
-                $fecha_ini = date("d-m-Y", $limite_menor_consultas);
-                $fecha_fin = date("d-m-Y", $limite_mayor_consultas);
-                array_push($alerta_advance, array('pac_id' => $pac_id,'llamado' => $order->number_year, 'contratista' => $contratista, 'dias' => $dias_tope_consultas, 'fecha_fin' => $fecha_fin, 'fecha_ini' => $fecha_ini));
-            }
-        }
-
-        // return response()->json(['status' => 'success', 'alerta_consultas' => $alerta_consultas,'alerta_aclaraciones' => $alerta_aclaraciones], 200);
-        return response()->json(['status' => 'success', 'alerta_advance' => $alerta_advance,'alerta_aclaraciones' => $alerta_aclaraciones], 200);
-    }
+            // return response()->json(['status' => 'success', 'alerta_advance' => $alerta_advance,'alerta_fidelity' => $alerta_fidelity], 200);
+            return response()->json(['status' => 'success', 'alerta_advance' => $alerta_advance], 200);
+    }   
 }

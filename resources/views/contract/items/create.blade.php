@@ -134,6 +134,13 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-12">
+                                            <div class="form-group text-center">
+                                                @if (in_array($contract->contract_state_id, [1,2]))
+                                                    <a href="{{ route('contracts.files.create', $contract->id) }}" class="btn btn-danger">Cargar PDF Póliza</a>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
                                             <br>
                                             <div class="form-group text-center">
                                                 <button type="submit" class="btn btn-primary m-b-0 f-12">Guardar</button>
