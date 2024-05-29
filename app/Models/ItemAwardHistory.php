@@ -29,7 +29,7 @@ class ItemAwardHistory extends Model
     public function budgetRequestProvider(){
         return $this->belongsTo('App\Models\BudgetRequestProvider');
     }
-    
+
     /*** Para obtener el vinculo con la tabla orders */
     public function orders(){
         return $this->belongsToMany('App\Models\Order', 'budget_request_providers');
@@ -50,7 +50,7 @@ class ItemAwardHistory extends Model
     }
 
     /**
-     * Agregamos funciones que formatean los datos 
+     * Agregamos funciones que formatean los datos
      * para mayor utilidad en los views
      */
     public function provider(){
@@ -69,5 +69,21 @@ class ItemAwardHistory extends Model
     }
     public function amountFormat(){
         return number_format($this->amount,0,",",".");
+    }
+
+    public function itemFromDateFormat(){
+        if(empty($this->item_from)){
+            return "";
+        }else{
+            return date('d/m/Y', strtotime($this->item_from));
+        }
+    }
+
+    public function itemToDateFormat(){
+        if(empty($this->item_to)){
+            return "";
+        }else{
+            return date('d/m/Y', strtotime($this->item_to));
+        }
     }
 }

@@ -51,13 +51,6 @@ class ItemAwardHistoriesController extends Controller
             return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
         }
 
-        // Definimos la ruta para volver a la visualizacion del pedido
-        // if( $request->user()->hasPermission(['plannings.item_award_histories.show']) == TRUE ){
-        //     $contracts_route = route('plannings.show', $item->contract_id);
-        // }else{
-        //     $contracts_route = route('contracts.show', $item->contract_id);
-        // }
-
         $item_award_histories = $item->itemAwardHistories;
         return view('contract.item_award_histories.index', compact('item', 'item_award_histories'));
     }
@@ -72,7 +65,7 @@ class ItemAwardHistoriesController extends Controller
         $item = Item::findOrFail($item_id);
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
-        if(!$request->user()->hasPermission(['admin.item_award_histories.create', 'plannings.item_award_histories.create']) &&
+        if(!$request->user()->hasPermission(['admin.item_award_histories.create', 'contracts.item_award_histories.create']) &&
         $item->contract->dependency_id != $request->user()->dependency_id){
             return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
         }
@@ -89,25 +82,108 @@ class ItemAwardHistoriesController extends Controller
      */
     public function store(Request $request, $item_id)
     {
+        $rules = array(
+            'policy_id' => 'numeric|required|max:2147483647',
+            'number_policy' => 'string|required|unique:items,number_policy',
+            'item_from' => 'date_format:d/m/Y',
+            'item_to' => 'required|date_format:d/m/Y',
+            'amount' => 'nullable|string|max:9223372036854775807',
+            'comments' => 'nullable|max:300'
+        );
+
+        $validator =  Validator::make($request->input(), $rules);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
         $item = Item::find($item_id);
         $types = $request->input('type');
-        $dncp_pac_ids = $request->input('dncp_pac_id');
-        $budget_request_providers = $request->input('budget_request_provider');
+        $numbers_policy = $request->input('number_policy');
+        $items_from = $request->input('item_from');
+        $items_to = $request->input('item_to');
         $amounts = $request->input('amount');
+        $comments = $request->input('comments');
+
         for ($i=0; $i < count($types); $i++) {
             $item_award_history = new ItemAwardHistory;
             $item_award_history->item_id = $item->id;
-            $item_award_history->dncp_pac_id = empty($dncp_pac_ids[$i]) ? NULL : str_replace('.', '', $dncp_pac_ids[$i]);
-            $item_award_history->budget_request_provider_id = $budget_request_providers[$i];
-            $item_award_history->amount = str_replace(['Gs. ', '.'], '', $amounts[$i]);
-            $item_award_history->creator_dependency_id = $request->user()->dependency_id;
-            $item_award_history->creator_user_id = $request->user()->id;
+            $item_award_history->number_policy = $request->input('number_policy');
+            $item_award_history->item_from = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_from'))));
+            $item_award_history->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));
+
+            $amount = str_replace('.', '',($request->input('amount')));
+            if ($amount === '' ) {
+                $validator->errors()->add('amount', 'Ingrese Monto');
+                return back()->withErrors($validator)->withInput();
+            }
+
+            if ($amount < 0 ) {
+                $validator->errors()->add('amount', 'Monto no puede ser negativo');
+                return back()->withErrors($validator)->withInput();
+            }else{
+                $item_award_history->amount = $amount;
+            }
+
+            $item_award_history->comments = $request->input('comments');
+            $item_award_history->creator_user_id = $request->user()->id;  // usuario logueado
             $item_award_history->save();
         }
 
-        $request->session()->flash('success', 'Se han agregado exitosamente los precios referenciales.');
+        $request->session()->flash('success', 'Se han agregado exitosamente los endosos');
         return response()->json(['status' => 'success', 'code' => 200], 200);
     }
+
+    /**
+     * Funcionalidad de guardado del pedido de ítemes Contrato Abierto.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    // public function store(Request $request, $contract_id)
+    // {
+    //     $rules = array(
+    //         'policy_id' => 'numeric|required|max:2147483647',
+    //         'number_policy' => 'string|required|unique:items,number_policy',
+    //         'item_from' => 'date_format:d/m/Y',
+    //         'item_to' => 'required|date_format:d/m/Y',
+    //         'amount' => 'nullable|string|max:9223372036854775807',
+    //         'comments' => 'nullable|max:300'
+    //     );
+
+    //     $validator =  Validator::make($request->input(), $rules);
+    //     if ($validator->fails()) {
+    //         return back()->withErrors($validator)->withInput();
+    //     }
+
+    //     $item_award_history = new ItemAwardHistory;
+    //     $item_award_history->contract_id = $contract_id;
+    //     $item_award_history->policy_id = $request->input('policy_id');
+    //     $item_award_history->number_policy = $request->input('number_policy');
+    //     $item_award_history->item_from = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_from'))));
+    //     $item_award_history->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));
+
+    //     $amount = str_replace('.', '',($request->input('amount')));
+    //     if ($amount === '' ) {
+    //         $validator->errors()->add('amount', 'Ingrese Monto');
+    //         return back()->withErrors($validator)->withInput();
+    //     }
+
+    //     if ($amount < 0 ) {
+    //         $validator->errors()->add('amount', 'Monto no puede ser negativo');
+    //         return back()->withErrors($validator)->withInput();
+    //     }else{
+    //         $item_award_history->amount = $amount;
+    //     }
+    //     $item_award_history->comments = $request->input('comments');
+    //     $item_award_history->creator_user_id = $request->user()->id;  // usuario logueado
+    //     $item_award_history->save();
+    //     return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza agregada correctamente'); // Caso usuario posee rol pedidos
+    // }
+
+
+
+
+
 
     /**
      * Show the form for editing the specified resource.

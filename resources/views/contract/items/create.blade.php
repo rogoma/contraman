@@ -48,7 +48,7 @@
                                             <h3 style="text-align: center;">Agregar Póliza</h3>
                                             <br>
                                             <div class="form-group row @error('policy_id') has-danger @enderror">
-                                                <label class="col-sm-2 col-form-label">Póliza</label>
+                                                <label class="col-sm-2 col-form-label">Tipo de Póliza</label>
                                                 <div class="col-sm-10">
                                                     <select id="policy_id" name="policy_id" class="form-control">
                                                         <option value="">--- Seleccionar Tipo de Póliza ---</option>
@@ -134,13 +134,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-12">
+                                        {{-- <div class="col-sm-12">
                                             <div class="form-group text-center">
                                                 @if (in_array($contract->contract_state_id, [1,2]))
                                                     <a href="{{ route('contracts.files.create', $contract->id) }}" class="btn btn-danger">Cargar PDF Póliza</a>
                                                 @endif
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="col-sm-12">
                                             <br>
                                             <div class="form-group text-center">

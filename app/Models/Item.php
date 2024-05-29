@@ -9,6 +9,17 @@ class Item extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'policy_number',
+        // 'name',
+        // 'lastname',
+        // 'email',
+        // 'password',
+        // 'dependency_id',
+        // 'position_id',
+        // 'state',
+    ];
+
     /**
      * Para obtener el vinculo con la tabla orders
      */

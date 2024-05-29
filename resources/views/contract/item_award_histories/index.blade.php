@@ -13,8 +13,8 @@
                 <div class="page-header-title">
                     <i class="fa fa-sitemap bg-c-blue"></i>
                     <div class="d-inline">
-                        <h5>Pedido Nº {{ $item->order_id }}</h5>
-                        <span>Listado de Endosos</span>
+                        <h5>Listado de Endosos</h5>
+                        <h5>Póliza: {{ $item->policy->description }} - N°: {{ $item->number_policy }}</h5>
                     </div>
                 </div>
             </div>
@@ -25,7 +25,8 @@
                             <a href="{{ route('home') }}"><i class="feather icon-home"></i></a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{ $orders_route }}">Pedido Nº {{ $item->order_id }}</a>
+                            <a href="{{ route('contracts.show', $item->contract_id) }}">Pólizas</a>
+                            {{-- <a>Póliza Nº {{ $item->contract_id }}</a> --}}
                         </li>
                     </ul>
                 </div>
@@ -47,14 +48,14 @@
                                     <div class="float-right">
                                     {{-- En caso de no tener precios referenciales relacionados--}}
                                     @if($item_award_histories->count() == 0)
-                                        @if (Auth::user()->hasPermission(['admin.item_award_histories.create', 'plannings.item_award_histories.create']) || $item->order->dependency_id == Auth::user()->dependency_id)
-                                            <a href="{{ route('item_award_histories.create', $item->id) }}" class="btn btn-primary">Agregar</a>
+                                        @if (Auth::user()->hasPermission(['admin.item_award_histories.create', 'contracts.item_award_histories.create']) || $item->contract->dependency_id == Auth::user()->dependency_id)
+                                            <a href="{{ route('item_award_histories.create', $item->id) }}" class="btn btn-primary">Agregar Endoso</a>
                                         @endif
                                     @else
-                                        @if (Auth::user()->hasPermission(['admin.item_award_histories.update', 'plannings.item_award_histories.update']) || $item->order->dependency_id == Auth::user()->dependency_id)
+                                        @if (Auth::user()->hasPermission(['admin.item_award_histories.update', 'contracts.item_award_histories.update']) || $item->contract->dependency_id == Auth::user()->dependency_id)
                                             <a href="{{ route('item_award_histories.edit', $item->id) }}" class="btn btn-warning">Editar</a>
                                         @endif
-                                        @if (Auth::user()->hasPermission(['admin.item_award_histories.delete']) || $item->order->dependency_id == Auth::user()->dependency_id)
+                                        @if (Auth::user()->hasPermission(['admin.item_award_histories.delete', 'contracts.item_award_histories.delete']) || $item->contract->dependency_id == Auth::user()->dependency_id)
                                             <button type="button" title="Borrar" class="btn btn-danger" onclick="deleteItemAwardHistories({{ $item->id }})">
                                                 Borrar
                                             </button>
@@ -64,24 +65,26 @@
                                 </div>
                                 <div class="card-block">
                                     <div class="dt-responsive table-responsive">
-                                        <table id="item_award_histories" class="table table-striped table-bordered nowrap">
+                                        <table id="item_award_histories" class="table table-striped table-bcontracted nowrap">
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Ítem</th>
-                                                    <th>DNCP PAC ID</th>
-                                                    <th>Proveedor</th>
+                                                    <th>N° de Póliza</th>
+                                                    <th>Vigencia Desde</th>
+                                                    <th>Vigencia Hasta</th>
                                                     <th>Monto</th>
+                                                    <th>Comentarios</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                             @for ($i = 0; $i < count($item_award_histories); $i++)
                                                 <tr>
                                                     <td>{{ ($i+1) }}</td>
-                                                    <td>{{ $item_award_histories[$i]->item->item_number }}</td>
-                                                    <td>{{ $item_award_histories[$i]->dncpPacIdFormat() }}</td>
-                                                    <td>{{ $item_award_histories[$i]->provider() }}</td>
-                                                    <td>{{ 'Gs. '.$item_award_histories[$i]->amountFormat() }}</td>
+                                                    <td>{{ $item_award_histories[$i]->number_policy }}</td>
+                                                    <td>{{ $item_award_histories[$i]->itemFromDateFormat() }}</td>
+                                                    <td>{{ $item_award_histories[$i]->itemtoDateFormat() }}</td>
+                                                    <td>{{ $item_award_histories[$i]->amountFormat() }}</td>
+                                                    <td>{{ $item_award_histories[$i]->comments }}</td>
                                                 </tr>
                                             @endfor
                                             </tbody>
@@ -127,7 +130,7 @@ $(document).ready(function(){
                 try{
                     response = (typeof data == "object") ? data : JSON.parse(data);
                     if(response.status == "success"){
-                        location.href = "{{ route('orders.show', $item->order->id) }}";
+                        location.href = "{{ route('contracts.show', $item->contract->id) }}";
                     }else{
                         swal("Error!", response.message, "error");
                     }

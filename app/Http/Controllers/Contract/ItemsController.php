@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Contract;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+
 use App\Models\Order;
 use App\Models\Contract;
 use App\Models\Policy;
@@ -163,8 +165,8 @@ class ItemsController extends Controller
     public function store(Request $request, $contract_id)
     {
         $rules = array(
-            'policy_id' => 'numeric|required|max:2147483647',
-            'number_policy' => 'string|required',
+            'policy_id' => 'numeric|required|max:2147483647|unique:items,policy_id',
+            'number_policy' => 'string|required|unique:items,number_policy',
             'item_from' => 'date_format:d/m/Y',
             'item_to' => 'required|date_format:d/m/Y',
             'amount' => 'nullable|string|max:9223372036854775807',
@@ -198,7 +200,7 @@ class ItemsController extends Controller
         $item->comments = $request->input('comments');
         $item->creator_user_id = $request->user()->id;  // usuario logueado
         $item->save();
-        return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza agregada correctamente'); // Caso usuario posee rol pedidos
+        return redirect()->route('contracts.files.create', $contract_id)->with('success', 'Póliza agregada correctamente'); // Caso usuario posee rol pedidos
     }
 
     /**
@@ -213,13 +215,31 @@ class ItemsController extends Controller
         $item = Item::findOrFail($item_id);
 
         $rules = array(
-            'policy_id' => 'numeric|required|max:2147483647',
-            'number_policy' => 'string|required',
+            // 'policy_id' => 'numeric|required|max:2147483647',
+            'policy_id' => [
+                'numeric',
+                'required',
+                'max:2147483647',
+                Rule::unique('items')->ignore($item->id),
+            ],
+            'number_policy' => [
+                'string',
+                'required',
+                Rule::unique('items')->ignore($item->id),
+            ],
+            // 'number_policy' => 'string|required|unique:items,number_policy->ignore($item->id)',
             'item_from' => 'date_format:d/m/Y',
             'item_to' => 'required|date_format:d/m/Y',
             'amount' => 'nullable|string|max:9223372036854775807',
             'comments' => 'nullable|max:300'
         );
+
+        // Valida los datos de entrada
+        $validatedData = $request->validate($rules);
+
+        // Actualiza el item con los datos validados
+        $item->update($validatedData);
+
 
         $validator =  Validator::make($request->input(), $rules);
         if ($validator->fails()) {
@@ -781,9 +801,9 @@ class ItemsController extends Controller
         }
 
         // Chequeamos si existen item_award_histories referenciando al item
-        // if($item->itemAwardHistories->count() > 0){
-        //     return response()->json(['status' => 'error', 'message' => 'No se ha podido eliminar el item debido a que se encuentra vinculado con históricos de precios referenciales, debe eliminarlos primero para continuar. ', 'code' => 200], 200);
-        // }
+        if($item->itemAwardHistories->count() > 0){
+            return response()->json(['status' => 'error', 'message' => 'Póliza no puede eliminarse, posee detalle en endosos, verificar ', 'code' => 200], 200);
+        }
 
         // Eliminamos en caso de no existir registros referenciando al item
         $item->delete();
