@@ -21,11 +21,15 @@ class Item extends Model
     ];
 
     /**
-     * Para obtener el vinculo con la tabla orders
+     * Para obtener el vinculo con la tabla contratos
      */
    public function contract(){
        return $this->belongsTo('App\Models\Contract');
    }
+
+//    public function contract_items(){
+//     return $this->hasMany('App\Models\Contract');
+// }
 
     /**
      * Para obtener el vinculo con la item_award_histories items

@@ -232,9 +232,19 @@ p.centrado {
                                                                         <i class="fa fa-trash"></i>
                                                                     </button>
                                                                 @endif
-                                                                <button type="button" title="Endosos de Pólizas" class="btn btn-primary btn-icon" onclick="itemAwardHistories({{ $contract->items[$i]->id }})">
-                                                                    <i class="fa fa-list"></i>
-                                                                </button>
+
+                                                                    <button type="button" title="Endosos de Pólizas" class="btn btn-primary btn-icon" onclick="itemAwardHistories({{ $contract->items[$i]->id }})">
+                                                                        <i class="fa fa-list"></i>
+                                                                    </button>
+
+                                                                {{-- @if($contract->items[$i]->itemAwardHistories->count() > 0) --}}
+                                                                {{-- <button type="button" title="Archivo PDF" class="btn btn-danger btn-icon" onclick="itemAwardHistories({{ $contract->items[$i]->id }})">
+                                                                    <i class="fa fa-file-pdf-o"></i>
+                                                                </button> --}}
+                                                                {{-- <a href="{{ asset('storage/files/'.$user_files_pol[$i]->file) }}" title="Archivo PDF" target="_blank" class="btn btn-danger btn-icon"><i class="fa fa-file-pdf-o"></i></a> --}}
+                                                            {{-- @endif --}}
+
+
                                                                 {{-- @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']) || $contract->dependency_id == Auth::user()->dependency_id)
                                                                     <button type="button" title="Endosos" class="btn btn-success btn-icon" onclick="updateItem({{ $contract->items[$i]->id }})">
                                                                         <i class="fa fa-flag-o"></i>
@@ -251,7 +261,7 @@ p.centrado {
                                                     @if (Auth::user()->hasPermission(['contracts.contracts.create','admin.orders.create']))
                                                         {{-- Si pedido está anulado no muestra agregar ítems --}}
                                                         @if (in_array($contract->contract_state_id, [1,2]))
-                                                        <a href="{{ route('contracts.items.create', $contract->id) }}" class="btn btn-primary">Agregar Pólizas</a>
+                                                        <a href="{{ route('contracts.items.create', $contract->id) }}" class="btn btn-primary">Agregar Póliza</a>
                                                         @endif
                                                     @endif
                                                 </div>

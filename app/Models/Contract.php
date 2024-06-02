@@ -51,6 +51,10 @@ class Contract extends Model
         return $this->hasMany('App\Models\Item');
     }
 
+    // public function items_contract(){
+    //     return $this->belongsTo('App\Models\Item');
+    // }
+
     /**
      * Para obtener el vinculo con la tabla itemsAwards que equivale a endosos de pólizas
      */

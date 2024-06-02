@@ -124,6 +124,7 @@
                                                     @enderror
                                                 </div>
                                             </div>
+
                                             <div class="form-group row @error('comments') has-danger @enderror">
                                                 <label class="col-sm-2 col-form-label">Comentarios</label>
                                                 <div class="col-sm-10">
@@ -133,6 +134,14 @@
                                                     @enderror
                                                 </div>
                                             </div>
+
+                                            <div class="form-group @error('file') has-danger @enderror">
+                                                <label class="col-sm-2 col-form-label">Cargar archivo <small>(Archivos permitidos: WORD, PDF, EXCEL)</small></label>
+                                                <input id="file" type="file" class="form-control" name="file">
+                                                @error('file')
+                                                    <div class="col-form-label">{{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
                                         {{-- <div class="col-sm-12">
                                             <div class="form-group text-center">
@@ -141,6 +150,9 @@
                                                 @endif
                                             </div>
                                         </div> --}}
+
+
+
                                         <div class="col-sm-12">
                                             <br>
                                             <div class="form-group text-center">

@@ -105,6 +105,7 @@
         @endfor
     </table>
     <br>
+    <h2>PÓLIZAS Y GARANTÍAS</h2>
     <table>
         <tr>
             <th>Tipo Póliza</th>
@@ -128,7 +129,35 @@
             <td> {{ $contracts2[$i]->comments}}</td>
         </tr>
         @endfor
-
     </table>
+    <br>
+    {{-- MOSTRAR DATOS DE ITEMS_AWARD DEL CONTROLADOR --}}
+    <h2>ENDOSOSO DE PÓLIZAS Y GARANTÍAS</h2>
+    <table>
+        <tr>
+            <th>Tipo Póliza</th>
+            <th>N° Póliza</th>
+            <th>Vencimiento</th>
+            <th>Cumple1</th>
+            <th>Cumple2</th>
+            <th>Cumple3</th>
+            <th>Comentarios</th>
+        </tr>
+
+        @for ($i = 0; $i < count($contracts2); $i++)
+        <tr>
+            <td> {{ $contracts2[$i]->polizas }}</td>
+            <td> {{ $contracts2[$i]->number_policy }}</td>
+            {{-- <td> {{ $contracts2[$i]->year_adj }}</td> --}}
+            <td> {{ date('d/m/Y', strtotime($contracts2[$i]->item_to )) }}</td>
+            <td> {{ $contracts2[$i]->comments}}</td>
+            <td> {{ $contracts2[$i]->comments}}</td>
+            <td> {{ $contracts2[$i]->comments}}</td>
+            <td> {{ $contracts2[$i]->comments}}</td>
+        </tr>
+        @endfor
+    </table>
+
+
 </body>
 </html>
