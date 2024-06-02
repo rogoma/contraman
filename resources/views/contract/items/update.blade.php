@@ -135,7 +135,7 @@
                                             <div class="form-group row @error('amount') has-danger @enderror">
                                                 <label class="col-sm-2 col-form-label">Monto</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" id="amount" name="amount" value="{{ old('amount', number_format($item->amount, 0, ',', '.')) }}" class="form-control @error('amount') form-control-danger @enderror">
+                                                    <input type="text" id="amount" name="amount" value="{{ old('amount', number_format($item->amount, 0, ',', '.')) }}" class="form-control @error('amount') form-control-danger @enderror" maxlength="23">
                                                     @error('amount')
                                                         <div class="col-form-label">{{ $message }}</div>
                                                     @enderror
@@ -222,12 +222,23 @@ $(document).ready(function(){
         event.target.value = '0';
         return;
     }
-    // Convertimos a número y formateamos el valor con separador de miles
-    monto = parseFloat(monto).toLocaleString('es-ES');
+
+    // Convertimos a número
+    monto = parseFloat(monto);
+    
+    // Verificamos si el monto es un número válido y no NaN
+    if (isNaN(monto) || monto < 0) {
+        event.target.value = '0';
+        return;
+    }
+
+    // Formateamos el valor con separador de miles
+    monto = monto.toLocaleString('es-ES');
 
     // Actualizamos el valor en el input text
     event.target.value = monto;
     });
+
 
     $('#item_from').datepicker({
         language: 'es',

@@ -118,7 +118,7 @@
                                             <div class="form-group row @error('amount') has-danger @enderror">
                                                 <label class="col-sm-2 col-form-label">Monto</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" id="amount" name="amount" value="{{ old('amount') }}" class="form-control @error('amount') form-control-danger @enderror">
+                                                    <input type="text" id="amount" name="amount" value="{{ old('amount') }}" class="form-control @error('amount') form-control-danger @enderror" maxlength="23">
                                                     @error('amount')
                                                         <div class="col-form-label">{{ $message }}</div>
                                                     @enderror
@@ -135,13 +135,13 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group @error('file') has-danger @enderror">
+                                            {{-- <div class="form-group @error('file') has-danger @enderror">
                                                 <label class="col-sm-2 col-form-label">Cargar archivo <small>(Archivos permitidos: WORD, PDF, EXCEL)</small></label>
                                                 <input id="file" type="file" class="form-control" name="file">
                                                 @error('file')
                                                     <div class="col-form-label">{{ $message }}</div>
                                                 @enderror
-                                            </div>
+                                            </div> --}}
                                         </div>
                                         {{-- <div class="col-sm-12">
                                             <div class="form-group text-center">
@@ -182,16 +182,27 @@ $(document).ready(function(){
     // Obtenemos el valor ingresado
     let monto = event.target.value.replace(/\./g, '');
     // Comprobamos si el valor es vacío
-    if (monto === '') {
+    if (monto === '' || monto < 0) {
         event.target.value = '0';
         return;
     }
-    // Convertimos a número y formateamos el valor con separador de miles
-    monto = parseFloat(monto).toLocaleString('es-ES');
+    
+    // Convertimos a número
+    monto = parseFloat(monto);
+    
+    // Verificamos si el monto es un número válido y no NaN
+    if (isNaN(monto) || monto < 0) {
+        event.target.value = '0';
+        return;
+    }
+
+    // Formateamos el valor con separador de miles
+    monto = monto.toLocaleString('es-ES');
 
     // Actualizamos el valor en el input text
     event.target.value = monto;
     });
+
 
     $('#item_from').datepicker({
         language: 'es',

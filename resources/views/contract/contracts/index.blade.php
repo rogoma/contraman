@@ -11,14 +11,14 @@
     padding: 1.25rem 0.5rem;
 }
 
-.columna1 { width: 3%; text-align: center;}
+/* .columna1 { width: 3%; text-align: center;}
 .columna2 { width: 50%; text-align: left;}
 .columna3 { width: 5%; text-align: center;}
 .columna4 { width: 1%; text-align: left;}
 .columna5 { width: 5%; text-align: center;}
 .columna6 { width: 5%; text-align: center;}
 .columna7 { width: 5%; text-align: center;}
-.columna8 { width: 5%; text-align: center;}
+.columna8 { width: 5%; text-align: center;} */
 
 p.centrado {
 
@@ -91,6 +91,7 @@ p.centrado {
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
+                                                    <th>Responsable</th>
                                                     <th>Llamado</th>
                                                     <th>IDDNCP</th>
                                                     <th>Link DNCP</th>
@@ -105,10 +106,11 @@ p.centrado {
                                             <tbody>
                                             @for ($i = 0; $i < count($contracts); $i++)
                                                 <tr>
-                                                    <td>{{ ($i+1) }}</td>
-                                                    <td class="columna2">{{ $contracts[$i]->description }}</td>
-                                                    <td> {{ number_format($contracts[$i]->iddncp,'0', ',','.') }} </td>
-                                                    <td style="color:#ff0000">{{ $contracts[$i]->linkdncp }}</td>
+                                                    <td> {{ ($i+1) }}</td>
+                                                    <td> {{ $contracts[$i]->dependency->description }}</td>
+                                                    <td> {{ $contracts[$i]->description }}</td>
+                                                    <td> {{ number_format($contracts[$i]->iddncp,'0', ',','.') }} </td>                                                    
+                                                    <td style="color:#ff0000">{{ $contracts[$i]->linkdncp }}</td>                                                    
                                                     <td> Gs.{{ number_format($contracts[$i]->total_amount,'0', ',','.') }} </td>
                                                     <td>{{ $contracts[$i]->provider->ruc }}-{{ $contracts[$i]->provider->description }}</td>
                                                     <td>{{ $contracts[$i]->modality->code }}-{{ $contracts[$i]->modality->description }}</td>
@@ -123,7 +125,7 @@ p.centrado {
                                                         @endif
                                                     @endif
 
-                                                    <td class="columna11">{{ $contracts[$i]->contractType->description }}</td>
+                                                    <td>{{ $contracts[$i]->contractType->description }}</td>
                                                     <td>
                                                         <a href="{{ route('contracts.show', $contracts[$i]->id) }}" class="btn btn-outline-success">Ver Más</a>
                                                     </td>
@@ -153,7 +155,7 @@ p.centrado {
                     {
                         // { "width": "30%", "targets": 0 },  // Define el ancho de la primera columna
                         // { "width": "30%", "targets": 1 },  // Define el ancho de la segunda columna
-                        "targets": 3, // Índice de la columna que deseas personalizar
+                        "targets": 4, // Índice de la columna que deseas personalizar
                         "data": "linkdncp",
                         "render": function (data, type, row, meta) {
                         // Puedes personalizar el contenido de la columna aquí

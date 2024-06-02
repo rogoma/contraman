@@ -278,7 +278,7 @@ class ItemAwardHistoriesController extends Controller
             $item_award_history->delete();
         }
 
-        $request->session()->flash('success', 'Se han eliminado los precios referenciales del ítem.');
+        $request->session()->flash('success', 'Se han eliminado los endosos referenciales a la póliza');
         return response()->json(['status' => 'success', 'code' => 200], 200);
     }
 }

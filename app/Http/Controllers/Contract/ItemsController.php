@@ -173,8 +173,7 @@ class ItemsController extends Controller
             'item_from' => 'date_format:d/m/Y',
             'item_to' => 'required|date_format:d/m/Y',
             'amount' => 'nullable|string|max:9223372036854775807',
-            'comments' => 'nullable|max:300',
-            'description' => 'string|required|max:100',
+            'comments' => 'nullable|max:300'
         );
 
         $validator =  Validator::make($request->input(), $rules);
@@ -204,35 +203,37 @@ class ItemsController extends Controller
         $item->comments = $request->input('comments');
         $item->creator_user_id = $request->user()->id;  // usuario logueado
         $item->save();
+        return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza agregada correctamente'); // Caso usuario posee rol pedidos
 
-        if (!$request->hasFile('file')) {
-            $validator = Validator::make($request->input(), []);
-            $validator->errors()->add('file', 'El campo es requerido, debe ingresar un archivo WORD, PDF o EXCEL.');
-            return back()->withErrors($validator)->withInput();
-        }
+        // SI DESEAMOS AGREGAR ACA ADJUNTAR ARCHIVO
+        // if (!$request->hasFile('file')) {
+        //     $validator = Validator::make($request->input(), []);
+        //     $validator->errors()->add('file', 'El campo es requerido, debe ingresar un archivo WORD, PDF o EXCEL.');
+        //     return back()->withErrors($validator)->withInput();
+        // }
 
-        // chequeamos la extension del archivo subido
-        $extension = $request->file('file')->getClientOriginalExtension();
-        if(!in_array($extension, array('pdf'))){
-            $validator = Validator::make($request->input(), []); // Creamos un objeto validator
-            $validator->errors()->add('file', 'El archivo debe ser pdf.'); // Agregamos el error
-            return back()->withErrors($validator)->withInput();
-        }
-        // Pasó todas las validaciones, guardamos el archivo
-        $fileName = time().'-contract-file.'.$extension; // nombre a guardar
-        // Cargamos el archivo (ruta storage/app/public/files, enlace simbólico desde public/files)
-        $path = $request->file('file')->storeAs('public/files', $fileName);
+        // // chequeamos la extension del archivo subido
+        // $extension = $request->file('file')->getClientOriginalExtension();
+        // if(!in_array($extension, array('pdf'))){
+        //     $validator = Validator::make($request->input(), []); // Creamos un objeto validator
+        //     $validator->errors()->add('file', 'El archivo debe ser pdf.'); // Agregamos el error
+        //     return back()->withErrors($validator)->withInput();
+        // }
+        // // Pasó todas las validaciones, guardamos el archivo
+        // $fileName = time().'-contract-file.'.$extension; // nombre a guardar
+        // // Cargamos el archivo (ruta storage/app/public/files, enlace simbólico desde public/files)
+        // $path = $request->file('file')->storeAs('public/files', $fileName);
 
-        $file = new File;
-        $file->description = $request->input('number_policy');
-        $file->file = $fileName;
-        $file->file_type = 1;//pólizas
-        $file->contract_id = $contract_id;
-        $file->contract_state_id = 1;
-        $file->creator_user_id = $request->user()->id;  // usuario logueado
-        $file->dependency_id = $request->user()->dependency_id;  // dependencia del usuario
-        $file->save();
-        return redirect()->route('contracts.files.show', $contract_id)->with('success', 'Póliza agregada correctamente'); // Caso usuario posee rol pedidos
+        // $file = new File;
+        // $file->description = $request->input('number_policy');
+        // $file->file = $fileName;
+        // $file->file_type = 1;//pólizas
+        // $file->contract_id = $contract_id;
+        // $file->contract_state_id = 1;
+        // $file->creator_user_id = $request->user()->id;  // usuario logueado
+        // $file->dependency_id = $request->user()->dependency_id;  // dependencia del usuario
+        // $file->save();
+        // return redirect()->route('contracts.files.show', $contract_id)->with('success', 'Póliza agregada correctamente'); // Caso usuario posee rol pedidos
     }
 
     /**
