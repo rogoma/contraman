@@ -278,11 +278,14 @@ p.centrado {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>Reporte Pólizas del Llamado</td>
-                                                        <td><a href="/pdf/panel_contracts/{{ $contract->id }}" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Informe de Pólizas</a></td>
-                                                    </tr>
+                                                    {{-- MUESTRA LINK DE RFEPORTE SI ESTA CARGADO ITEMS (POLIZAS) --}}
+                                                    @if($contract->items->count() > 0)
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>Reporte Pólizas del Llamado</td>
+                                                            <td><a href="/pdf/panel_contracts/{{ $contract->id }}" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Informe de Pólizas</a></td>
+                                                        </tr>
+                                                    @endif
                                                 </tbody>
                                             </table>
                                         </div>

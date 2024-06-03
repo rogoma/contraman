@@ -66,8 +66,8 @@ class ReportsController extends Controller{
             $contracts3 = DB::table('vista_contracts_full2')//vista que muestra los datos
             ->select(['polizas', 'number_policy1','item_from1','item_to1',
             'amount1', 'comments1', 'contratista', 'dependencia'])
-            ->where('contract_id', '=', $contract_id) 
-            ->whereNotNull('number_policy1') 
+            ->where('contract_id', '=', $contract_id)
+            ->whereNotNull('number_policy1')
             // ->where('monto_adjudica', null)
             ->get();
         }else{
@@ -188,11 +188,18 @@ class ReportsController extends Controller{
             ->get();
         }
 
-        $view = View::make('reports.contracts', compact('contracts', 'nombreMetodo'))->render();
-        $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML($view);
-        $pdf->setPaper('A4', 'landscape');//coloca en apaisado
-        return $pdf->stream('LLAMADO-CONTRATOS CERRADOS'.'.pdf');
+        // CONTROLA SI HAY DATOS PARA GENERAR REPORTE
+        $val = $contracts->count();
+
+        if ($val > 0) {
+            $view = View::make('reports.contracts', compact('contracts', 'nombreMetodo'))->render();
+            $pdf = App::make('dompdf.wrapper');
+            $pdf->loadHTML($view);
+            $pdf->setPaper('A4', 'landscape');//coloca en apaisado
+            return $pdf->stream('LLAMADO-CONTRATOS CERRADOS'.'.pdf');
+        }else{
+            return redirect()->route('contracts.index')->with('error', 'NO HAY DATOS PARA GENERAR EL REPORTE');
+        }
     }
 
     // Para mostrar todos los llamados que estan cerrados (estado = 3)
