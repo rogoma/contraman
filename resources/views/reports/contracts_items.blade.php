@@ -79,8 +79,6 @@
     <h2>INFORME DE VERIFICACIÓN DE PÓLIZAS Y GARANTÍAS</h2>
     <br>
 
-
-
     {{-- <h2>LLAMADOS</h2> --}}
     <table id="providers">
         @for ($i = 0; $i < count($contracts1); $i = $i+3)
@@ -104,7 +102,7 @@
         </tr>
         @endfor
     </table>
-    <br>
+    {{-- <br> --}}
     <h2>PÓLIZAS Y GARANTÍAS</h2>
     <table>
         <tr>
@@ -135,7 +133,7 @@
     <h2>ENDOSOSO DE PÓLIZAS Y GARANTÍAS</h2>
     <table>
         <tr>
-            <th>Tipo Póliza</th>
+            <th>Endoso de Póliza</th>
             <th>N° Póliza</th>
             <th>Vencimiento</th>
             <th>Cumple1</th>
@@ -144,16 +142,16 @@
             <th>Comentarios</th>
         </tr>
 
-        @for ($i = 0; $i < count($contracts2); $i++)
+        @for ($i = 0; $i < count($contracts3); $i++)
         <tr>
-            <td> {{ $contracts2[$i]->polizas }}</td>
-            <td> {{ $contracts2[$i]->number_policy }}</td>
+            <td> {{ $contracts3[$i]->polizas }}</td>
+            <td> {{ $contracts3[$i]->number_policy1 }}</td>
             {{-- <td> {{ $contracts2[$i]->year_adj }}</td> --}}
-            <td> {{ date('d/m/Y', strtotime($contracts2[$i]->item_to )) }}</td>
-            <td> {{ $contracts2[$i]->comments}}</td>
-            <td> {{ $contracts2[$i]->comments}}</td>
-            <td> {{ $contracts2[$i]->comments}}</td>
-            <td> {{ $contracts2[$i]->comments}}</td>
+            <td> {{ date('d/m/Y', strtotime($contracts3[$i]->item_to1 )) }}</td>
+            <td> {{ $contracts3[$i]->comments1}}</td>
+            <td> {{ $contracts3[$i]->comments1}}</td>
+            <td> {{ $contracts3[$i]->comments1}}</td>
+            <td> {{ $contracts3[$i]->comments1}}</td>
         </tr>
         @endfor
     </table>

@@ -61,6 +61,15 @@ class ReportsController extends Controller{
             'amount', 'comments', 'contratista', 'dependencia'])
             ->where('contract_id', '=', $contract_id)
             ->get();
+
+            //Donde contracts3 muestra endosos (itemawards_histories)
+            $contracts3 = DB::table('vista_contracts_full2')//vista que muestra los datos
+            ->select(['polizas', 'number_policy1','item_from1','item_to1',
+            'amount1', 'comments1', 'contratista', 'dependencia'])
+            ->where('contract_id', '=', $contract_id) 
+            ->whereNotNull('number_policy1') 
+            // ->where('monto_adjudica', null)
+            ->get();
         }else{
             //Donde contracts es una vista
             $contracts1 = DB::table('vista_contracts')//vista que muestra los datos
@@ -77,13 +86,22 @@ class ReportsController extends Controller{
             ->where('contract_id', '=', $contract_id)
             ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
             ->get();
+
+            //Donde contracts3 muestra endosos (itemawards_histories)
+            $contracts3 = DB::table('vista_contracts_full2')//vista que muestra los datos
+            ->select(['polizas', 'number_policy1','item_from1','item_to1',
+            'amount1', 'comments1', 'contratista', 'dependencia'])
+            ->where('contract_id', '=', $contract_id)
+            ->whereNotNull('number_policy1')
+            ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
+            ->get();
         }
 
-        $view = View::make('reports.contracts_items', compact('contracts1','contracts2'))->render();
+        $view = View::make('reports.contracts_items', compact('contracts1','contracts2','contracts3'))->render();
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML($view);
         $pdf->setPaper('A4', 'landscape');//coloca en apaisado
-        return $pdf->stream('LLAMADO-POLIZAS'.'.pdf');
+        return $pdf->stream('LLAMADO-POLIZAS-ENDOSOS'.'.pdf');
     }
 
     public function generarContracts0(Request $request)

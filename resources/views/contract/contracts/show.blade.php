@@ -222,7 +222,7 @@ p.centrado {
                                                                 <td>{{ $contract->items[$i]->comments }}</td>
 
                                                                 <td>
-                                                                    @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']) || $contract->dependency_id == Auth::user()->dependency_id)
+                                                                @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']) || $contract->dependency_id == Auth::user()->dependency_id)
                                                                     <button type="button" title="Editar" class="btn btn-warning btn-icon" onclick="updateItem({{ $contract->items[$i]->id }})">
                                                                         <i class="fa fa-pencil"></i>
                                                                     </button>
