@@ -262,21 +262,34 @@ class ItemAwardHistoriesController extends Controller
     public function edit(Request $request, $item_id)
     {
         $item = Item::findOrFail($item_id);
+        $endoso = $item->itemAwardHistories();
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
-        if(!$request->user()->hasPermission(['admin.item_award_histories.update', 'plannings.item_award_histories.update']) &&
+        if(!$request->user()->hasPermission(['admin.item_award_histories.create', 'contracts.item_award_histories.create']) &&
         $item->contract->dependency_id != $request->user()->dependency_id){
             return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
         }
 
-        // obtenemos los precios referenciales cargados por otras dependencias
-        $other_dependencies = $item->itemAwardHistories()
-            ->where('creator_dependency_id', '!=', $request->user()->dependency_id)->get();
-        // obtenemos los precios referenciales cargados por la dependencia actual
-        $item_award_histories = $item->itemAwardHistories()
-            ->where('creator_dependency_id', $request->user()->dependency_id)->get();
-        $budget_request_providers = $item->contract->budgetRequestProviders;
-        return view('contract.item_award_histories.update', compact('item', 'other_dependencies', 'item_award_histories', 'budget_request_providers'));
+        // $budget_request_providers = $item->contract->budgetRequestProviders;
+        return view('contract.item_award_histories.update', compact('item'));
+
+
+        // $item = Item::findOrFail($item_id);
+
+        // // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
+        // if(!$request->user()->hasPermission(['admin.item_award_histories.update', 'plannings.item_award_histories.update']) &&
+        // $item->contract->dependency_id != $request->user()->dependency_id){
+        //     return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
+        // }
+
+        // // obtenemos los precios referenciales cargados por otras dependencias
+        // $other_dependencies = $item->itemAwardHistories()
+        //     ->where('creator_dependency_id', '!=', $request->user()->dependency_id)->get();
+        // // obtenemos los precios referenciales cargados por la dependencia actual
+        // $item_award_histories = $item->itemAwardHistories()
+        //     ->where('creator_dependency_id', $request->user()->dependency_id)->get();
+        // $budget_request_providers = $item->contract->budgetRequestProviders;
+        // return view('contract.item_award_histories.update', compact('item', 'other_dependencies', 'item_award_histories', 'budget_request_providers'));
     }
 
     /**

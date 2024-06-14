@@ -13,13 +13,13 @@
                 <div class="page-header-title">
                     <i class="fa fa-sitemap bg-c-blue"></i>
                     <div class="d-inline">
-                        <h5>Listado de Endosos</h5>                                                
+                        <h5>Listado de Endosos</h5>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4">
-                <div class="page-header-breadcrumb">                    
-                    <ul class=" breadcrumb breadcrumb-title">                        
+                <div class="page-header-breadcrumb">
+                    <ul class=" breadcrumb breadcrumb-title">
                         <li class="breadcrumb-item">
                             <a href="{{ route('home') }}"><i class="feather icon-home"></i></a>
                         </li>
@@ -27,10 +27,10 @@
                             <a href="{{ route('contracts.show', $item->contract_id) }}">Pólizas</a>
                             {{-- <a>Póliza Nº {{ $item->contract_id }}</a> --}}
                         </li>
-                    </ul>                    
+                    </ul>
                 </div>
-            </div>            
-        </div>        
+            </div>
+        </div>
     </div>
     <div class="pcoded-inner-content">
         <div class="main-body">
@@ -91,16 +91,16 @@
                                                     {{-- @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']) || $item->dependency_id == Auth::user()->dependency_id) --}}
                                                         <button type="button" title="Editar" class="btn btn-warning btn-icon" onclick="updateItem({{ $item_award_histories[$i]->id }})">
                                                             <i class="fa fa-pencil"></i>
-                                                        </button>                                                    
+                                                        </button>
                                                     {{-- @endif --}}
                                                     {{-- @if (Auth::user()->hasPermission(['admin.items.delete','contracts.items.update']) || $item->dependency_id == Auth::user()->dependency_id) --}}
                                                         <button type="button" title="Borrar" class="btn btn-danger btn-icon" onclick="deleteItem({{$item_award_histories[$i]->id }})">
                                                             <i class="fa fa-trash"></i>
-                                                        </button>                                                    
+                                                        </button>
                                                     {{-- @endif --}}
                                                     </td>
                                                 </tr>
-                                            @endfor                                            
+                                            @endfor
                                             </tbody>
                                         </table>
                                         <br>
@@ -136,7 +136,7 @@ $(document).ready(function(){
     updateItem = function(item){
         //llamar a Función JS que está en H:\Proyectos\sistedoc\public\js\guardar-tab.js
         // persistirTab();
-        location.href = '/items/{{ $item->id }}/item_award_histories/'+item+'/edit/';
+        location.href = '/items/{{ $item->id }}/item_award_histories/edit/';
     }
 
     deleteItemAwardHistories = function(item_id){
