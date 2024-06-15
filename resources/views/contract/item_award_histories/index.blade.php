@@ -13,7 +13,7 @@
                 <div class="page-header-title">
                     <i class="fa fa-sitemap bg-c-blue"></i>
                     <div class="d-inline">
-                        <h5>Listado de Endosos</h5>
+                        <h3>Listado de Endosos</h3>
                     </div>
                 </div>
             </div>
