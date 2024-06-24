@@ -79,22 +79,22 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            @for ($i = 0; $i < count($item_award_histories); $i++)
+                                            @for ($i = 0; $i < count($item->itemAwardHistories); $i++)
                                                 <tr>
                                                     <td>{{ ($i+1) }}</td>
-                                                    <td>{{ $item_award_histories[$i]->number_policy }}</td>
-                                                    <td>{{ $item_award_histories[$i]->itemFromDateFormat() }}</td>
-                                                    <td>{{ $item_award_histories[$i]->itemtoDateFormat() }}</td>
-                                                    <td>{{ $item_award_histories[$i]->amountFormat() }}</td>
-                                                    <td>{{ $item_award_histories[$i]->comments }}</td>
+                                                    <td>{{ $item->itemAwardHistories[$i]->number_policy }}</td>
+                                                    <td>{{ $item->itemAwardHistories[$i]->itemFromDateFormat() }}</td>
+                                                    <td>{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td>
+                                                    <td>{{ $item->itemAwardHistories[$i]->amountFormat() }}</td>
+                                                    <td>{{ $item->itemAwardHistories[$i]->comments }}</td>
                                                     <td>
                                                     {{-- @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']) || $item->dependency_id == Auth::user()->dependency_id) --}}
-                                                        <button type="button" title="Editar" class="btn btn-warning btn-icon" onclick="updateItem({{ $item_award_histories[$i]->id }})">
+                                                        <button type="button" title="Editar" class="btn btn-warning btn-icon" onclick="updateItem({{ $item->itemAwardHistories[$i]->id }})">
                                                             <i class="fa fa-pencil"></i>
-                                                        </button>
+                                                        </button>                                                        
                                                     {{-- @endif --}}
                                                     {{-- @if (Auth::user()->hasPermission(['admin.items.delete','contracts.items.update']) || $item->dependency_id == Auth::user()->dependency_id) --}}
-                                                        <button type="button" title="Borrar" class="btn btn-danger btn-icon" onclick="deleteItem({{$item_award_histories[$i]->id }})">
+                                                        <button type="button" title="Borrar" class="btn btn-danger btn-icon" onclick="deleteItemAwardHistories({{$item->itemAwardHistories[$i]->id }})">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
                                                     {{-- @endif --}}
@@ -108,7 +108,7 @@
                                             @if (Auth::user()->hasPermission(['contracts.contracts.create','admin.orders.create']))
                                                 {{-- Si pedido está anulado no muestra agregar ítems --}}
                                                 {{-- @if (in_array($contract->contract_state_id, [1,2])) --}}
-                                                <a href="{{ route('item_award_histories.create', $item->id) }}" class="btn btn-primary">Agregar Endoso</a>
+                                                <a href="{{ route('items.item_award_histories.create', $item->id) }}" class="btn btn-primary">Agregar Endoso</a>
                                                 {{-- @endif --}}
                                             @endif
                                         </div>
@@ -133,10 +133,8 @@
 $(document).ready(function(){
     $('#item_award_histories').DataTable();
 
-    updateItem = function(item){
-        //llamar a Función JS que está en H:\Proyectos\sistedoc\public\js\guardar-tab.js
-        // persistirTab();
-        location.href = '/items/{{ $item->id }}/item_award_histories/edit/';
+    updateItem = function(item){               
+        location.href = '/items/{{ $item->id }}/item_award_histories/'+item+'/edit/';
     }
 
     deleteItemAwardHistories = function(item_id){
@@ -152,7 +150,7 @@ $(document).ready(function(){
         function(isConfirm){
           if(isConfirm){
             $.ajax({
-              url : '/items/'+item_id+'/item_award_histories',
+              url : '/items/{{ $item->id }}/items_award_histories/'+item_id,            
               method : 'POST',
               data: {_method: 'DELETE', _token: '{{ csrf_token() }}'},
               success: function(data){
@@ -164,12 +162,12 @@ $(document).ready(function(){
                         swal("Error!", response.message, "error");
                     }
                 }catch(error){
-                    swal("Error!", "Ocurrió un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
+                    swal("Error!", "Ocurrió1 un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
                     console.log(error);
                 }
               },
               error: function(error){
-                swal("Error!", "Ocurrió un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
+                swal("Error!", "Ocurrió2 un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
                 console.log(error);
               }
             });

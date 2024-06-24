@@ -154,11 +154,23 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     // Route::resource('orders.items_adjudica', ItemsAdjudicaController::class); //Recurso anidado, es igual a /orders/{order_id}/items/{item_id}
     // Route::resource('orders.items_budget', BudgetRequestProvidersController::class); //Recurso anidado, es igual a /orders/{order_id}/items/{item_id}
 
-    //RECURSOS DE CONTRACTS PARA MANEJAR ITEMS
+    //RECURSOS DE CONTRACTS PARA MANEJAR ITEMS (POLIZAS)
     Route::resource('contracts.items', ItemsController::class); //Recurso anidado, es igual a /contracts/{contract_id}/items/{item_id}
     //GRABAR PÓLIZAS
-    Route::post('/contracts/{id}/store', [ItemsController::class, 'store'])->name('contracts.items.store');
+    // Route::post('/contracts/{id}/store', [ItemsController::class, 'store'])->name('contracts.items.store');
 
+    //RECURSOS PARA MANEJAR ITEMS AWARDS HISTORIES (ENDOSOS)
+    Route::resource('items.item_award_histories', ItemAwardHistoriesController::class); //Recurso anidado, es igual a /contracts/{contract_id}/items/{item_id}
+
+    // Route::get('items/{itemA_id}/item_award_histories', [ItemAwardHistoriesController::class, 'index'])->name('item_award_histories.index');
+    // Route::get('items/{item_id}/item_award_histories/create', [ItemAwardHistoriesController::class, 'create'])->name('item_award_histories.create');
+    // Route::post('items/{item_id}/item_award_histories/create', [ItemAwardHistoriesController::class, 'store'])->name('item_award_histories.store');
+    // Route::get('items/{item_id}/item_award_histories/{itemA_id}/edit', [ItemAwardHistoriesController::class, 'edit'])->name('item_award_histories.edit');
+    // Route::post('items/{item_id}/item_award_histories/{itemA_id}/edit', [ItemAwardHistoriesController::class, 'update'])->name('item_award_histories.update');
+    // Route::delete('items/{item_id}/item_award_histories', [ItemAwardHistoriesController::class, 'destroy'])->name('item_award_histories.destroy');
+
+
+    
 
     //DESDE ACA PARA AGREGAR EMPRESAS ADJUDICADAS
     //Route::resource('orders.budget_request_providers', BudgetRequestProvidersController::class); //Recurso anidado, es igual a /orders/{order_id}/items/{item_id}
@@ -258,14 +270,10 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     // // Contrato Abierto con Mmin y Mmax
     // Route::post('/orders/{id}/uploadExcel3', [ItemsController::class, 'storeExcel3'])->name('orders.items.storeExcel3');
 
+    
 
-    Route::get('items/{item_id}/item_award_histories', [ItemAwardHistoriesController::class, 'index'])->name('item_award_histories.index');
-    Route::get('items/{item_id}/item_award_histories/create', [ItemAwardHistoriesController::class, 'create'])->name('item_award_histories.create');
-    Route::post('items/{item_id}/item_award_histories/create', [ItemAwardHistoriesController::class, 'store'])->name('item_award_histories.store');
-    Route::get('items/{item_id}/item_award_histories/edit', [ItemAwardHistoriesController::class, 'edit'])->name('item_award_histories.edit');
-    Route::post('items/{item_id}/item_award_histories/edit', [ItemAwardHistoriesController::class, 'update'])->name('item_award_histories.update');
-    Route::delete('items/{item_id}/item_award_histories', [ItemAwardHistoriesController::class, 'destroy'])->name('item_award_histories.destroy');
-
+    // location.href = '/items/{{ $item->id }}/item_award_histories/'+item+'/edit/';
+    
     //BUSCA ITEMS DE CATALOGO 5
     Route::get('items/search', [ItemsController::class, 'search']);
     //BUSCA ITEMS DE CATALOGO 4

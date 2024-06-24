@@ -203,39 +203,31 @@ class ItemsController extends Controller
         $item->comments = $request->input('comments');
         $item->creator_user_id = $request->user()->id;  // usuario logueado
         $item->save();
-        return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza agregada correctamente'); // Caso usuario posee rol pedidos
-
-        // SI DESEAMOS AGREGAR ACA ADJUNTAR ARCHIVO
-        // if (!$request->hasFile('file')) {
-        //     $validator = Validator::make($request->input(), []);
-        //     $validator->errors()->add('file', 'El campo es requerido, debe ingresar un archivo WORD, PDF o EXCEL.');
-        //     return back()->withErrors($validator)->withInput();
-        // }
-
-        // // chequeamos la extension del archivo subido
-        // $extension = $request->file('file')->getClientOriginalExtension();
-        // if(!in_array($extension, array('pdf'))){
-        //     $validator = Validator::make($request->input(), []); // Creamos un objeto validator
-        //     $validator->errors()->add('file', 'El archivo debe ser pdf.'); // Agregamos el error
-        //     return back()->withErrors($validator)->withInput();
-        // }
-        // // Pasó todas las validaciones, guardamos el archivo
-        // $fileName = time().'-contract-file.'.$extension; // nombre a guardar
-        // // Cargamos el archivo (ruta storage/app/public/files, enlace simbólico desde public/files)
-        // $path = $request->file('file')->storeAs('public/files', $fileName);
-
-        // $file = new File;
-        // $file->description = $request->input('number_policy');
-        // $file->file = $fileName;
-        // $file->file_type = 1;//pólizas
-        // $file->contract_id = $contract_id;
-        // $file->contract_state_id = 1;
-        // $file->creator_user_id = $request->user()->id;  // usuario logueado
-        // $file->dependency_id = $request->user()->dependency_id;  // dependencia del usuario
-        // $file->save();
-        // return redirect()->route('contracts.files.show', $contract_id)->with('success', 'Póliza agregada correctamente'); // Caso usuario posee rol pedidos
+        return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza agregada correctamente'); // Caso usuario posee rol pedidos        
     }
 
+
+    /**
+     * Formulario de modificacion de pedido
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Request $request, $contract_id, $item_id)
+    {
+        $contract = Contract::findOrFail($contract_id);
+
+        // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
+        if(!$request->user()->hasPermission(['admin.items.update','contracts.items.update']) &&  $contract->dependency_id != $request->user()->dependency_id){
+            return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
+        }
+
+        $item = Item::findOrFail($item_id);
+        $policies = Policy::all();
+        return view('contract.items.update', compact('contract','item','policies'));
+    }
+
+    
     /**
      * Funcionalidad de modificacion del pedido CUANDO ESTIPO CONTRATO 2 = CERRADO
      *
@@ -304,6 +296,40 @@ class ItemsController extends Controller
         return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza modificada correctamente'); // Caso usuario posee rol pedidos
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request, $contract_id, $item_id)
+    {
+        $contract = Contract::findOrFail($contract_id);
+        $item = Item::find($item_id);
+
+        // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
+        if(!$request->user()->hasPermission(['admin.items.delete','contracts.items.delete']) && $item->contract->dependency_id != $request->user()->dependency_id){
+            return response()->json(['status' => 'error', 'message' => 'No posee los suficientes permisos para eliminar la póliza.', 'code' => 200], 200);
+        }
+
+        // Chequeamos si existen item_award_histories referenciando al item
+        if($item->itemAwardHistories->count() > 0){
+            return response()->json(['status' => 'error', 'message' => 'Póliza no puede eliminarse, posee detalle en endosos, verificar ', 'code' => 200], 200);
+        }
+
+        // Eliminamos en caso de no existir registros referenciando al item
+        $item->delete();
+        // session()->flash('status', 'success');
+        // session()->flash('message', 'Se ha eliminado la póliza ' . $item->number_policy);
+
+        // return response()->json([
+        //     'status' => 'success',
+        //     'message' => 'Se ha eliminado la póliza'. $item->number_policy,
+        //     'code' => 200
+        // ], 200);
+
+        return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza eliminada correctamente'); // Caso usuario posee rol pedidos
+    }
 
     /**
      * Formulario de agregacion de ítems Archivo Excel de CONTRATO ABIERTO.
@@ -791,62 +817,5 @@ class ItemsController extends Controller
             return back()->withErrors($validator)->withInput();
         }
     }
-
-    /**
-     * Formulario de modificacion de pedido
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Request $request, $contract_id, $item_id)
-    {
-        $contract = Contract::findOrFail($contract_id);
-
-        // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
-        if(!$request->user()->hasPermission(['admin.items.update','contracts.items.update']) &&  $contract->dependency_id != $request->user()->dependency_id){
-            return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
-        }
-
-        $item = Item::findOrFail($item_id);
-        $policies = Policy::all();
-        // $level5_catalog_codes = Level5CatalogCode::all();
-        // $contract_presentations = contractPresentation::all();
-        // $contract_measurement_units = contractMeasurementUnit::all();
-        return view('contract.items.update', compact('contract','item','policies'));
-    }
-
-
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request, $contract_id, $item_id)
-    {
-        $contract = Contract::findOrFail($contract_id);
-        $item = Item::find($item_id);
-
-        // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
-        if(!$request->user()->hasPermission(['admin.items.delete','contracts.items.delete']) && $item->contract->dependency_id != $request->user()->dependency_id){
-            return response()->json(['status' => 'error', 'message' => 'No posee los suficientes permisos para eliminar la póliza.', 'code' => 200], 200);
-        }
-
-        // Chequeamos si existen item_award_histories referenciando al item
-        if($item->itemAwardHistories->count() > 0){
-            return response()->json(['status' => 'error', 'message' => 'Póliza no puede eliminarse, posee detalle en endosos, verificar ', 'code' => 200], 200);
-        }
-
-        // Eliminamos en caso de no existir registros referenciando al item
-        $item->delete();
-        session()->flash('status', 'success');
-        session()->flash('message', 'Se ha eliminado la póliza ' . $item->number_policy);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Se ha eliminado la póliza'. $item->number_policy,
-            'code' => 200
-        ], 200);
-    }
+    
 }

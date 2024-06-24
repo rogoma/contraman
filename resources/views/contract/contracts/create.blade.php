@@ -42,7 +42,7 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h5>Agregar Llamado</h5>
-                                    <br>
+                                    <br><br>
                                     <label id="fecha_actual" name="fecha_actual"  style="font-size: 20px;color: #FF0000;float: left;" for="fecha_actual">{{ Carbon\Carbon::now()->format('d/m/Y') }}</label>
                                     {{-- <label style="font-size: 20px;color: #FF0000;float: left;">FECHA: </label> --}}                                   
                                 </div>
@@ -51,7 +51,6 @@
                                     <h3 class="text-center">Datos para cargar Llamado</h3>
                                     <form class="row" method="POST" action="{{ route('contracts.store') }}">
                                         @csrf
-
                                         <div class="col-sm-12">
                                             @if ($errors->any())
                                                 <div class="alert alert-danger">

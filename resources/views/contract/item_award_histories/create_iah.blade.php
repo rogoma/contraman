@@ -31,7 +31,7 @@
                             <a href="{{ route('home') }}"><i class="feather icon-home"></i></a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{ route('item_award_histories.index', $item->id) }}">Listado de Endosos de Pólizas</a>
+                            <a href="{{ route('items.item_award_histories.index', $item->id) }}">Listado de Endosos de Pólizas</a>
                         </li>
                     </ul>
                 </div>
@@ -472,7 +472,7 @@ $(document).ready(function(){
                     try{
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
-                            location.href = "{{ route('item_award_histories.index', $item->id) }}";
+                            location.href = "{{ route('items.item_award_histories.index', $item->id) }}";
                         }else{
                             swal("Error!", response.message, "error");
                         }

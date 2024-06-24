@@ -51,8 +51,9 @@ class ItemAwardHistoriesController extends Controller
             return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
         }
 
-        $item_award_histories = $item->itemAwardHistories;
-        return view('contract.item_award_histories.index', compact('item', 'item_award_histories'));
+        // $item_award_histories = $item->itemAwardHistories;
+
+        return view('contract.item_award_histories.index', compact('item'));
     }
 
     /**
@@ -116,12 +117,12 @@ class ItemAwardHistoriesController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        $item = new ItemAwardHistory;
-        $item->item_id = $item_id;
+        $itemA = new ItemAwardHistory;
+        $itemA->item_id = $item_id;
         // $item->policy_id = $request->input('policy_id');
-        $item->number_policy = $request->input('number_policy');
-        $item->item_from = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_from'))));
-        $item->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));
+        $itemA->number_policy = $request->input('number_policy');
+        $itemA->item_from = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_from'))));
+        $itemA->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));
 
         $amount = str_replace('.', '',($request->input('amount')));
         if ($amount === '' ) {
@@ -133,12 +134,12 @@ class ItemAwardHistoriesController extends Controller
             $validator->errors()->add('amount', 'Monto no puede ser negativo');
             return back()->withErrors($validator)->withInput();
         }else{
-            $item->amount = $amount;
+            $itemA->amount = $amount;
         }
-        $item->comments = $request->input('comments');
-        $item->creator_user_id = $request->user()->id;  // usuario logueado
-        $item->save();
-        return redirect()->route('item_award_histories.index', $item_id)->with('success', 'Endoso agregado correctamente'); // Caso usuario posee rol pedidos
+        $itemA->comments = $request->input('comments');
+        $itemA->creator_user_id = $request->user()->id;  // usuario logueado
+        $itemA->save();
+        return redirect()->route('items.item_award_histories.index', $item_id)->with('success', 'Endoso agregado correctamente'); // Caso usuario posee rol pedidos
     }
 
     // ORIGINAL ITEM AWARD HOSTORIES STORE CON JSCRIPT
@@ -259,10 +260,11 @@ class ItemAwardHistoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $item_id)
+    public function edit(Request $request, $item_id, $itemA_id)
     {
+        // $item = ItemAwardHistory::findOrFail($item_id);
+        
         $item = Item::findOrFail($item_id);
-        $endoso = $item->itemAwardHistories();
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
         if(!$request->user()->hasPermission(['admin.item_award_histories.create', 'contracts.item_award_histories.create']) &&
@@ -270,26 +272,9 @@ class ItemAwardHistoriesController extends Controller
             return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
         }
 
-        // $budget_request_providers = $item->contract->budgetRequestProviders;
-        return view('contract.item_award_histories.update', compact('item'));
-
-
-        // $item = Item::findOrFail($item_id);
-
-        // // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
-        // if(!$request->user()->hasPermission(['admin.item_award_histories.update', 'plannings.item_award_histories.update']) &&
-        // $item->contract->dependency_id != $request->user()->dependency_id){
-        //     return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
-        // }
-
-        // // obtenemos los precios referenciales cargados por otras dependencias
-        // $other_dependencies = $item->itemAwardHistories()
-        //     ->where('creator_dependency_id', '!=', $request->user()->dependency_id)->get();
-        // // obtenemos los precios referenciales cargados por la dependencia actual
-        // $item_award_histories = $item->itemAwardHistories()
-        //     ->where('creator_dependency_id', $request->user()->dependency_id)->get();
-        // $budget_request_providers = $item->contract->budgetRequestProviders;
-        // return view('contract.item_award_histories.update', compact('item', 'other_dependencies', 'item_award_histories', 'budget_request_providers'));
+        $itemA = ItemAwardHistory::findOrFail($itemA_id);
+        
+        return view('contract.item_award_histories.update', compact('item','itemA'));        
     }
 
     /**
@@ -299,43 +284,51 @@ class ItemAwardHistoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $item_id)
+    public function update(Request $request, $item_id, $itemA_id)
     {
-        $item = Item::find($item_id);
-        $before_ids = empty($request->input('id')) ? array() : (array)$request->input('id');
-        $types = $request->input('type');
-        $dncp_pac_ids = $request->input('dncp_pac_id');
-        $budget_request_providers = $request->input('budget_request_provider');
-        $amounts = $request->input('amount');
+        $item = Item::findOrFail($item_id);
+        $itemA = ItemAwardHistory::findOrFail($itemA_id);        
 
-        // Los registros cargados anteriormente por la dependencia actual
-        // que fueron eliminados en la vista, los eliminamos en la bd
-        $deleted_items = ItemAwardHistory::where('item_id', $item_id)
-                        ->where('creator_dependency_id', $request->user()->dependency_id)
-                        ->whereNotIn('id', $before_ids)->get()->pluck('id');
-        ItemAwardHistory::destroy($deleted_items);
+        $rules = array(
+            // 'policy_id' => 'numeric|required|max:2147483647|unique:items,policy_id',
+            'number_policy' => 'string|required|unique:items,number_policy',
+            'item_from' => 'date_format:d/m/Y',
+            'item_to' => 'required|date_format:d/m/Y',
+            'amount' => 'nullable|string|max:9223372036854775807',
+            'comments' => 'nullable|max:300'
+        );
 
-        for ($i=0; $i < count($types); $i++) {
-            // Los registros cargados anteriormente los modificamos
-            if(is_array($before_ids) && $i < count($before_ids)){
-                $item_award_history = ItemAwardHistory::find($before_ids[$i]);
-                $item_award_history->modifier_user_id = $request->user()->id;
-            }else{
-            // Para los nuevos precios referenciales creamos nuevos registros
-                $item_award_history = new ItemAwardHistory;
-                $item_award_history->creator_user_id = $request->user()->id;
-            }
-
-            $item_award_history->item_id = $item->id;
-            $item_award_history->dncp_pac_id = empty($dncp_pac_ids[$i]) ? NULL : str_replace('.', '', $dncp_pac_ids[$i]);
-            $item_award_history->budget_request_provider_id = $budget_request_providers[$i];
-            $item_award_history->amount = str_replace(['Gs. ', '.'], '', $amounts[$i]);
-            $item_award_history->creator_dependency_id = $request->user()->dependency_id;
-            $item_award_history->save();
+        $validator =  Validator::make($request->input(), $rules);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
         }
 
-        $request->session()->flash('success', 'Se han modificado exitosamente los precios referenciales.');
-        return response()->json(['status' => 'success', 'code' => 200], 200);
+        // $itemA = new ItemAwardHistory;
+        // $itemA->item_id = $item_id;
+        // $item->policy_id = $request->input('policy_id');
+        $itemA->number_policy = $request->input('number_policy');
+        $itemA->item_from = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_from'))));
+        $itemA->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));
+
+        $amount = str_replace('.', '',($request->input('amount')));
+        if ($amount === '' ) {
+            $validator->errors()->add('amount', 'Ingrese Monto');
+            return back()->withErrors($validator)->withInput();
+        }
+
+        if ($amount < 0 ) {
+            $validator->errors()->add('amount', 'Monto no puede ser negativo');
+            return back()->withErrors($validator)->withInput();
+        }else{
+            $itemA->amount = $amount;
+        }
+        $itemA->comments = $request->input('comments');
+        $itemA->creator_user_id = $request->user()->id;  // usuario logueado
+        $itemA->save();
+
+        // $request->session()->flash('success', 'Se ha modificado exitosamente el endoso de la póliza');
+        // return response()->json(['status' => 'success', 'code' => 200], 200);
+        return redirect()->route('items.item_award_histories.index',$item_id)->with('success', 'Se ha modificado exitosamente el endoso de la póliza'); // Caso usuario posee rol pedidos
     }
 
     /**
@@ -344,9 +337,9 @@ class ItemAwardHistoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $item_id)
+    public function destroy(Request $request, $item_id, $itemA_id)
     {
-        $item = Item::findOrFail($item_id);
+        $item = ItemAwardHistory::findOrFail($item_id);
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
         if(!$request->user()->hasPermission(['admin.item_award_histories.delete']) &&
@@ -354,12 +347,18 @@ class ItemAwardHistoriesController extends Controller
             return response()->json(['status' => 'error', 'message' => 'No posee los suficientes permisos para realizar esta acción.', 'code' => 200], 200);
         }
 
-        // Quitamos todos los precios referenciales del item
-        foreach ($item->itemAwardHistories as $item_award_history) {
-            $item_award_history->delete();
-        }
+        // Eliminamos en caso de no existir registros referenciando al item
+        $item->delete();
+        // session()->flash('status', 'success');
+        // session()->flash('message', 'Se ha eliminado la póliza ' . $item->number_policy);
 
-        $request->session()->flash('success', 'Se han eliminado los endosos referenciales a la póliza');
+        // return response()->json([
+        //     'status' => 'success',
+        //     'message' => 'Se ha eliminado la póliza'. $item->number_policy,
+        //     'code' => 200
+        // ], 200);
+
+        $request->session()->flash('success', 'Se ha eliminado el endoso referencial a la póliza');
         return response()->json(['status' => 'success', 'code' => 200], 200);
     }
 }

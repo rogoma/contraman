@@ -20,7 +20,7 @@
                             <a href="{{ route('home') }}"><i class="feather icon-home"></i></a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{ route('item_award_histories.index', $item->id) }}">Listado Endosos {{ $item->iddncp }}</a>
+                            <a href="{{ route('items.item_award_histories.index', $item->id) }}">Listado Endosos {{ $item->iddncp }}</a>
                         </li>
                     </ul>
                 </div>
@@ -38,12 +38,12 @@
                                 <div class="card-header">
                                     {{-- <h5>Agregar Endoso al Llamado Nº {{ $item->iddncp }}</h5> --}}
                                     <h5>Póliza: {{ $item->policy->description }} - N°: {{ $item->number_policy }}</h5>
-                                    <br>
+                                    <br><br>
                                     <label id="fecha_actual" name="fecha_actual"  style="font-size: 20px;color: #FF0000;float: left;" for="fecha_actual">{{ Carbon\Carbon::now()->format('d/m/Y') }}</label>
                                     {{-- <label style="font-size: 20px;color: #FF0000;float: left;">FECHA: </label> --}}
                                 </div>
                                 <div class="card-block">
-                                    <form method="POST" action="{{ route('item_award_histories.store', $item->id) }}">
+                                    <form method="POST" action="{{ route('items.item_award_histories.store', $item->id) }}">
                                         @csrf
                                         <div class="container">
                                             <h3 style="text-align: center;">Agregar Endoso</h3>

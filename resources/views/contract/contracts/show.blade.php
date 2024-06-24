@@ -217,7 +217,6 @@ p.centrado {
                                                                     <td style="color:#ff0000">{{ $contract->items[$i]->itemToDateFormat() }}</td>
                                                                 @endif --}}
                                                                 <td>{{ $contract->items[$i]->itemToDateFormat() }}</td>
-
                                                                 <td>{{ $contract->items[$i]->AmountFormat()}} </td>
                                                                 <td>{{ $contract->items[$i]->comments }}</td>
 
@@ -235,21 +234,7 @@ p.centrado {
 
                                                                     <button type="button" title="Endosos de Pólizas" class="btn btn-primary btn-icon" onclick="itemAwardHistories({{ $contract->items[$i]->id }})">
                                                                         <i class="fa fa-list"></i>
-                                                                    </button>
-
-                                                                {{-- @if($contract->items[$i]->itemAwardHistories->count() > 0) --}}
-                                                                {{-- <button type="button" title="Archivo PDF" class="btn btn-danger btn-icon" onclick="itemAwardHistories({{ $contract->items[$i]->id }})">
-                                                                    <i class="fa fa-file-pdf-o"></i>
-                                                                </button> --}}
-                                                                {{-- <a href="{{ asset('storage/files/'.$user_files_pol[$i]->file) }}" title="Archivo PDF" target="_blank" class="btn btn-danger btn-icon"><i class="fa fa-file-pdf-o"></i></a> --}}
-                                                            {{-- @endif --}}
-
-
-                                                                {{-- @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']) || $contract->dependency_id == Auth::user()->dependency_id)
-                                                                    <button type="button" title="Endosos" class="btn btn-success btn-icon" onclick="updateItem({{ $contract->items[$i]->id }})">
-                                                                        <i class="fa fa-flag-o"></i>
-                                                                    </button>
-                                                                @endif --}}
+                                                                    </button>                                                                
                                                                 </td>
                                                             </tr>
                                                         @endfor
@@ -458,12 +443,12 @@ $(document).ready(function(){
                         swal("Error!", response.message, "error");
                     }
                 }catch(error){
-                    swal("Error!", "Ocurrió1 un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
+                    swal("Error!", "Ocurrió un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
                     console.log(error);
                 }
               },
               error: function(error){
-                swal("Error!", "Ocurrió2 un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
+                swal("Error!", "Ocurrió un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina", "error");
                 console.log(error);
               }
             });
