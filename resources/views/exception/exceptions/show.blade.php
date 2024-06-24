@@ -41,10 +41,10 @@ p.centrado {
                         <span>Llamado Nº {{ $order->number }}</span>
                         <br><br>
                         {{-- <h6>Estado Actual: {{ $order->orderState->id." - ".$order->orderState->description }}</h6>    --}}
-                        <h5><p style="font-size: 17px; font-weight: bold; color:#FF0000">Estado Actual: {{ $order->orderState->id." - ".$order->orderState->description }}</p></h5> 
+                        <h5><p style="font-size: 17px; font-weight: bold; color:#FF0000">Estado Actual: {{ $order->orderState->id." - ".$order->orderState->description }}</p></h5>
                         {{-- <a href="/pdf/modalities" class="btn btn-info" target="_blank">Plazos de Procesos</a>                         --}}
                     </div>
-                </div>                
+                </div>
             </div>
             <div class="col-lg-4">
                 <div class="page-header-breadcrumb">
@@ -70,12 +70,12 @@ p.centrado {
                                 <div class="card-header">
                                     <div class="row">
                                         <div class="col-sm-10 text-left">
-                                            
+
                                             {{-- <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."-".$order->description }} --}}
-                                            {{-- @if ($order->covid==0)                                                
-                                                <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}   
-                                            @else                                                
-                                                <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}    
+                                            {{-- @if ($order->covid==0)
+                                                <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}
+                                            @else
+                                                <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}
                                                 <label style="font-size: 16px; font-weight: bold; color:blue;background-color:yellow;">Proceso COVID</label></h5>
                                             @endif --}}
 
@@ -85,19 +85,19 @@ p.centrado {
                                                     <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}
                                                 @else
                                                     <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}
-                                                    <label style="color:red;font-weight: bold;background-color:yellow">(URGENCIA IMPOSTERGABLE)</span> </td></label></h5>                                                        
+                                                    <label style="color:red;font-weight: bold;background-color:yellow">(URGENCIA IMPOSTERGABLE)</span> </td></label></h5>
                                                 @endif
                                             @else
-                                                @if ($order->unpostponable==0)                                                        
-                                                    <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }} 
+                                                @if ($order->unpostponable==0)
+                                                    <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}
                                                     <label style="font-size: 16px; font-weight: bold; color:blue;background-color:yellow;">Proceso COVID</label></h5>
                                                 @else
-                                                    <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }} 
+                                                    <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}
                                                         <label style="font-size: 16px; font-weight: bold; color:blue;background-color:yellow;">Proceso COVID </label>
                                                         <label style="color:red;font-weight: bold;background-color:yellow"> (URGENCIA IMPOSTERGABLE)</label></h5>
-                                                @endif                                                        
+                                                @endif
                                             @endif
-                                            
+
                                             @if ($order->urgency_state == "ALTA")
                                                 <label class="label label-danger m-l-5">Prioridad {{ $order->urgency_state }}</label></h5>
                                             @else
@@ -105,10 +105,10 @@ p.centrado {
                                                     <label class="label label-warning m-l-5">Prioridad {{ $order->urgency_state }}</label></h5>
                                                 @else
                                                     <label class="label label-info m-l-5">Prioridad {{ $order->urgency_state }}</label></h5>
-                                                @endif    
+                                                @endif
                                             @endif
                                             <h5><p style="font-size: 17px; font-weight: bold; color:blue">SIMESE: {{ is_null($order->simese->first()) ? '' : number_format($order->simese->first()['simese'],'0', ',','.')."/".$order->simese->first()['year'] }}</p></h5>
-                                            
+
                                             @if ($order->open_contract == 1)
                                                 <h5><a style="font-size: 15px; font-weight: bold; color:red"> Tipo Contrato: Abierto</a></h5>
                                             @else
@@ -116,12 +116,12 @@ p.centrado {
                                                     <h5><a style="font-size: 15px; font-weight: bold; color:red"> Tipo Contrato: Cerrado</a></h5>
                                                 @else
                                                     <h5><a style="font-size: 15px; font-weight: bold; color:red"> Tipo Contrato: Abierto con MontoMin y MontoMáx</a></h5>
-                                                @endif        
+                                                @endif
                                             @endif
-                                            
+
                                             {{-- Si fecha de apertura está vacía --}}
                                             @if (is_null($order->queries_deadline))
-                                                
+
                                             @else
                                                 <label style="font-size: 17px; font-weight: bold; color:red;background-color:yellow;">Fecha de Apertura: {{ $order->queriesDeadline() }}</label></h5>
                                             @endif
@@ -133,37 +133,37 @@ p.centrado {
                                                     <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="recibeOrder({{ $order->id }});">Recibir Proceso Llamado</a>
                                                 @else
                                                     @if ($order->actual_state == 97)
-                                                        <button class="btn btn-danger dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Recibir Reparo</button>                                                
-                                                        <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="recibeOrderUTA({{ $order->id }});">Recibir PBC de UTA-CON REPARO</a>                                               
+                                                        <button class="btn btn-danger dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Recibir Reparo</button>
+                                                        <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="recibeOrderUTA({{ $order->id }});">Recibir PBC de UTA-CON REPARO</a>
                                                     @else
-                                                        @if ($order->actual_state == 62)                                                        
+                                                        @if ($order->actual_state == 62)
                                                             <button class="btn btn-danger dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Recibir de PAC con Obs.Solucionado</button>
                                                             <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="recibeOrder({{ $order->id }});">Recibir PAC con Obs.Solucionado</a>
                                                         @else
                                                             <button class="btn btn-primary dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Acciones</button>
                                                         @endif
                                                     @endif
-                                                @endif                                                                                              
-                                            
+                                                @endif
+
                                             <div class="dropdown-menu" aria-labelledby="acciones" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
-                                                
+
                                                 {{-- Verificamos que el pedido tenga estado 20-PROCESADO PLANIFICACIÓN --}}
-                                                {{-- @if ($order->actual_state == 20)                                                
+                                                {{-- @if ($order->actual_state == 20)
                                                     <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="recibeOrder({{ $order->id }});">Recibir Proceso Llamado</a>
                                                 @endif                                                 --}}
-                                                
+
                                                 {{-- @if (in_array($order->actual_state, [55,101])&&  (!empty($order->queries_deadline))) --}}
-                                                @if (in_array($order->actual_state, [55]))                                                    
+                                                @if (in_array($order->actual_state, [55]))
                                                     <a style="font-size: 14px; font-weight: bold; color:white;background-color:red;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="derivePAC({{ $order->id }});">Derivar a PAC con Observaciones</a>
                                                     <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="deriveOrder({{ $order->id }});">Derivar a UTA para Control de PBC</a>
                                                 @endif
 
-                                                @if (in_array($order->actual_state, [101]))                                                    
+                                                @if (in_array($order->actual_state, [101]))
                                                     <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="deriveOrder({{ $order->id }});">Derivar a UTA para Control de PBC</a>
                                                 @endif
-                                            
+
                                                 {{-- Verificamos que el pedido tenga estado VERIFICADO PBC EN UTA CON REPARO --}}
-                                                
+
 
                                                 {{-- @if ($order->actual_state == 97)
                                                 <a class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="recibeOrderUTA({{ $order->id }});">Recibir PBC de UTA-CON REPARO</a>
@@ -174,8 +174,8 @@ p.centrado {
                                                     <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="deriveComite({{ $order->id }});">Derivar Antecedentes a Comité de Evaluación</a>
                                                 @endif
 
-                                                @if ($order->actual_state == 130 && (is_null($order->queries_deadline)))                                                
-                                                    <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" data-toggle="modal" data-target="#fechaAperturaSobresModal">Agregar Fecha Apertura de Sobres</a>                                                
+                                                @if ($order->actual_state == 130 && (is_null($order->queries_deadline)))
+                                                    <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" data-toggle="modal" data-target="#fechaAperturaSobresModal">Agregar Fecha Apertura de Sobres</a>
                                                 @endif
 
                                                 {{-- @if ($order->actual_state == 130 && (!empty($order->queries_deadline))) --}}
@@ -191,7 +191,7 @@ p.centrado {
 
                             <div class="card">
                                 <div class="card-block">
-                                    
+
                                     <ul class="nav nav-tabs md-tabs" role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link active" data-toggle="tab" href="#tab1" role="tab"><i class="fa fa-tasks"></i> Datos del Llamado</a>
@@ -201,11 +201,11 @@ p.centrado {
                                             <a class="nav-link" data-toggle="tab" href="#tab2" role="tab"><i class="fa fa-briefcase"></i> Empresas solicitadas presupuesto</a>
                                             <div class="slide"></div>
                                         </li> --}}
-                                                                                
+
                                         <li class="nav-item">
                                             <a class="nav-link" data-toggle="tab" href="#tab3" role="tab"><i class="fa fa-list"></i> Ítems</a>
                                             <div class="slide"></div>
-                                        </li>                                        
+                                        </li>
                                         {{-- <li class="nav-item">
                                             <a class="nav-link" data-toggle="tab" href="#tab4" role="tab"><i class="fa fa-file-pdf-o"></i> Formularios</a>
                                             <div class="slide"></div>
@@ -215,7 +215,7 @@ p.centrado {
                                             <a class="nav-link" data-toggle="tab" href="#tab5" role="tab"><i class="fa fa-file-text-o"></i> SIMESE Relacionado</a>
                                             <div class="slide"></div>
                                         </li> --}}
-                                        
+
                                         {{-- //Se controla que tenga estado recibido en Compras Excepciones para mostrar estos TABS --}}
                                         {{-- @if (($order->actual_state <> 20) && ($order->actual_state <> 97)) --}}
                                         @if ($order->actual_state <> 20)
@@ -230,12 +230,12 @@ p.centrado {
                                             <li class="nav-item">
                                                 <a class="nav-link" data-toggle="tab" href="#tab12" role="tab"><i class="fa fa-bar-chart"></i>Cuadro Comparativo</a>
                                                 <div class="slide"></div>
-                                            </li>                                            
+                                            </li>
                                             <li class="nav-item">
                                                 <a class="nav-link" data-toggle="tab" href="#tab6" role="tab"><i class="fa fa-file-archive-o"></i> Archivos (Anteced.)</a>
                                                 <div class="slide"></div>
                                             </li>
-                                            <li class="nav-item">                                                
+                                            <li class="nav-item">
                                                 <a class="nav-link" data-toggle="tab" href="#tab7" role="tab"><i class="fa fa-folder-open-o"></i> Archivos Excepciones</a>
                                                 <div class="slide"></div>
                                             </li>
@@ -249,7 +249,7 @@ p.centrado {
                                                     <div class="slide"></div>
                                                 </li>
                                             {{-- @endif --}}
-                                        @endif    
+                                        @endif
                                     </ul>
                                     <div class="tab-content card-block">
                                         <div class="tab-pane active" id="tab1" role="tabpanel">
@@ -322,7 +322,7 @@ p.centrado {
                                                     <tr>
                                                         <td><label class="col-form-label f-w-600">Autorización del Fabricante:</label></td>
                                                         <td><label class="col-form-label f-w-600">Anticipo financiero, porcentaje, monto:</label></td>
-                                                        <td colspan="3"><label class="col-form-label f-w-600">Especificaciones Técnicas detalladas del bien o servicio a ser adquirido, 
+                                                        <td colspan="3"><label class="col-form-label f-w-600">Especificaciones Técnicas detalladas del bien o servicio a ser adquirido,
                                                         en caso de obras anexar el programa de entrega, en caso de combustibles describir el valor en cupos y tarjetas:</label></td>
                                                         <td><label class="col-form-label f-w-600">Solicitud de muestras:</label></td>
                                                     </tr>
@@ -357,9 +357,9 @@ p.centrado {
                                                     <tr>
                                                         <td><label class="col-form-label f-w-600">Administrador del Contrato:</label></td>
                                                         <td><label class="col-form-label f-w-600">Vigencia del Contrato:</label></td>
-                                                        <td colspan="2"><label class="col-form-label f-w-600">Documentos adicionales que deberá presentar el oferente que 
+                                                        <td colspan="2"><label class="col-form-label f-w-600">Documentos adicionales que deberá presentar el oferente que
                                                             demuestran que los bienes ofertados cumplen con las especificaciones técnicas:</label></td>
-                                                        <td colspan="2"><label class="col-form-label f-w-600">Documentos adicionales que deberá presentar el oferente que demuestran 
+                                                        <td colspan="2"><label class="col-form-label f-w-600">Documentos adicionales que deberá presentar el oferente que demuestran
                                                             que el oferente se halla calificado para ejecutar el contrato:</label></td>
                                                     </tr>
                                                     <tr>
@@ -399,7 +399,7 @@ p.centrado {
                                                 </tbody>
                                             </table>
                                         </div>
-                                        
+
                                         <div class="tab-pane" id="tab2" role="tabpanel">
                                             <table id="budget_request_providers" class="table table-striped table-bordered">
                                                 <thead>
@@ -444,8 +444,8 @@ p.centrado {
                                                             <th>Present.</th>
                                                             <th>U.M.</th>
                                                             {{-- Mostramos ítemes de Contrato Abierto --}}
-                                                            @if ($order->open_contract == 1) 
-                                                                <th>Precio Unitario</th> 
+                                                            @if ($order->open_contract == 1)
+                                                                <th>Precio Unitario</th>
                                                                 <th>Pedido Mínimo</th>
                                                                 <th>Pedido Máximo</th>
                                                                 <th>Monto Mínimo</th>
@@ -453,21 +453,21 @@ p.centrado {
                                                                 {{-- <th>Acciones</th> --}}
                                                             @else
                                                                 {{-- Mostramos ítemes de Contrato Cerrado --}}
-                                                                @if ($order->open_contract == 2) 
+                                                                @if ($order->open_contract == 2)
                                                                     <th>Cantidad</th>
-                                                                    <th>Precio Unitario</th>                                                                
+                                                                    <th>Precio Unitario</th>
                                                                     <th>Monto Total</th>
                                                                     {{-- <th>Acciones</th> --}}
                                                                 @else
                                                                 {{-- Mostramos ítemes de Contrato Abierto con Mmin y Mmax --}}
                                                                     <th>Cantidad</th>
-                                                                    <th>Precio Unitario IVA INCL.</th>                                                                
+                                                                    <th>Precio Unitario IVA INCL.</th>
                                                                     <th>Monto Mínimo</th>
                                                                     <th>Monto Máximo</th>
                                                                     {{-- <th>Acciones</th> --}}
-                                                                @endif    
+                                                                @endif
                                                             @endif
-                                                            
+
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -475,41 +475,41 @@ p.centrado {
                                                         <tr>
                                                             <td>{{ ($i+1) }}</td>
                                                             <td>{{ $order->items[$i]->batch }}</td>
-                                                            <td>{{ $order->items[$i]->item_number }}</td>                                                                
-                                                            @if ($order->items[$i]->level5CatalogCode->code == '99999999-9999')                                                                    
+                                                            <td>{{ $order->items[$i]->item_number }}</td>
+                                                            @if ($order->items[$i]->level5CatalogCode->code == '99999999-9999')
                                                                 <td class="columna3" style="color:red;font-weight: bold">{{ $order->items[$i]->level5CatalogCode->code }}</td>
                                                                 <td style="color:red;font-weight: bold">{{ $order->items[$i]->level5CatalogCode->description }}</td>
                                                             @else
                                                                 <td class="columna3"> {{ $order->items[$i]->level5CatalogCode->code }}</td>
                                                                 <td>{{ $order->items[$i]->level5CatalogCode->description }}</td>
-                                                            @endif                                                                
+                                                            @endif
                                                             <td>{{ $order->items[$i]->technical_specifications }}</td>
                                                             <td>{{ $order->items[$i]->orderPresentation->description }}</td>
                                                             <td>{{ $order->items[$i]->orderMeasurementUnit->description }}</td>
 
                                                             {{-- Mostramos ítemes de Contrato Abierto --}}
-                                                            @if ($order->open_contract == 1) 
-                                                                <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>                                                            
+                                                            @if ($order->open_contract == 1)
+                                                                <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>
                                                                 <td class="columna9"style="text-align: center">{{ $order->items[$i]->min_quantityFormat() }}</td>
                                                                 <td class="columna10"style="text-align: center">{{ $order->items[$i]->max_quantityFormat() }}</td>
                                                                 <td class="columna11"style="text-align: center">{{ 'Gs. '.$order->items[$i]->totalAmount_min_Format() }}</td>
                                                                 <td class="columna12">{{ 'Gs. '.$order->items[$i]->totalAmountFormat() }}</td>
                                                             @else
                                                                 {{-- Mostramos ítemes de Contrato Cerrado --}}
-                                                                @if ($order->open_contract == 2) 
-                                                                    <td class="columna8"style="text-align: center">{{ $order->items[$i]->quantityFormat() }}</td> 
-                                                                    <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>                                                                                                                                               
+                                                                @if ($order->open_contract == 2)
+                                                                    <td class="columna8"style="text-align: center">{{ $order->items[$i]->quantityFormat() }}</td>
+                                                                    <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>
                                                                     <td class="columna12">{{ 'Gs. '.$order->items[$i]->totalAmountFormat() }}</td>
                                                                 @else
-                                                                    {{-- Mostramos ítemes de Contrato Abierto con Mmin y Mmax --}}                                                                        
+                                                                    {{-- Mostramos ítemes de Contrato Abierto con Mmin y Mmax --}}
                                                                     <td class="columna10"style="text-align: center">{{ $order->items[$i]->quantityFormat() }}</td>
-                                                                    <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td> 
+                                                                    <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>
                                                                     <td class="columna11"style="text-align: center">{{ 'Gs. '.$order->items[$i]->totalAmount_min_Format() }}</td>
                                                                     <td class="columna12">{{ 'Gs. '.$order->items[$i]->totalAmountFormat() }}</td>
                                                                 @endif
                                                             @endif
-                                                            
-                                                            
+
+
                                                             <td style="white-space:nowrap">
                                                                 {{-- <button type="button" title="Listado de Precios Referenciales" class="btn btn-primary btn-icon" onclick="itemAwardHistories({{ $order->items[$i]->id }})">
                                                                     <i class="fa fa-list"></i>
@@ -538,7 +538,7 @@ p.centrado {
                                                     </a>
                                                 @endif
                                             </div>
-                                            <span style="font-size: 16px; font-weight: bold; color:red;background-color:yellow;" >MONTO TOTAL DEL LLAMADO: {{ $order->totalAmountFormat() }}</span>  
+                                            <span style="font-size: 16px; font-weight: bold; color:red;background-color:yellow;" >MONTO TOTAL DEL LLAMADO: {{ $order->totalAmountFormat() }}</span>
                                     </div>
                                         <div class="tab-pane" id="tab4" role="tabpanel">
                                             <table id="forms" class="table table-striped table-bordered">
@@ -629,7 +629,7 @@ p.centrado {
                                                         <th>Dependencia</th>
                                                         <th>Fecha/Hora</th>
                                                         <th>Acciones</th>
-                                                    </tr>   
+                                                    </tr>
                                                 </thead>
                                                 <tbody>
                                                     @for ($i=0; $i < count($other_files); $i++)
@@ -647,7 +647,7 @@ p.centrado {
                                                     {{-- @for ($i=0; $i < count($exception_files); $i++)
                                                     <tr>
                                                         <td>{{ $i+1 }}</td>
-                                                        <td>{{ $exception_files[$i]->description }}</td>                                                        
+                                                        <td>{{ $exception_files[$i]->description }}</td>
                                                         <td>
                                                             <a href="{{ asset('storage/files/'.$exception_files[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
                                                             <a href="{{ route('orders.files.download', $exception_files[$i]->id) }}" title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a>
@@ -660,7 +660,7 @@ p.centrado {
                                             <div class="text-right">
                                                 {{-- <a href="{{ route('orders.files.create', $order->id) }}" class="btn btn-primary">Cargar Archivos</a>                                                 --}}
                                             </div>
-                                            <div class="col-sm-10 text-left">                                               
+                                            <div class="col-sm-10 text-left">
                                                 {{-- <h4>Adjuntar: Pliego de Bases y Condiciones</h4> --}}
                                             </div>
                                         </div>
@@ -674,11 +674,11 @@ p.centrado {
                                                         <th>Acciones</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>                                                   
+                                                <tbody>
                                                     @for ($i=0; $i < count($exception_files); $i++)
                                                     <tr>
                                                         <td>{{ $i+1 }}</td>
-                                                        <td>{{ $exception_files[$i]->description }}</td>                                                        
+                                                        <td>{{ $exception_files[$i]->description }}</td>
                                                         <td>
                                                             <a href="{{ asset('storage/files/'.$exception_files[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
                                                             <a href="{{ route('orders.files.download', $exception_files[$i]->id) }}" title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a>
@@ -688,22 +688,22 @@ p.centrado {
                                                     @endfor
                                                 </tbody>
                                             </table>
-                                            <div class="text-right">                                                
-                                                <a href="{{ route('orders.files.create', $order->id) }}" class="btn btn-primary">Cargar Archivos</a>                                                                                                
+                                            <div class="text-right">
+                                                <a href="{{ route('orders.files.create', $order->id) }}" class="btn btn-primary">Cargar Archivos</a>
                                             </div>
                                             <div class="col-sm-10 text-left">
-                                                <h6 style="font-weight: bold; color:blue"> Adjuntar:</h6> 
+                                                <h6 style="font-weight: bold; color:blue"> Adjuntar:</h6>
                                                 <h6>• Nota dirigida al Director Nacional comunicando el llamado (firmada y escaneada).</h6>
                                                 <h6>• Pliego de bases y condiciones del llamado, redactado en base al pliego estándar aprobado por la DNCP.</h6>
-                                                <h6>• CDP (escaneado y firmado en concordancia al registro de firmas remitido a la DNCP) o Constancia Ad referéndum (según corresponda).</h6>                                                    
+                                                <h6>• CDP (escaneado y firmado en concordancia al registro de firmas remitido a la DNCP) o Constancia Ad referéndum (según corresponda).</h6>
                                                 <h6>• Constancia de previsión de plurianualidad (en caso de que el llamado sea ejecutado con cargo a más de un ejercicio fiscal).</h6>
-                                                <h6>• Resolución que aprueba el PBC, firmada por la Máxima Autoridad de la Convocante o autorizado, por delegación.</h6>                                                                                                                                                   
+                                                <h6>• Resolución que aprueba el PBC, firmada por la Máxima Autoridad de la Convocante o autorizado, por delegación.</h6>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="tab-pane" id="tab8" role="tabpanel">
                                             <label class="col-form-label f-w-600">Consultas obtenidas en el portal de la DNCP</label><br>
-                                            <label style="font-weight: bold; color:red" class="col-form-label f-w-600">Fecha Apertura de Sobres:</label> <label id="queries_deadline_label" style="font-weight: bold; color:red;background-color:yellow" class="col-form-label">{{ empty($order->queries_deadline) ? "No se ha cargado la fecha Apertura de Sobres." : $order->queriesDeadline() }}</label>                                           
+                                            <label style="font-weight: bold; color:red" class="col-form-label f-w-600">Fecha Apertura de Sobres:</label> <label id="queries_deadline_label" style="font-weight: bold; color:red;background-color:yellow" class="col-form-label">{{ empty($order->queries_deadline) ? "No se ha cargado la fecha Apertura de Sobres." : $order->queriesDeadline() }}</label>
                                             <table class="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
@@ -763,11 +763,11 @@ p.centrado {
                                                     <tr>
                                                         <th>#</th>
                                                         <th>Descripción</th>
-                                                        <th>Tipo de Archivo</th>                                                       
+                                                        <th>Tipo de Archivo</th>
                                                         <th>Acciones</th>
-                                                    </tr>   
+                                                    </tr>
                                                 </thead>
-                                                <tbody>                                                    
+                                                <tbody>
                                                     @for ($i=0; $i < count($exception_filedncp_con); $i++)
                                                     <tr>
                                                         <td>{{ $i+1 }}</td>
@@ -776,16 +776,16 @@ p.centrado {
                                                         <td>
                                                             <a href="{{ asset('storage/files/'.$exception_filedncp_con[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
                                                             <a href="{{ route('orders.files.download', $exception_filedncp_con[$i]->id) }}" title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a>
-                                                            <button title="Eliminar Archivo" onclick="deleteFile({{ $exception_filedncp_con[$i]->id }})" class="btn btn-danger"><i class="fa fa-trash"></i></a>                                                            
+                                                            <button title="Eliminar Archivo" onclick="deleteFile({{ $exception_filedncp_con[$i]->id }})" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                                                         </td>
                                                     </tr>
                                                     @endfor
                                                 </tbody>
                                             </table>
-                                            <div class="text-right">                                                
-                                                <a href="{{ route('orders.files.create_filedncp_con', $order->id) }}" class="btn btn-primary">Cargar Archivos de Consultas</a>                                                
-                                            </div>                                            
-                                        </div>   
+                                            <div class="text-right">
+                                                <a href="{{ route('orders.files.create_filedncp_con', $order->id) }}" class="btn btn-primary">Cargar Archivos de Consultas</a>
+                                            </div>
+                                        </div>
 
 
 
@@ -830,7 +830,7 @@ p.centrado {
                                                         <a href="{{ route('exceptions.objections_responses.create', $objections[$i]->id) }}" class="btn btn-primary">Cargar Respuesta</a>
                                                     </div>
                                                 </div>
-                                            @endfor                                            
+                                            @endfor
                                             <div class="text-right m-t-20">
                                                 <a href="{{ route('exceptions.objections.create', $order->id) }}" class="btn btn-primary">Cargar Reparos</a>
                                             </div>
@@ -841,11 +841,11 @@ p.centrado {
                                                     <tr>
                                                         <th>#</th>
                                                         <th>Descripción</th>
-                                                        <th>Tipo de Archivo</th>                                                       
+                                                        <th>Tipo de Archivo</th>
                                                         <th>Acciones</th>
-                                                    </tr>   
+                                                    </tr>
                                                 </thead>
-                                                <tbody>                                                    
+                                                <tbody>
                                                     @for ($i=0; $i < count($exception_filedncp); $i++)
                                                     <tr>
                                                         <td>{{ $i+1 }}</td>
@@ -854,17 +854,17 @@ p.centrado {
                                                         <td>
                                                             <a href="{{ asset('storage/files/'.$exception_filedncp[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
                                                             <a href="{{ route('orders.files.download', $exception_filedncp[$i]->id) }}" title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a>
-                                                            <button title="Eliminar Archivo" onclick="deleteFile({{ $exception_filedncp[$i]->id }})" class="btn btn-danger"><i class="fa fa-trash"></i></a>                                                            
+                                                            <button title="Eliminar Archivo" onclick="deleteFile({{ $exception_filedncp[$i]->id }})" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                                                         </td>
                                                     </tr>
                                                     @endfor
                                                 </tbody>
                                             </table>
-                                            <div class="text-right">                                                
-                                                <a href="{{ route('orders.files.create_filedncp', $order->id) }}" class="btn btn-primary">Cargar Archivos de Reparos</a>                                                
-                                            </div>                                              
+                                            <div class="text-right">
+                                                <a href="{{ route('orders.files.create_filedncp', $order->id) }}" class="btn btn-primary">Cargar Archivos de Reparos</a>
+                                            </div>
                                         </div>
-                                        
+
                                         {{-- PARA EMPRESAS INVITADAS --}}
                                         <div class="tab-pane" id="tab10" role="tabpanel">
                                             <table id="budget_request_providers" class="table table-striped table-bordered">
@@ -876,7 +876,7 @@ p.centrado {
                                                         <th style="font-weight: bold; color:red">Teléfono</th>
                                                         <th style="font-weight: bold; color:red">Email para Ofertas</th>
                                                         <th style="font-weight: bold; color:red">Email para Ord. Compras</th>
-                                                        <th style="font-weight: bold; color:red">Representante</th>                                                        
+                                                        <th style="font-weight: bold; color:red">Representante</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -889,7 +889,7 @@ p.centrado {
                                                             <td>{{ $order->budgetRequestProviders[$i]->provider->ruc }}</td>
                                                             <td>{{ $order->budgetRequestProviders[$i]->provider->telefono }}</td>
                                                             <td>{{ $order->budgetRequestProviders[$i]->provider->email_oferta }}</td>
-                                                            <td>{{ $order->budgetRequestProviders[$i]->provider->email_ocompra }}</td>                                                            
+                                                            <td>{{ $order->budgetRequestProviders[$i]->provider->email_ocompra }}</td>
                                                             <td>{{ $order->budgetRequestProviders[$i]->provider->representante }}</td>
                                                         @else
                                                             {{-- {{ ($i+0) }} --}}
@@ -898,8 +898,8 @@ p.centrado {
                                                 @endfor
                                                 </tbody>
                                             </table>
-                                            <div class="text-right">                                                
-                                                {{-- En caso de no tener pedidos de tipo 2 (empresas invitadas) --}}                                                
+                                            <div class="text-right">
+                                                {{-- En caso de no tener pedidos de tipo 2 (empresas invitadas) --}}
                                                 @if($order->budgetRequestProviders->where('request_provider_type', 2)->count() == 0)
                                                     {{-- Si pedido está anulado no muestra botón agregar --}}
                                                     @if ($order->actual_state == 0)
@@ -914,10 +914,10 @@ p.centrado {
                                                     @if ($order->actual_state == 0)
                                                     @else
                                                         @if (Auth::user()->hasPermission(['admin.budget_request_providers.update','exceptions.budget_request_providers.update']))
-                                                            <a href="{{ route('orders.budget_request_providers.edit_providers_guests', $order->id) }}" class="btn btn-success">Editar Empresas invitadas</a> 
+                                                            <a href="{{ route('orders.budget_request_providers.edit_providers_guests', $order->id) }}" class="btn btn-success">Editar Empresas invitadas</a>
                                                             {{-- SI LLAMADO YA SE ENCUENTRA EN ADJUDICACION     --}}
-                                                            {{-- @if ($order->actual_state <> 65)                                                                
-                                                                <a href="{{ route('orders.budget_request_providers.edit_providers_guests', $order->id) }}" class="btn btn-success">Editar Empresas invitadas</a> 
+                                                            {{-- @if ($order->actual_state <> 65)
+                                                                <a href="{{ route('orders.budget_request_providers.edit_providers_guests', $order->id) }}" class="btn btn-success">Editar Empresas invitadas</a>
                                                             @else
                                                                     <br><br>
                                                                     <h4 style="background-color:yellow;font-weight: bold; color:red" class="text-rigth">El Llamado ya se encuentra en Adjudicaciones</h4>
@@ -931,16 +931,16 @@ p.centrado {
                                                     @endif
                                                 @endif
                                                 {{-- <br><br> --}}
-                                                <br><br>                                                
+                                                <br><br>
                                                 <div class="col-sm-2">
                                                     {{-- Para editar empresas invitadas (con permisos de index, update y create de proiders en Roles de Licit,compras men y excepciones) --}}
                                                     @if ((Auth::user()->hasPermission(['admin.providers.update'])))
                                                         <a href="{{ route('providers.index')}}" class="btn btn-danger waves-effect" target="_blank">Crear/Editar datos de Empresas</a>
                                                     @endif
                                                 </div>
-                                            </div>                                            
+                                            </div>
                                         </div>
-                                        
+
 
                                         {{-- PARA EMPRESAS PARTICIPANTES --}}
                                         <div class="tab-pane" id="tab11" role="tabpanel">
@@ -951,7 +951,7 @@ p.centrado {
                                             <table id="budget_request_providers" class="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
-                                                        <th style="font-weight: bold; color:red">#</th>                                                       
+                                                        <th style="font-weight: bold; color:red">#</th>
                                                         <th style="font-weight: bold; color:red">Empresa participante</th>
                                                         <th style="font-weight: bold; color:red">RUC</th>
                                                         <th style="font-weight: bold; color:red">Teléfono</th>
@@ -963,9 +963,9 @@ p.centrado {
                                                 <tbody>
 
                                                 @for ($j = 0; $j < count($order->budgetRequestProviders);($j++))
-                                                    <tr>                                                        
+                                                    <tr>
                                                         {{-- Muestra las empresas invitadas (request_provider_type=3) --}}
-                                                        @if ($order->budgetRequestProviders[$j]->request_provider_type==3)                                                                
+                                                        @if ($order->budgetRequestProviders[$j]->request_provider_type==3)
                                                             <td>{{ ($j+1) }}</td>
                                                             <td>{{ $order->budgetRequestProviders[$j]->provider->description }}</td>
                                                             <td>{{ $order->budgetRequestProviders[$j]->provider->ruc }}</td>
@@ -976,10 +976,10 @@ p.centrado {
                                                         @endif
                                                     </tr>
                                                 @endfor
-                                                </tbody>                                                
+                                                </tbody>
                                             </table>
                                             <div class="text-right">
-                                                {{-- En caso de no tener pedidos de tipo 3 (empresas participantes) --}}                                                
+                                                {{-- En caso de no tener pedidos de tipo 3 (empresas participantes) --}}
                                                 @if($order->budgetRequestProviders->where('request_provider_type', 3)->count() == 0)
                                                     {{-- Si pedido está anulado no muestra botón agregar --}}
                                                     @if ($order->actual_state == 0)
@@ -997,7 +997,7 @@ p.centrado {
                                                             <a href="{{ route('orders.budget_request_providers.edit_providers_participants', $order->id) }}" class="btn btn-success">Editar Empresas participantes</a>
 
                                                             {{-- SI LLAMADO YA SE ENCUENTRA EN ADJUDICACION     --}}
-                                                            {{-- @if ($order->actual_state <> 65)                                                                
+                                                            {{-- @if ($order->actual_state <> 65)
                                                                     <a href="{{ route('orders.budget_request_providers.edit_providers_participants', $order->id) }}" class="btn btn-success">Editar Empresas participantes</a>
                                                             @else
                                                                     <br><br>
@@ -1011,13 +1011,13 @@ p.centrado {
                                                             </button>
                                                         @endif --}}
                                                     @endif
-                                                @endif                                            
+                                                @endif
                                             </div>
-                                        </div>                                       
+                                        </div>
 
                                         {{-- PARA CUADRO COMPARATIVO --}}
                                         <div class="tab-pane" id="tab12" role="tabpanel">
-                                            <label class="col-form-label f-w-600">Cuadro Comparativo de Ofertas:</label>                                            
+                                            <label class="col-form-label f-w-600">Cuadro Comparativo de Ofertas:</label>
                                             <table class="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
@@ -1027,12 +1027,12 @@ p.centrado {
                                                         <th>Acciones</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>                                                   
+                                                <tbody>
                                                     @for ($i=0; $i < count($exception_files2); $i++)
                                                     <tr>
                                                         <td>{{ $i+1 }}</td>
                                                         <td>{{ $exception_files2[$i]->description }}</td>
-                                                        <td>{{ $exception_files2[$i]->updated_atDateFormat() }}</td>                                                        
+                                                        <td>{{ $exception_files2[$i]->updated_atDateFormat() }}</td>
                                                         <td>
                                                             <a href="{{ asset('storage/files/'.$exception_files2[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a>
                                                             <a href="{{ route('orders.files.download', $exception_files2[$i]->id) }}" title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a>
@@ -1042,10 +1042,10 @@ p.centrado {
                                                     @endfor
                                                 </tbody>
                                             </table>
-                                            <div class="text-right">                                                                                                
-                                                <a href="{{ route('orders.files.create_cuadro_compar', $order->id) }}" class="btn btn-primary">Cargar Archivo de Cuadro Comparativo</a>                                                                                                
+                                            <div class="text-right">
+                                                <a href="{{ route('orders.files.create_cuadro_compar', $order->id) }}" class="btn btn-primary">Cargar Archivo de Cuadro Comparativo</a>
                                             </div>
-                                            <div class="col-sm-10 text-left">                                                
+                                            <div class="col-sm-10 text-left">
                                                 <h6 style="font-weight: bold; color:red"> Adjuntar: Archivo de Cuadro Comparativo de Ofertas</h6>
                                             </div>
                                         </div>
@@ -1064,8 +1064,8 @@ p.centrado {
                                                             <th>Present.</th>
                                                             <th>U.M.</th>
                                                             {{-- Mostramos ítemes de Contrato Abierto --}}
-                                                            @if ($order->open_contract == 1) 
-                                                                <th>Precio Unitario</th> 
+                                                            @if ($order->open_contract == 1)
+                                                                <th>Precio Unitario</th>
                                                                 <th>Pedido Mínimo</th>
                                                                 <th>Pedido Máximo</th>
                                                                 <th>Monto Mínimo</th>
@@ -1073,21 +1073,21 @@ p.centrado {
                                                                 <th>Acciones</th>
                                                             @else
                                                                 {{-- Mostramos ítemes de Contrato Cerrado --}}
-                                                                @if ($order->open_contract == 2) 
+                                                                @if ($order->open_contract == 2)
                                                                     <th>Cantidad</th>
-                                                                    <th>Precio Unitario</th>                                                                
+                                                                    <th>Precio Unitario</th>
                                                                     <th>Monto Total</th>
                                                                     <th>Acciones</th>
                                                                 @else
                                                                 {{-- Mostramos ítemes de Contrato Abierto con Mmin y Mmax --}}
                                                                     <th>Cantidad</th>
-                                                                    <th>Precio Unitario IVA INCL.</th>                                                                
+                                                                    <th>Precio Unitario IVA INCL.</th>
                                                                     <th>Monto Mínimo</th>
                                                                     <th>Monto Máximo</th>
                                                                     <th>Acciones</th>
-                                                                @endif    
+                                                                @endif
                                                             @endif
-                                                            
+
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -1095,41 +1095,41 @@ p.centrado {
                                                         <tr>
                                                             <td>{{ ($i+1) }}</td>
                                                             <td>{{ $order->items[$i]->batch }}</td>
-                                                            <td>{{ $order->items[$i]->item_number }}</td>                                                                
-                                                            @if ($order->items[$i]->level5CatalogCode->code == '99999999-9999')                                                                    
+                                                            <td>{{ $order->items[$i]->item_number }}</td>
+                                                            @if ($order->items[$i]->level5CatalogCode->code == '99999999-9999')
                                                                 <td class="columna3" style="color:red;font-weight: bold">{{ $order->items[$i]->level5CatalogCode->code }}</td>
                                                                 <td style="color:red;font-weight: bold">{{ $order->items[$i]->level5CatalogCode->description }}</td>
                                                             @else
                                                                 <td class="columna3"> {{ $order->items[$i]->level5CatalogCode->code }}</td>
                                                                 <td>{{ $order->items[$i]->level5CatalogCode->description }}</td>
-                                                            @endif                                                                
+                                                            @endif
                                                             <td>{{ $order->items[$i]->technical_specifications }}</td>
                                                             <td>{{ $order->items[$i]->orderPresentation->description }}</td>
                                                             <td>{{ $order->items[$i]->orderMeasurementUnit->description }}</td>
 
                                                             {{-- Mostramos ítemes de Contrato Abierto --}}
-                                                            @if ($order->open_contract == 1) 
-                                                                <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>                                                            
+                                                            @if ($order->open_contract == 1)
+                                                                <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>
                                                                 <td class="columna9"style="text-align: center">{{ $order->items[$i]->min_quantityFormat() }}</td>
                                                                 <td class="columna10"style="text-align: center">{{ $order->items[$i]->max_quantityFormat() }}</td>
                                                                 <td class="columna11"style="text-align: center">{{ 'Gs. '.$order->items[$i]->totalAmount_min_Format() }}</td>
                                                                 <td class="columna12">{{ 'Gs. '.$order->items[$i]->totalAmountFormat() }}</td>
                                                             @else
                                                                 {{-- Mostramos ítemes de Contrato Cerrado --}}
-                                                                @if ($order->open_contract == 2) 
-                                                                    <td class="columna8"style="text-align: center">{{ $order->items[$i]->quantityFormat() }}</td> 
-                                                                    <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>                                                                                                                                               
+                                                                @if ($order->open_contract == 2)
+                                                                    <td class="columna8"style="text-align: center">{{ $order->items[$i]->quantityFormat() }}</td>
+                                                                    <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>
                                                                     <td class="columna12">{{ 'Gs. '.$order->items[$i]->totalAmountFormat() }}</td>
                                                                 @else
-                                                                    {{-- Mostramos ítemes de Contrato Abierto con Mmin y Mmax --}}                                                                        
+                                                                    {{-- Mostramos ítemes de Contrato Abierto con Mmin y Mmax --}}
                                                                     <td class="columna10"style="text-align: center">{{ $order->items[$i]->quantityFormat() }}</td>
-                                                                    <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td> 
+                                                                    <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>
                                                                     <td class="columna11"style="text-align: center">{{ 'Gs. '.$order->items[$i]->totalAmount_min_Format() }}</td>
                                                                     <td class="columna12">{{ 'Gs. '.$order->items[$i]->totalAmountFormat() }}</td>
                                                                 @endif
                                                             @endif
-                                                            
-                                                            
+
+
                                                             <td style="white-space:nowrap">
                                                                 <button type="button" title="Listado de Precios Referenciales" class="btn btn-primary btn-icon" onclick="itemAwardHistories({{ $order->items[$i]->id }})">
                                                                     <i class="fa fa-list"></i>
@@ -1257,7 +1257,7 @@ $(document).ready(function(){
             data: {queries_deadline: $('#queries_deadline').val(), _token: '{{ csrf_token() }}'},
             success: function(data){
                 $('#fechaAperturaSobresModal').modal('toggle');
-                
+
                 try{
                     response = (typeof data == "object") ? data : JSON.parse(data);
                     if(response.status == "success"){
@@ -1291,7 +1291,7 @@ $(document).ready(function(){
                     response = (typeof data == "object") ? data : JSON.parse(data);
                     if(response.status == "success"){
                         swal({
-                            title: "Exito!",
+                            title: "Éxito!",
                             text: response.message,
                             type: "success"
                         },
@@ -1323,7 +1323,7 @@ $(document).ready(function(){
                     response = (typeof data == "object") ? data : JSON.parse(data);
                     if(response.status == "success"){
                         swal({
-                            title: "Exito!",
+                            title: "Éxito!",
                             text: response.message,
                             type: "success"
                         },
@@ -1366,7 +1366,7 @@ $(document).ready(function(){
                     response = (typeof data == "object") ? data : JSON.parse(data);
                     if(response.status == "success"){
                         swal({
-                            title: "Exito!",
+                            title: "Éxito!",
                             text: response.message,
                             type: "success"
                         },
@@ -1386,10 +1386,10 @@ $(document).ready(function(){
                 console.log(error);
             }
             });
-          }    
+          }
         }
       );
-    };    
+    };
 
     derivePAC = function(order_id){
         swal({
@@ -1412,7 +1412,7 @@ $(document).ready(function(){
                     response = (typeof data == "object") ? data : JSON.parse(data);
                     if(response.status == "success"){
                         swal({
-                            title: "Exito!",
+                            title: "Éxito!",
                             text: response.message,
                             type: "success"
                         },
@@ -1432,7 +1432,7 @@ $(document).ready(function(){
                 console.log(error);
             }
             });
-          }    
+          }
         }
       );
     };
@@ -1458,7 +1458,7 @@ $(document).ready(function(){
                     response = (typeof data == "object") ? data : JSON.parse(data);
                     if(response.status == "success"){
                         swal({
-                            title: "Exito!",
+                            title: "Éxito!",
                             text: response.message,
                             type: "success"
                         },
@@ -1478,7 +1478,7 @@ $(document).ready(function(){
                 console.log(error);
             }
             });
-          }    
+          }
         }
       );
     };
@@ -1682,8 +1682,8 @@ $(document).ready(function(){
       );
     };
 
-    
-    
+
+
 });
 </script>
 @endpush

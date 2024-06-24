@@ -10,21 +10,21 @@
     padding: 1.25rem 0.5rem;
 }
 }
-    .columna1 { width: 1%; text-align: center;} 
+    .columna1 { width: 1%; text-align: center;}
     .columna2 { width: 10%; text-align: left;}
-    .columna3 { width: 9%; text-align: left;}    
+    .columna3 { width: 9%; text-align: left;}
     .columna4 { width: 12%; text-align: left;}
-    .columna5 { width: 2%; text-align: center;} 
-    .columna6 { width: 4%; text-align: center;} 
-    .columna7 { width: 4%; text-align: center;} 
-    .columna8 { width: 3%; text-align: center;} 
-    .columna9 { width: 3%; text-align: left;} 
-    .columna10 { width: 3%; text-align: center;} 
-    .columna11 { width: 9%; text-align: left;} 
-    .columna12 { width: 10%; text-align: left;} 
+    .columna5 { width: 2%; text-align: center;}
+    .columna6 { width: 4%; text-align: center;}
+    .columna7 { width: 4%; text-align: center;}
+    .columna8 { width: 3%; text-align: center;}
+    .columna9 { width: 3%; text-align: left;}
+    .columna10 { width: 3%; text-align: center;}
+    .columna11 { width: 9%; text-align: left;}
+    .columna12 { width: 10%; text-align: left;}
 
-    .columna13 { width: 60%; text-align: left;} 
-    .columna14 { width: 20%; text-align: left;} 
+    .columna13 { width: 60%; text-align: left;}
+    .columna14 { width: 20%; text-align: left;}
 
     p.centrado {
 
@@ -40,7 +40,7 @@
                 <div class="page-header-title">
                     <i class="fa fa-list bg-c-blue"></i>
                     <div class="d-inline">
-                        <h5>Visualizar Pedido</h5>                        
+                        <h5>Visualizar Pedido</h5>
                         <span>Pedido Nº {{ $order->id }}</span>
                     </div>
                     <br>
@@ -70,16 +70,16 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="card">
-                                <div class="card-header">                                    
+                                <div class="card-header">
                                     <div class="row">
                                         <div class="col-sm-10 text-left">
                                             {{-- <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."-".$order->description }} --}}
-                                            @if ($order->covid==0)                                                
-                                                <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}   
-                                            @else                                                
-                                                <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}    
+                                            @if ($order->covid==0)
+                                                <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}
+                                            @else
+                                                <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}
                                                 <label style="font-size: 16px; font-weight: bold; color:blue;background-color:yellow;">Proceso COVID</label></h5>
-                                            @endif 
+                                            @endif
 
                                             @if ($order->urgency_state == "ALTA")
                                                 <label class="label label-danger m-l-5">Prioridad {{ $order->urgency_state }}</label></h5>
@@ -88,10 +88,10 @@
                                                     <label class="label label-warning m-l-5">Prioridad {{ $order->urgency_state }}</label></h5>
                                                 @else
                                                     <label class="label label-info m-l-5">Prioridad {{ $order->urgency_state }}</label></h5>
-                                                @endif    
+                                                @endif
                                             @endif
                                             <h5><a style="font-size: 17px; font-weight: bold; color:red"> SIMESE:</a> <a style="font-size: 17px; font-weight: bold; color:blue;background-color:yellow;"> {{ is_null($order->simese->first()) ? 'Para derivar el pedido debe cargarse Ítems y N°SIMESE ' : number_format($order->simese->first()['simese'],'0', ',','.')."/".$order->simese->first()['year'] }}</a></h5>
-                                            
+
                                             @if ($order->open_contract == 1)
                                                 <h5><a style="font-size: 15px; font-weight: bold; color:red"> Tipo Contrato: Abierto</a></h5>
                                             @else
@@ -99,7 +99,7 @@
                                                     <h5><a style="font-size: 15px; font-weight: bold; color:red"> Tipo Contrato: Cerrado</a></h5>
                                                 @else
                                                     <h5><a style="font-size: 15px; font-weight: bold; color:red"> Tipo Contrato: Abierto con MontoMin y MontoMáx</a></h5>
-                                                @endif        
+                                                @endif
                                             @endif
                                         </div>
                                         {{-- <div class="col-sm-10 text-right">
@@ -111,63 +111,63 @@
                                                 {{-- ************************************************************************ --}}
                                                 {{-- Ver para que solo admin pueda anular Derivación --}}
                                                 {{-- ************************************************************************     --}}
-                                                
-                                                {{-- Verificamos permisos para anular derivación --}}                                                
-                                                {{-- @if (Auth::user()->hasPermission(['orders.orders.derive']) && $order->actual_state == 2 )                                                
-                                                <a class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="anuleDerive({{ $order->id }});">Anular Derivación</a>                                                
+
+                                                {{-- Verificamos permisos para anular derivación --}}
+                                                {{-- @if (Auth::user()->hasPermission(['orders.orders.derive']) && $order->actual_state == 2 )
+                                                <a class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="anuleDerive({{ $order->id }});">Anular Derivación</a>
                                                 @endif --}}
-                                                
+
                                                 {{-- Verificamos permisos de edición del usuario --}}
                                                 @if ((Auth::user()->hasPermission(['orders.orders.update']) && $order->dependency_id == Auth::user()->dependency_id && $order->actual_state >= 1) || Auth::user()->hasPermission(['admin.orders.update']))
                                                 <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="{{ route('orders.edit', $order->id)}}">Editar Pedido</a>
                                                 @endif
                                                 {{-- Verificamos permisos de eliminación del usuario --}}
                                                 @if ((Auth::user()->hasPermission(['orders.orders.delete']) && $order->dependency_id == Auth::user()->dependency_id && $order->actual_state >= 1) || Auth::user()->hasPermission(['admin.orders.delete']))
-                                                <a style="font-size: 14px; font-weight: bold; color:white;background-color:red;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="anuleOrder({{ $order->id }})">Anular Pedido</a>                                                     
+                                                <a style="font-size: 14px; font-weight: bold; color:white;background-color:red;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="anuleOrder({{ $order->id }})">Anular Pedido</a>
                                                 @endif
-                                                
+
                                                 {{-- Verificamos que el pedido tenga estado 1 y Verificamos que el pedido tenga ítems, y que tenga SIMESE--}}
                                                 @if (Auth::user()->hasPermission(['orders.orders.derive']) && $order->actual_state == 1 && $order->items->count() > 0 && count($related_simese_user) <> 0)
-                                                    <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="deriveOrder({{ $order->id }});">Derivar Pedido a DGAF</a>                                                
+                                                    <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="deriveOrder({{ $order->id }});">Derivar Pedido a DGAF</a>
                                                 @endif
 
                                                 {{-- Verificamos permisos de derivación del pedido y que el pedido tenga estado PROCESADO PEDIDO --}}
                                                 {{-- @if (Auth::user()->hasPermission(['derive_orders.orders.derive']) && $order->actual_state == 4)
                                                 <a class="dropdown-item waves-effect f-w-600" href="{{ route('derive_orders.create', $order->id) }}">Procesar Pedido en DGAF</a>
                                                 @endif --}}
-                                                
+
                                                 {{-- //ACCIONES PARA DGAF --}}
                                                 {{-- @if ((Auth::user()->dependency->id == 2)) --}}
                                                     {{-- Pemite Editar Proceso Pedido (Colocar Prioridad) - estado 5 y  Cambiar rechazo (estado 10) --}}
                                                     {{-- @if (Auth::user()->hasPermission(['derive_orders.orders.update_derive']) && in_array($order->actual_state, [5,10]))
-                                                        <a class="dropdown-item waves-effect f-w-600" href="{{ route('derive_orders.edit', $order->id) }}">Modificar Procesar Pedido en DGAF</a>                                                        
+                                                        <a class="dropdown-item waves-effect f-w-600" href="{{ route('derive_orders.edit', $order->id) }}">Modificar Procesar Pedido en DGAF</a>
                                                     @endif --}}
 
                                                     {{-- Pemite Derivar Pedido (Cuando estado = 115 Verificado dictamen --}}
-                                                    {{-- @if (Auth::user()->hasPermission(['derive_orders.orders.derive']) && in_array($order->actual_state, [115]))                                                        
+                                                    {{-- @if (Auth::user()->hasPermission(['derive_orders.orders.derive']) && in_array($order->actual_state, [115]))
                                                         <a class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="deriveDictamen({{ $order->id }});">V°B° a Dictamen de PBC en DGAF</a>
                                                     @endif --}}
 
                                                     {{-- Pemite Derivar Pedido (Cuando estado = 117 Verificado dictamen --}}
-                                                    {{-- @if (Auth::user()->hasPermission(['derive_orders.orders.derive']) && in_array($order->actual_state, [117]))                                                        
+                                                    {{-- @if (Auth::user()->hasPermission(['derive_orders.orders.derive']) && in_array($order->actual_state, [117]))
                                                         <a class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="deriveDictamen({{ $order->id }});">V°B° a Dictamen de CVE en DGAF</a>
                                                     @endif --}}
 
-                                                    {{-- //Acción para DGAF cuando hay estado 155 - VERIFICADO DICTAMEN DE EVALUACION EN COORD. DOC--}}                                                
-                                                    {{-- @if (Auth::user()->hasPermission(['derive_orders.orders.derive']) && in_array($order->actual_state, [155]))                                                        
+                                                    {{-- //Acción para DGAF cuando hay estado 155 - VERIFICADO DICTAMEN DE EVALUACION EN COORD. DOC--}}
+                                                    {{-- @if (Auth::user()->hasPermission(['derive_orders.orders.derive']) && in_array($order->actual_state, [155]))
                                                         <a class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="deriveDictamenEVAL({{ $order->id }});">V°B° a Dictamen de Evaluación en DGAF</a>
                                                     @endif --}}
                                                 {{-- @endif --}}
-                                                
+
                                             </div>
                                         </div>
-                                    </div>                                    
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="card">
                                 <div class="card-block">
-                                    
+
                                     <ul class="nav nav-tabs md-tabs" role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link active" data-toggle="tab" href="#tab1" role="tab"><i class="fa fa-tasks"></i> Datos del Pedido</a>
@@ -192,7 +192,7 @@
                                             <li class="nav-item">
                                                 <a class="nav-link" data-toggle="tab" href="#tab6" role="tab"><i class="fa fa-file-archive-o"></i> Archivos</a>
                                                 <div class="slide"></div>
-                                            </li>                                        
+                                            </li>
                                     </ul>
                                     <div class="tab-content card-block">
                                         <div class="tab-pane active" id="tab1" role="tabpanel">
@@ -220,24 +220,24 @@
                                                         <td><label class="col-form-label f-w-600">Fuente de Financiamiento:</label></td>
                                                         <td><label class="col-form-label f-w-600">Organismo Financiero:</label></td>
                                                         <td colspan="2"><label class="col-form-label f-w-600">Monto total:</label></td>
-                                                        <td colspan="2"><label class="col-form-label f-w-600">COVID:</label>                                                        
+                                                        <td colspan="2"><label class="col-form-label f-w-600">COVID:</label>
                                                     </tr>
                                                     <tr>
                                                         <td>{{ $order->subProgram->budgetStructure() }}</td>
                                                         <td>{{ $order->fundingSource->description }}</td>
                                                         <td>{{ $order->financialOrganism->description }}</td>
                                                         <td colspan="2" style="font-size: 16px;color:blue;font-weight: bold">{{ 'Gs. '.$order-> totalAmountFormat() }}</td>
-                                                        <td>{{ $order->covid ? "SÍ" : "NO" }}</td>                                                        
+                                                        <td>{{ $order->covid ? "SÍ" : "NO" }}</td>
                                                     </tr>
-                                                    <tr>                                                        
+                                                    <tr>
                                                         <td><label class="col-form-label f-w-600">Objeto de Gasto1:</label></td>
                                                         <td><label class="col-form-label f-w-600">Objeto de Gasto2:</label></td>
                                                         <td><label class="col-form-label f-w-600">Objeto de Gasto3:</label></td>
                                                         <td><label class="col-form-label f-w-600">Objeto de Gasto4:</label></td>
                                                         <td><label class="col-form-label f-w-600">Objeto de Gasto5:</label></td>
-                                                        <td><label class="col-form-label f-w-600">Objeto de Gasto6:</label></td>                                                        
+                                                        <td><label class="col-form-label f-w-600">Objeto de Gasto6:</label></td>
                                                     </tr>
-                                                    <tr>                                                                                                                
+                                                    <tr>
                                                         <td>{{ $order->expenditureObject->code }}</td>
                                                         <td>{{ $order->expenditureObject->code }}</td>
                                                         <td>{{ $order->expenditureObject->code }}</td>
@@ -253,7 +253,7 @@
                                                         <td><label class="col-form-label f-w-600">Monto Objeto de Gasto5:</label></td>
                                                         <td><label class="col-form-label f-w-600">Monto Objeto de Gasto6:</label></td>
                                                     </tr>
-                                                    <tr>                                                        
+                                                    <tr>
                                                         <td>{{ $order->amount1 }}</td>
                                                         <td>{{ $order->amount2 }}</td>
                                                         <td>{{ $order->amount3 }}</td>
@@ -283,8 +283,8 @@
                                                         @else
                                                             <td>{{ $order->plurianualidad ? "SÍ" : "NO" }}</td>
                                                         @endif
-                                                        
-                                                        <td>{{ $order->system_awarded_by }}</td>                                                        
+
+                                                        <td>{{ $order->system_awarded_by }}</td>
                                                         <td>{{ $order->fonacide ? "SÍ" : "NO" }}</td>
                                                         <td>{{ $order->modality->description }}</td>
                                                     </tr>
@@ -298,7 +298,7 @@
                                                     <tr>
                                                         <td colspan="2">{{ $order->catalogs_technical_annexes ? "SÍ" : "NO" }}</td>
                                                         <td>{{ $order->alternative_offers ? "SÍ" : "NO" }}</td>
-                                                        
+
                                                         {{-- Verificamos tipo de Contrato  --}}
                                                         @if ($order->open_contract == 1)
                                                             <td>Abierto</a></td>
@@ -307,14 +307,14 @@
                                                                 <td>Cerrado</a></td>
                                                             @else
                                                                 <td>Abierto con MontoMin y MontoMáx</a></td>
-                                                            @endif        
+                                                            @endif
                                                         @endif
                                                         <td colspan="2">{{ $order->period_time }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><label class="col-form-label f-w-600">Autorización del Fabricante:</label></td>
                                                         <td><label class="col-form-label f-w-600">Anticipo financiero, porcentaje, monto:</label></td>
-                                                        <td colspan="3"><label class="col-form-label f-w-600">Especificaciones Técnicas detalladas del bien o servicio a ser adquirido, 
+                                                        <td colspan="3"><label class="col-form-label f-w-600">Especificaciones Técnicas detalladas del bien o servicio a ser adquirido,
                                                         en caso de obras anexar el programa de entrega, en caso de combustibles describir el valor en cupos y tarjetas:</label></td>
                                                         <td><label class="col-form-label f-w-600">Solicitud de muestras:</label></td>
                                                     </tr>
@@ -349,9 +349,9 @@
                                                     <tr>
                                                         <td><label class="col-form-label f-w-600">Administrador del Contrato:</label></td>
                                                         <td><label class="col-form-label f-w-600">Vigencia del Contrato:</label></td>
-                                                        <td colspan="2"><label class="col-form-label f-w-600">Documentos adicionales que deberá presentar el oferente que 
+                                                        <td colspan="2"><label class="col-form-label f-w-600">Documentos adicionales que deberá presentar el oferente que
                                                             demuestran que los bienes ofertados cumplen con las especificaciones técnicas:</label></td>
-                                                        <td colspan="2"><label class="col-form-label f-w-600">Documentos adicionales que deberá presentar el oferente que demuestran 
+                                                        <td colspan="2"><label class="col-form-label f-w-600">Documentos adicionales que deberá presentar el oferente que demuestran
                                                             que el oferente se halla calificado para ejecutar el contrato:</label></td>
                                                     </tr>
                                                     <tr>
@@ -391,7 +391,7 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        
+
                                         <div class="tab-pane" id="tab2" role="tabpanel">
                                             <table id="budget_request_providers" class="table table-striped table-bordered">
                                                 <thead>
@@ -406,7 +406,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    
+
                                                 @for ($i = 0; $i < count($order->budgetRequestProviders); $i++)
                                                     <tr>
                                                         {{-- Muestra las empresas cotizantes (request_provider_type=1) --}}
@@ -442,7 +442,7 @@
                                                 @if ($order->actual_state == 0)
                                                 @else
                                                     @if (Auth::user()->hasPermission(['admin.budget_request_providers.update', 'plannings.budget_request_providers.update']) || $order->dependency_id == Auth::user()->dependency_id)
-                                                        <a href="{{ route('orders.budget_request_providers.edit_providers', $order->id) }}" class="btn btn-warning">Editar</a>                                                        
+                                                        <a href="{{ route('orders.budget_request_providers.edit_providers', $order->id) }}" class="btn btn-warning">Editar</a>
                                                     @endif
                                                     @if (Auth::user()->hasPermission(['admin.budget_request_providers.delete']) || $order->dependency_id == Auth::user()->dependency_id)
                                                         {{-- PARA BORRAR SE VERIFICA QUE ESTADO ESTÉ <= 15 --}}
@@ -450,13 +450,13 @@
                                                             <button type="button" title="Borrar" class="btn btn-danger" onclick="deleteProviders({{ $order->id }})">
                                                                 Borrar
                                                             </button>
-                                                        @endif    
+                                                        @endif
                                                     @endif
                                                 @endif
                                             @endif
                                             </div>
                                         </div>
-                                                                                                                       
+
                                         <div class="tab-pane" id="tab3" role="tabpanel">
                                                 <div class="row">
                                                     <table id="items" class="table table-striped table-bordered">
@@ -471,8 +471,8 @@
                                                                 <th>Present.</th>
                                                                 <th>U.M.</th>
                                                                 {{-- Mostramos ítemes de Contrato Abierto --}}
-                                                                @if ($order->open_contract == 1) 
-                                                                    <th>Precio Unitario</th> 
+                                                                @if ($order->open_contract == 1)
+                                                                    <th>Precio Unitario</th>
                                                                     <th>Pedido Mínimo</th>
                                                                     <th>Pedido Máximo</th>
                                                                     <th>Monto Mínimo</th>
@@ -480,21 +480,21 @@
                                                                     <th>Acciones</th>
                                                                 @else
                                                                     {{-- Mostramos ítemes de Contrato Cerrado --}}
-                                                                    @if ($order->open_contract == 2) 
+                                                                    @if ($order->open_contract == 2)
                                                                         <th>Cantidad</th>
-                                                                        <th>Precio Unitario</th>                                                                
+                                                                        <th>Precio Unitario</th>
                                                                         <th>Monto Total</th>
                                                                         <th>Acciones</th>
                                                                     @else
                                                                     {{-- Mostramos ítemes de Contrato Abierto con Mmin y Mmax --}}
                                                                         <th>Cantidad</th>
-                                                                        <th>Precio Unitario IVA. INCL.</th>                                                                
+                                                                        <th>Precio Unitario IVA. INCL.</th>
                                                                         <th>Monto Mínimo</th>
                                                                         <th>Monto Máximo</th>
                                                                         <th>Acciones</th>
-                                                                    @endif    
+                                                                    @endif
                                                                 @endif
-                                                                
+
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -502,41 +502,41 @@
                                                             <tr>
                                                                 <td>{{ ($i+1) }}</td>
                                                                 <td>{{ $order->items[$i]->batch }}</td>
-                                                                <td>{{ $order->items[$i]->item_number }}</td>                                                                
-                                                                @if ($order->items[$i]->level5CatalogCode->code == '99999999-9999')                                                                    
+                                                                <td>{{ $order->items[$i]->item_number }}</td>
+                                                                @if ($order->items[$i]->level5CatalogCode->code == '99999999-9999')
                                                                     <td class="columna3" style="color:red;font-weight: bold">{{ $order->items[$i]->level5CatalogCode->code }}</td>
                                                                     <td style="color:red;font-weight: bold">{{ $order->items[$i]->level5CatalogCode->description }}</td>
                                                                 @else
-                                                                    <td class="columna3"> {{ $order->items[$i]->level5CatalogCode->code }}</td>                                                                    
+                                                                    <td class="columna3"> {{ $order->items[$i]->level5CatalogCode->code }}</td>
                                                                     <td class="columna4"> {{ $order->items[$i]->level5CatalogCode->description }}</td>
-                                                                @endif                                                                
+                                                                @endif
                                                                 <td>{{ $order->items[$i]->technical_specifications }}</td>
                                                                 <td>{{ $order->items[$i]->orderPresentation->description }}</td>
                                                                 <td>{{ $order->items[$i]->orderMeasurementUnit->description }}</td>
 
                                                                 {{-- Mostramos ítemes de Contrato Abierto --}}
-                                                                @if ($order->open_contract == 1) 
-                                                                    <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>                                                            
+                                                                @if ($order->open_contract == 1)
+                                                                    <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>
                                                                     <td class="columna9"style="text-align: center">{{ $order->items[$i]->min_quantityFormat() }}</td>
                                                                     <td class="columna10"style="text-align: center">{{ $order->items[$i]->max_quantityFormat() }}</td>
                                                                     <td class="columna11"style="text-align: center">{{ 'Gs. '.$order->items[$i]->totalAmount_min_Format() }}</td>
                                                                     <td class="columna12">{{ 'Gs. '.$order->items[$i]->totalAmountFormat() }}</td>
                                                                 @else
                                                                     {{-- Mostramos ítemes de Contrato Cerrado --}}
-                                                                    @if ($order->open_contract == 2) 
-                                                                        <td class="columna8"style="text-align: center">{{ $order->items[$i]->quantityFormat() }}</td> 
-                                                                        <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>                                                                                                                                               
+                                                                    @if ($order->open_contract == 2)
+                                                                        <td class="columna8"style="text-align: center">{{ $order->items[$i]->quantityFormat() }}</td>
+                                                                        <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>
                                                                         <td class="columna12">{{ 'Gs. '.$order->items[$i]->totalAmountFormat() }}</td>
                                                                     @else
-                                                                        {{-- Mostramos ítemes de Contrato Abierto con Mmin y Mmax --}}                                                                        
+                                                                        {{-- Mostramos ítemes de Contrato Abierto con Mmin y Mmax --}}
                                                                         <td class="columna10"style="text-align: center">{{ $order->items[$i]->quantityFormat() }}</td>
-                                                                        <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td> 
+                                                                        <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>
                                                                         <td class="columna11"style="text-align: center">{{ 'Gs. '.$order->items[$i]->totalAmount_min_Format() }}</td>
                                                                         <td class="columna12">{{ 'Gs. '.$order->items[$i]->totalAmountFormat() }}</td>
                                                                     @endif
                                                                 @endif
-                                                                
-                                                                
+
+
                                                                 <td style="white-space:nowrap">
                                                                     <button type="button" title="Listado de Precios Referenciales" class="btn btn-primary btn-icon" onclick="itemAwardHistories({{ $order->items[$i]->id }})">
                                                                         <i class="fa fa-list"></i>
@@ -569,7 +569,7 @@
                                                         </a>
                                                     @endif
                                                 </div>
-                                            <span style="font-size: 16px; font-weight: bold; color:red;background-color:yellow;" >MONTO TOTAL DEL PEDIDO: {{ $order->totalAmountFormat() }}</span>  
+                                            <span style="font-size: 16px; font-weight: bold; color:red;background-color:yellow;" >MONTO TOTAL DEL PEDIDO: {{ $order->totalAmountFormat() }}</span>
 
                                         </div>
 
@@ -607,7 +607,7 @@
                                                                 <td><a href="/pdf/reporte3/{{ $order->id }}" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> &nbsp;Ver Formulario 3</a></td>
                                                             @else
                                                                 {{-- reporte contrato min max --}}
-                                                            
+
                                                             @endif
                                                         @endif
                                                     </tr>
@@ -623,7 +623,7 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        
+
                                         <div class="tab-pane" id="tab5" role="tabpanel">
                                             <label class="col-form-label f-w-600">Documentos SIMESE relacionados al pedido:</label>
                                             <table class="table table-striped table-bordered">
@@ -700,9 +700,9 @@
                                                     {{-- @else --}}
 
                                                     {{-- @endif --}}
-                                                    
+
                                                     {{-- //Verifica si es de AJ si es no hace muestra valores --}}
-                                                    {{-- @if ((Auth::user()->dependency->id == 57))                                                        
+                                                    {{-- @if ((Auth::user()->dependency->id == 57))
                                                     @else --}}
                                                         @for ($i=0; $i < count($user_files); $i++)
                                                         <tr>
@@ -727,7 +727,7 @@
                                                     @else
                                                         <a href="{{ route('orders.files.create', $order->id) }}" class="btn btn-primary">Cargar Archivos</a>
                                                     @endif
-                                                @endif 
+                                                @endif
                                             </div>
                                         </div>
 
@@ -736,7 +736,7 @@
                                             <div class="float-center">
                                                 <h5>Listado de Precios Referenciales</h5>
                                                 <a href="/pdf/prefs/{{ $order->id }}" class="btn btn-primary" target="_blank">Listado de Carga de Precios Referenciales</a>
-                                            </div>                                            
+                                            </div>
                                         </div>
                                         <div class="tab-pane" id="tab8" role="tabpanel">
                                             <label class="col-form-label f-w-600">Dictamenes:</label>
@@ -748,7 +748,7 @@
                                                         <th>Acciones</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>                                                                                                       
+                                                <tbody>
                                                     @for ($i=0; $i < count($user_files); $i++)
                                                     <tr>
                                                         <td>{{ $i+1 }}</td>
@@ -772,8 +772,8 @@
                                                         <h5>Adjuntar: Dictamen de Pliego de Bases y Condiciones (PBC).</h5>
                                                     </div>
                                                 @else
-                                                    <a href="{{ route('orders.files.create', $order->id) }}" class="btn btn-primary">Cargar Archivos</a>                                                    
-                                                @endif                                                    
+                                                    <a href="{{ route('orders.files.create', $order->id) }}" class="btn btn-primary">Cargar Archivos</a>
+                                                @endif
                                             </div>                                             --}}
                                         </div>
                                     </div>
@@ -809,7 +809,7 @@
                     </div>
                 </div>
             </div>
-        </div>    
+        </div>
     </div>
 </div>
 @endsection
@@ -817,7 +817,7 @@
 @push('scripts')
 <script type="text/javascript">
 $(document).ready(function(){
-    
+
     anuleOrder = function(order_id){
       swal({
             title: "Atención",
@@ -839,7 +839,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -859,7 +859,7 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
     };
@@ -925,7 +925,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -945,7 +945,7 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
     };
@@ -971,7 +971,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -991,7 +991,7 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
     };
@@ -1017,7 +1017,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -1037,7 +1037,7 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
     };
@@ -1063,7 +1063,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -1083,7 +1083,7 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
     };
@@ -1109,7 +1109,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -1129,7 +1129,7 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
     };
@@ -1155,7 +1155,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -1175,7 +1175,7 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
     };
@@ -1200,7 +1200,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -1220,7 +1220,7 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
     };
@@ -1246,7 +1246,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -1266,7 +1266,7 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
     };
@@ -1292,7 +1292,7 @@ $(document).ready(function(){
         function(isConfirm){
           if(isConfirm){
             $.ajax({
-              url : '/orders/{{ $order->id }}/items/'+item,              
+              url : '/orders/{{ $order->id }}/items/'+item,
               method : 'POST',
               data: {_method: 'DELETE', _token: '{{ csrf_token() }}'},
               success: function(data){
@@ -1331,7 +1331,7 @@ $(document).ready(function(){
         function(isConfirm){
           if(isConfirm){
             $.ajax({
-              url : '/orders/'+order_id+'/budget_request_providers',              
+              url : '/orders/'+order_id+'/budget_request_providers',
               method : 'POST',
               data: {_method: 'DELETE', _token: '{{ csrf_token() }}'},
               success: function(data){
@@ -1395,7 +1395,7 @@ $(document).ready(function(){
         }
       );
     };
-    
+
 });
 </script>
 @endpush

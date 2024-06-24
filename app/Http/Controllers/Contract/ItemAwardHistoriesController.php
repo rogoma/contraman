@@ -263,7 +263,7 @@ class ItemAwardHistoriesController extends Controller
     public function edit(Request $request, $item_id, $itemA_id)
     {
         // $item = ItemAwardHistory::findOrFail($item_id);
-        
+
         $item = Item::findOrFail($item_id);
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
@@ -273,8 +273,8 @@ class ItemAwardHistoriesController extends Controller
         }
 
         $itemA = ItemAwardHistory::findOrFail($itemA_id);
-        
-        return view('contract.item_award_histories.update', compact('item','itemA'));        
+
+        return view('contract.item_award_histories.update', compact('item','itemA'));
     }
 
     /**
@@ -287,7 +287,7 @@ class ItemAwardHistoriesController extends Controller
     public function update(Request $request, $item_id, $itemA_id)
     {
         $item = Item::findOrFail($item_id);
-        $itemA = ItemAwardHistory::findOrFail($itemA_id);        
+        $itemA = ItemAwardHistory::findOrFail($itemA_id);
 
         $rules = array(
             // 'policy_id' => 'numeric|required|max:2147483647|unique:items,policy_id',
@@ -349,16 +349,16 @@ class ItemAwardHistoriesController extends Controller
 
         // Eliminamos en caso de no existir registros referenciando al item
         $item->delete();
-        // session()->flash('status', 'success');
-        // session()->flash('message', 'Se ha eliminado la póliza ' . $item->number_policy);
+        session()->flash('status', 'success');
+        session()->flash('message', 'Se ha eliminado la póliza ' . $item->number_policy);
 
-        // return response()->json([
-        //     'status' => 'success',
-        //     'message' => 'Se ha eliminado la póliza'. $item->number_policy,
-        //     'code' => 200
-        // ], 200);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Se ha eliminado la póliza'. $item->number_policy,
+            'code' => 200
+        ], 200);
 
-        $request->session()->flash('success', 'Se ha eliminado el endoso referencial a la póliza');
-        return response()->json(['status' => 'success', 'code' => 200], 200);
+        // $request->session()->flash('success', 'Se ha eliminado el endoso referencial a la póliza');
+        // return response()->json(['status' => 'success', 'code' => 200], 200);
     }
 }

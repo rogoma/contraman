@@ -203,7 +203,7 @@ class ItemsController extends Controller
         $item->comments = $request->input('comments');
         $item->creator_user_id = $request->user()->id;  // usuario logueado
         $item->save();
-        return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza agregada correctamente'); // Caso usuario posee rol pedidos        
+        return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza agregada correctamente'); // Caso usuario posee rol pedidos
     }
 
 
@@ -227,7 +227,7 @@ class ItemsController extends Controller
         return view('contract.items.update', compact('contract','item','policies'));
     }
 
-    
+
     /**
      * Funcionalidad de modificacion del pedido CUANDO ESTIPO CONTRATO 2 = CERRADO
      *
@@ -319,16 +319,18 @@ class ItemsController extends Controller
 
         // Eliminamos en caso de no existir registros referenciando al item
         $item->delete();
-        // session()->flash('status', 'success');
-        // session()->flash('message', 'Se ha eliminado la póliza ' . $item->number_policy);
+        session()->flash('status', 'success');
+        session()->flash('message', 'Se ha eliminado la póliza ' . $item->number_policy);
 
-        // return response()->json([
-        //     'status' => 'success',
-        //     'message' => 'Se ha eliminado la póliza'. $item->number_policy,
-        //     'code' => 200
-        // ], 200);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Se ha eliminado la póliza'. $item->number_policy,
+            'code' => 200
+        ], 200);
 
-        return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza eliminada correctamente'); // Caso usuario posee rol pedidos
+        //return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza eliminada correctamente'); // Caso usuario posee rol pedidos
+        // return response()->json(['status' => 'success', 'message' => 'Póliza eliminada correctamente', 'code' => 200], 200);
+        //return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza modificada correctamente'); // Caso usuario posee rol pedidos
     }
 
     /**
@@ -817,5 +819,5 @@ class ItemsController extends Controller
             return back()->withErrors($validator)->withInput();
         }
     }
-    
+
 }

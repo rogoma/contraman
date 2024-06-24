@@ -811,7 +811,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -857,7 +857,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -903,7 +903,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -949,7 +949,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -995,7 +995,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -1042,7 +1042,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -1088,7 +1088,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -1135,7 +1135,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -1181,7 +1181,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -1227,7 +1227,7 @@ $(document).ready(function(){
     //                     response = (typeof data == "object") ? data : JSON.parse(data);
     //                     if(response.status == "success"){
     //                         swal({
-    //                             title: "Exito!",
+    //                             title: "Éxito!",
     //                             text: response.message,
     //                             type: "success"
     //                         },
@@ -1273,7 +1273,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -1319,7 +1319,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -1366,7 +1366,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -1412,7 +1412,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },

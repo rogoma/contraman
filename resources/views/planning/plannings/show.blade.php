@@ -38,11 +38,11 @@ p.centrado {
                     <i class="fa fa-list bg-c-blue"></i>
                     <div class="d-inline">
                         <h5>Visualizar Pedido</h5>
-                        <span>Pedido Nº {{ $order->id }}</span>                                                                        
+                        <span>Pedido Nº {{ $order->id }}</span>
                         <br><br>
                         {{-- <h6>Estado Actual: {{ $order->orderState->id." - ".$order->orderState->description }}</h6> --}}
                         <h5><p style="font-size: 17px; font-weight: bold; color:#FF0000">Estado Actual: {{ $order->orderState->id." - ".$order->orderState->description }}</p></h5>
-                    </div>                    
+                    </div>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -70,10 +70,10 @@ p.centrado {
                                 <div class="card-header">
                                     <div class="row">
                                         <div class="col-sm-10 text-left">
-                                            {{-- @if ($order->covid==0)                                                
-                                                <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}</h5>                                                       
-                                            @else                                                
-                                                <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}    
+                                            {{-- @if ($order->covid==0)
+                                                <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}</h5>
+                                            @else
+                                                <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}
                                                 <label style="font-size: 16px; font-weight: bold; color:blue;background-color:yellow;">Proceso COVID</label></h5>
                                             @endif  --}}
 
@@ -83,17 +83,17 @@ p.centrado {
                                                     <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}
                                                 @else
                                                     <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}
-                                                    <label style="color:red;font-weight: bold;background-color:yellow">(URGENCIA IMPOSTERGABLE)</span> </td></label></h5>                                                        
+                                                    <label style="color:red;font-weight: bold;background-color:yellow">(URGENCIA IMPOSTERGABLE)</span> </td></label></h5>
                                                 @endif
                                             @else
-                                                @if ($order->unpostponable==0)                                                        
-                                                    <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }} 
+                                                @if ($order->unpostponable==0)
+                                                    <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}
                                                     <label style="font-size: 16px; font-weight: bold; color:blue;background-color:yellow;">Proceso COVID</label></h5>
                                                 @else
-                                                    <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }} 
+                                                    <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}
                                                         <label style="font-size: 16px; font-weight: bold; color:blue;background-color:yellow;">Proceso COVID </label>
                                                         <label style="color:red;font-weight: bold;background-color:yellow"> (URGENCIA IMPOSTERGABLE)</label></h5>
-                                                @endif                                                        
+                                                @endif
                                             @endif
 
                                             {{-- <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."-".$order->description }} --}}
@@ -104,7 +104,7 @@ p.centrado {
                                                         <label class="label label-warning m-l-5">Prioridad {{ $order->urgency_state }}</label></h5>
                                                     @else
                                                         <label class="label label-info m-l-5">Prioridad {{ $order->urgency_state }}</label></h5>
-                                                    @endif    
+                                                    @endif
                                                 @endif
                                             <h5><p style="font-size: 17px; font-weight: bold; color:blue">SIMESE: {{ is_null($order->simese->first()) ? '' : number_format($order->simese->first()['simese'],'0', ',','.')."/".$order->simese->first()['year'] }}</p></h5>
 
@@ -115,17 +115,17 @@ p.centrado {
                                                     <h5><a style="font-size: 15px; font-weight: bold; color:red"> Tipo Contrato: Cerrado</a></h5>
                                                 @else
                                                     <h5><a style="font-size: 15px; font-weight: bold; color:red"> Tipo Contrato: Abierto con MontoMin y MontoMáx</a></h5>
-                                                @endif        
+                                                @endif
                                             @endif
-                                            
+
                                             {{-- MOSTRAMOS ESTE MENSAJE SI ES CVE- DEBE SER CAMBIADO POR CVE-IC o CVE-DP --}}
                                             @if ($order->modality->id == 28)
                                                 <label style="font-size: 17px; font-weight: bold; color:red;background-color:yellow;" class="label label-danger m-1-5">Para derivar Modalidad debe ser CVE-IC o CVE-DP</label>
-                                            @endif    
+                                            @endif
                                         </div>
-                                        <div class="col-sm-2">                                                                                               
+                                        <div class="col-sm-2">
                                                 {{-- RECIBIR PAC CON OBERVACIONES DE LICIT, MINOR O EXCEPTIONS --}}
-                                                @if (in_array($order->actual_state, [58]))  
+                                                @if (in_array($order->actual_state, [58]))
                                                     <button class="btn btn-primary dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Recibir</button>
                                                     <a style="font-size: 14px; font-weight: bold; color:white;background-color:red;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="recibeOrderObs({{ $order->id }});">Recibir PAC con Observ.</a>
                                                 @else
@@ -133,22 +133,22 @@ p.centrado {
                                                         <button class="btn btn-danger dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Recibir</button>
                                                         <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="recibeOrder({{ $order->id }});">Recibir Pedido en PAC</a>
                                                     @else
-                                                        @if (in_array($order->actual_state, [68]))  
+                                                        @if (in_array($order->actual_state, [68]))
                                                             <button class="btn btn-primary dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Recibir</button>
                                                             <a style="font-size: 14px; font-weight: bold; color:white;background-color:red;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="recibeOrderObsAdju({{ $order->id }});">Recibir PAC con Observ. de Adjudicaciones</a>
                                                         @else
                                                             <button class="btn btn-primary dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Acciones</button>
                                                         @endif
                                                     @endif
-                                                @endif                                                    
+                                                @endif
                                                 <div class="dropdown-menu" aria-labelledby="acciones" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
-                                               
 
-                                                {{-- Verificamos que el pedido tenga estado RECIBIDO O PROCESADO EN PLANIFICACIÓN --}}                                               
+
+                                                {{-- Verificamos que el pedido tenga estado RECIBIDO O PROCESADO EN PLANIFICACIÓN --}}
                                                 @if ((in_array($order->actual_state, [15,20,59])))
-                                                    @if ($order->number >0) 
+                                                    @if ($order->number >0)
                                                         {{-- Si Modalidad es sólo Compra Excepcional sin referenciar IC o DP --}}
-                                                        @if ($order->modality->id == 28) 
+                                                        @if ($order->modality->id == 28)
                                                             <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="{{ route('plannings.orders.update', $order->id) }}">Modificar datos de Llamado y Tipo de Modalidad</a>
                                                         @else
                                                             <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="{{ route('plannings.orders.update', $order->id) }}">Modificar datos de Llamado</a>
@@ -158,8 +158,8 @@ p.centrado {
                                                     @endif
                                                 @endif
                                                 {{-- Verificamos que el pedido tenga recibido en planings y tenga número de Llamado --}}
-                                                @if ($order->number >0)                                                
-                                                    {{-- Para Licitaciones y Compras menores --}}                                                
+                                                @if ($order->number >0)
+                                                    {{-- Para Licitaciones y Compras menores --}}
                                                     @if ((in_array($order->actual_state, [15])))
                                                             {{-- Envía a Licitaciones --}}
                                                             @if (in_array($order->modality_id, [1,2,3,7,8]))
@@ -176,11 +176,11 @@ p.centrado {
                                                                 @endif
                                                             @endif
                                                         @endif
-                                                @endif      
+                                                @endif
 
                                                 {{-- DERIVAR PEDIDO CON OBSERVACIONES --}}
-                                                @if ($order->number >0)                                                
-                                                    {{-- Para Licitaciones y Compras menores --}}                                                
+                                                @if ($order->number >0)
+                                                    {{-- Para Licitaciones y Compras menores --}}
                                                     @if ((in_array($order->actual_state, [59])))
                                                             {{-- Envía a Licitaciones --}}
                                                             @if (in_array($order->modality_id, [1,2,3,7,8]))
@@ -197,16 +197,16 @@ p.centrado {
                                                                 @endif
                                                             @endif
                                                         @endif
-                                                @endif      
-                                                
+                                                @endif
+
                                                 {{-- Verificamos que el pedido tenga recibido en planings y tenga número de Llamado --}}
-                                                @if ($order->number >0)                                                                                                    
+                                                @if ($order->number >0)
                                                     @if ((in_array($order->actual_state, [61])))
-                                                        {{-- Envía a Adjudicaciones --}}                                                            
+                                                        {{-- Envía a Adjudicaciones --}}
                                                         <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="deriveAdjudica({{ $order->id }});">Derivar PAC ajustado a Adjudicaciones</a>
                                                     @endif
-                                                @endif                                                
-                                            </div>                                        
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -214,7 +214,7 @@ p.centrado {
 
                             <div class="card">
                                 <div class="card-block">
-                                    
+
                                     <ul class="nav nav-tabs md-tabs" role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link" data-toggle="tab" href="#tab1" role="tab"><i class="fa fa-tasks"></i> Datos del Pedido</a>
@@ -243,7 +243,7 @@ p.centrado {
                                                 <a class="nav-link" data-toggle="tab" href="#tab6" role="tab"><i class="fa fa-file-archive-o"></i> Archivos</a>
                                                 <div class="slide"></div>
                                             </li>
-                                        {{-- @endif     --}} 
+                                        {{-- @endif     --}}
 
 
                                     </ul>
@@ -301,7 +301,7 @@ p.centrado {
                                                         <td>{{ $order->system_awarded_by }}</td>
                                                         <td>{{ $order->expenditureObject->code }}</td>
                                                         <td>{{ $order->fonacide ? "SÍ" : "NO" }}</td>
-                                                        @if ($order->modality->id == 28)   
+                                                        @if ($order->modality->id == 28)
                                                             <td style="font-size: 15px; font-weight: bold; color:red">{{ $order->modality->description }}</td>
                                                         @else
                                                             <td>{{ $order->modality->description }}</td>
@@ -322,7 +322,7 @@ p.centrado {
                                                     <tr>
                                                         <td><label class="col-form-label f-w-600">Autorización del Fabricante:</label></td>
                                                         <td><label class="col-form-label f-w-600">Anticipo financiero, porcentaje, monto:</label></td>
-                                                        <td colspan="3"><label class="col-form-label f-w-600">Especificaciones Técnicas detalladas del bien o servicio a ser adquirido, 
+                                                        <td colspan="3"><label class="col-form-label f-w-600">Especificaciones Técnicas detalladas del bien o servicio a ser adquirido,
                                                         en caso de obras anexar el programa de entrega, en caso de combustibles describir el valor en cupos y tarjetas:</label></td>
                                                         <td><label class="col-form-label f-w-600">Solicitud de muestras:</label></td>
                                                     </tr>
@@ -357,9 +357,9 @@ p.centrado {
                                                     <tr>
                                                         <td><label class="col-form-label f-w-600">Administrador del Contrato:</label></td>
                                                         <td><label class="col-form-label f-w-600">Vigencia del Contrato:</label></td>
-                                                        <td colspan="2"><label class="col-form-label f-w-600">Documentos adicionales que deberá presentar el oferente que 
+                                                        <td colspan="2"><label class="col-form-label f-w-600">Documentos adicionales que deberá presentar el oferente que
                                                             demuestran que los bienes ofertados cumplen con las especificaciones técnicas:</label></td>
-                                                        <td colspan="2"><label class="col-form-label f-w-600">Documentos adicionales que deberá presentar el oferente que demuestran 
+                                                        <td colspan="2"><label class="col-form-label f-w-600">Documentos adicionales que deberá presentar el oferente que demuestran
                                                             que el oferente se halla calificado para ejecutar el contrato:</label></td>
                                                     </tr>
                                                     <tr>
@@ -423,7 +423,7 @@ p.centrado {
                                                             <td>{{ $order->budgetRequestProviders[$i]->provider->ruc }}</td>
                                                             <td>{{ $order->budgetRequestProviders[$i]->provider->telefono }}</td>
                                                             <td>{{ $order->budgetRequestProviders[$i]->provider->email_oferta }}</td>
-                                                            <td>{{ $order->budgetRequestProviders[$i]->provider->email_ocompra }}</td>                                                            
+                                                            <td>{{ $order->budgetRequestProviders[$i]->provider->email_ocompra }}</td>
                                                             <td>{{ $order->budgetRequestProviders[$i]->provider->representante }}</td>
                                                         @else
                                                             {{-- {{ ($i+0) }} --}}
@@ -435,7 +435,7 @@ p.centrado {
                                             <div class="text-right">
                                             {{-- En caso de no tener solicitudes de presupuesto --}}
                                             {{-- @if($order->providers->count() == 0) --}}
-                                            @if($order->budgetRequestProviders->where('request_provider_type', 5)->count()==0) 
+                                            @if($order->budgetRequestProviders->where('request_provider_type', 5)->count()==0)
                                                 {{-- @if (Auth::user()->hasPermission(['plannings.budget_request_providers.create'])) --}}
                                                 @if (Auth::user()->hasPermission(['plannings.budget_request_providers.create','admin.budget_request_providers.create']) || $order->dependency_id == Auth::user()->dependency_id)
                                                     <a href="{{ route('orders.budget_request_providers.create_PAC', $order->id) }}" class="btn btn-primary">Agregar</a>
@@ -446,7 +446,7 @@ p.centrado {
                                                 @endif
                                             @endif
                                             </div>
-                                                                                           
+
                                             <div class="col-sm-2">
                                                 {{-- Para editar empresas invitadas (con permisos de index, update y create de proiders en Roles de Licit,compras men y excepciones) --}}
                                                 @if ((Auth::user()->hasPermission(['admin.providers.update'])))
@@ -469,8 +469,8 @@ p.centrado {
                                                             <th>Present.</th>
                                                             <th>U.M.</th>
                                                             {{-- Mostramos ítemes de Contrato Abierto --}}
-                                                            @if ($order->open_contract == 1) 
-                                                                <th>Precio Unitario</th> 
+                                                            @if ($order->open_contract == 1)
+                                                                <th>Precio Unitario</th>
                                                                 <th>Pedido Mínimo</th>
                                                                 <th>Pedido Máximo</th>
                                                                 <th>Monto Mínimo</th>
@@ -478,21 +478,21 @@ p.centrado {
                                                                 <th>Acciones</th>
                                                             @else
                                                                 {{-- Mostramos ítemes de Contrato Cerrado --}}
-                                                                @if ($order->open_contract == 2) 
+                                                                @if ($order->open_contract == 2)
                                                                     <th>Cantidad</th>
-                                                                    <th>Precio Unitario</th>                                                                
+                                                                    <th>Precio Unitario</th>
                                                                     <th>Monto Total</th>
                                                                     <th>Acciones</th>
                                                                 @else
                                                                 {{-- Mostramos ítemes de Contrato Abierto con Mmin y Mmax --}}
                                                                     <th>Cantidad</th>
-                                                                    <th>Precio Unitario IVA INCL.</th>                                                                
+                                                                    <th>Precio Unitario IVA INCL.</th>
                                                                     <th>Monto Mínimo</th>
                                                                     <th>Monto Máximo</th>
                                                                     <th>Acciones</th>
-                                                                @endif    
+                                                                @endif
                                                             @endif
-                                                            
+
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -500,40 +500,40 @@ p.centrado {
                                                         <tr>
                                                             <td>{{ ($i+1) }}</td>
                                                             <td>{{ $order->items[$i]->batch }}</td>
-                                                            <td>{{ $order->items[$i]->item_number }}</td>                                                                
-                                                            @if ($order->items[$i]->level5CatalogCode->code == '99999999-9999')                                                                    
+                                                            <td>{{ $order->items[$i]->item_number }}</td>
+                                                            @if ($order->items[$i]->level5CatalogCode->code == '99999999-9999')
                                                                 <td class="columna3" style="color:red;font-weight: bold">{{ $order->items[$i]->level5CatalogCode->code }}</td>
                                                                 <td style="color:red;font-weight: bold">{{ $order->items[$i]->level5CatalogCode->description }}</td>
                                                             @else
                                                                 <td class="columna3"> {{ $order->items[$i]->level5CatalogCode->code }}</td>
                                                                 <td class="columna4"> {{ $order->items[$i]->level5CatalogCode->description }}</td>
-                                                            @endif                                                                
+                                                            @endif
                                                             <td>{{ $order->items[$i]->technical_specifications }}</td>
                                                             <td>{{ $order->items[$i]->orderPresentation->description }}</td>
                                                             <td>{{ $order->items[$i]->orderMeasurementUnit->description }}</td>
 
                                                             {{-- Mostramos ítemes de Contrato Abierto --}}
-                                                            @if ($order->open_contract == 1) 
-                                                                <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>                                                            
+                                                            @if ($order->open_contract == 1)
+                                                                <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>
                                                                 <td class="columna9"style="text-align: center">{{ $order->items[$i]->min_quantityFormat() }}</td>
                                                                 <td class="columna10"style="text-align: center">{{ $order->items[$i]->max_quantityFormat() }}</td>
                                                                 <td class="columna11"style="text-align: center">{{ 'Gs. '.$order->items[$i]->totalAmount_min_Format() }}</td>
                                                                 <td class="columna12">{{ 'Gs. '.$order->items[$i]->totalAmountFormat() }}</td>
                                                             @else
                                                                 {{-- Mostramos ítemes de Contrato Cerrado --}}
-                                                                @if ($order->open_contract == 2) 
-                                                                    <td class="columna8"style="text-align: center">{{ $order->items[$i]->quantityFormat() }}</td> 
-                                                                    <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>                                                                                                                                               
+                                                                @if ($order->open_contract == 2)
+                                                                    <td class="columna8"style="text-align: center">{{ $order->items[$i]->quantityFormat() }}</td>
+                                                                    <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>
                                                                     <td class="columna12">{{ 'Gs. '.$order->items[$i]->totalAmountFormat() }}</td>
                                                                 @else
-                                                                    {{-- Mostramos ítemes de Contrato Abierto con Mmin y Mmax --}}                                                                        
+                                                                    {{-- Mostramos ítemes de Contrato Abierto con Mmin y Mmax --}}
                                                                     <td class="columna10"style="text-align: center">{{ $order->items[$i]->quantityFormat() }}</td>
-                                                                    <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td> 
+                                                                    <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>
                                                                     <td class="columna11"style="text-align: center">{{ 'Gs. '.$order->items[$i]->totalAmount_min_Format() }}</td>
                                                                     <td class="columna12">{{ 'Gs. '.$order->items[$i]->totalAmountFormat() }}</td>
                                                                 @endif
-                                                            @endif                                                            
-                                                            
+                                                            @endif
+
                                                             {{-- ESTO EN CASO DE QUE SOLO SE QUIERA EDITAR EL ITEM --}}
                                                             {{-- <td style="white-space:nowrap">
                                                                 <button type="button" title="Listado de Precios Referenciales" class="btn btn-primary btn-icon" onclick="itemAwardHistories({{ $order->items[$i]->id }})">
@@ -542,7 +542,7 @@ p.centrado {
                                                             @if ($order->items[$i]->level5CatalogCode->code == '99999999-9999')
                                                                 <button type="button" title="Editar" class="btn btn-warning btn-icon" onclick="updateItem({{ $order->items[$i]->id }})">
                                                                     <i class="fa fa-pencil"></i>
-                                                                </button>                                                            
+                                                                </button>
                                                             @endif --}}
 
                                                             <td style="white-space:nowrap">
@@ -560,7 +560,7 @@ p.centrado {
                                                                     <i class="fa fa-trash"></i>
                                                                 </button>
                                                             @endif
-                                                            
+
                                                         </td>
                                                         </tr>
                                                     @endfor
@@ -575,7 +575,7 @@ p.centrado {
                                                     </a>
                                                 @endif
                                             </div>
-                                            <span style="font-size: 16px; font-weight: bold; color:red;background-color:yellow;" >MONTO TOTAL DEL PEDIDO: {{ $order->totalAmountFormat() }}</span>  
+                                            <span style="font-size: 16px; font-weight: bold; color:red;background-color:yellow;" >MONTO TOTAL DEL PEDIDO: {{ $order->totalAmountFormat() }}</span>
                                     </div>
 
                                         <div class="tab-pane" id="tab4" role="tabpanel">
@@ -657,7 +657,7 @@ p.centrado {
                                                 @endif
                                             </div>
                                         </div>
-                                        
+
                                         <div class="tab-pane" id="tab6" role="tabpanel">
                                             <label class="col-form-label f-w-600">Archivos cargados al pedido:</label>
                                             <table class="table table-striped table-bordered">
@@ -701,11 +701,11 @@ p.centrado {
                                             <div class="text-right">
                                                 <a href="{{ route('orders.files.create', $order->id) }}" class="btn btn-primary">Cargar Archivo</a>
                                             </div>
-                                            <div class="col-sm-10 text-left">                                                
+                                            <div class="col-sm-10 text-left">
                                                 <h4 style="font-size: 17px; font-weight: bold; color:#FF0000">Adjuntar: Presupuestos, CDP y otros antecedentes</h4>
                                             </div>
                                         </div>
-                                                                                
+
                                     </div>
                                 </div>
                             </div>
@@ -758,7 +758,7 @@ $(document).ready(function(){
                     response = (typeof data == "object") ? data : JSON.parse(data);
                     if(response.status == "success"){
                         swal({
-                            title: "Exito!",
+                            title: "Éxito!",
                             text: response.message,
                             type: "success"
                         },
@@ -790,7 +790,7 @@ $(document).ready(function(){
                     response = (typeof data == "object") ? data : JSON.parse(data);
                     if(response.status == "success"){
                         swal({
-                            title: "Exito!",
+                            title: "Éxito!",
                             text: response.message,
                             type: "success"
                         },
@@ -822,7 +822,7 @@ $(document).ready(function(){
                     response = (typeof data == "object") ? data : JSON.parse(data);
                     if(response.status == "success"){
                         swal({
-                            title: "Exito!",
+                            title: "Éxito!",
                             text: response.message,
                             type: "success"
                         },
@@ -900,7 +900,7 @@ $(document).ready(function(){
       );
     };
 
-       
+
     deriveOrder = function(order_id){
       swal({
             title: "Atención",
@@ -922,7 +922,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -942,7 +942,7 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
     };
@@ -968,7 +968,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -988,7 +988,7 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
     };
@@ -1014,7 +1014,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -1034,7 +1034,7 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
     };
@@ -1159,7 +1159,7 @@ $(document).ready(function(){
         }
       );
     };
-    
+
 });
 </script>
 <script src="{{ asset('js/guardar-tab.js') }}" type="text/javascript"></script>

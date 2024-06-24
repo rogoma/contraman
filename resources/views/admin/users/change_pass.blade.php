@@ -40,10 +40,10 @@
                                 </div>
                                 <div class="card-block">
                                     {{-- <form method="GET" action="{{ route('users.update_pass', Auth::user()->id) }}"> --}}
-                                    <form method="POST" action="{{ route('users.update_pass', Auth::user()->id) }}">    
+                                    <form method="POST" action="{{ route('users.update_pass', Auth::user()->id) }}">
                                         @csrf
                                         @method('PUT')
-                                        
+
                                         {{-- CÓDIGO PARA MOSTRAR ERRORES --}}
                                         <div class="col-sm-12">
                                             @if ($errors->any())
@@ -67,9 +67,9 @@
                                                 @error('document')
                                                     <div class="has-danger col-form-label">{{ $message }}</div>
                                                 @enderror
-                                            </div>    
+                                            </div>
                                         </div>
-                                        
+
                                         <div class="form-group row @error('password') has-danger @enderror">
                                             <label class="col-sm-2 col-form-label">Password Actual</label>
                                             <div class="col-sm-2">
@@ -89,7 +89,7 @@
                                                 @enderror
                                             </div>
                                         </div>
-                                        
+
                                         <div class="form-group row @error('sec_pass') has-danger @enderror">
                                             <label class="col-sm-2 col-form-label">Repetir Password</label>
                                             <div class="col-sm-2">
@@ -110,15 +110,15 @@
                                                 <button type="submit" class="btn btn-primary m-b-0">Cambiar Password</button>
                                             </div>
                                         </div>
-                                        
+
                                         <br><br><br><br>
 
                                         {{-- VERIFICA PERMISOS --}}
                                         {{-- @if (Auth::user()->hasPermission(['admin.users.update']))
                                             <div class="text-center">
                                                 <label class="col-mm-2"></label>
-                                                <div class="col-mm-2">                                                                                        
-                                                    <a href="{{ route('home') }}" class="btn btn-primary">Resetear Password</a>                                                                         
+                                                <div class="col-mm-2">
+                                                    <a href="{{ route('home') }}" class="btn btn-primary">Resetear Password</a>
                                                 </div>
                                             </div>
                                         @endif --}}
@@ -127,13 +127,13 @@
 
                                         {{-- <div class="form-group row">
                                             <label class="col-mm-2"></label>
-                                            <div class="col-mm-2">                                                                                        
-                                                <a href="{{ route('home') }}" class="btn btn-primary">Resetear Password</a>                                                                         
+                                            <div class="col-mm-2">
+                                                <a href="{{ route('home') }}" class="btn btn-primary">Resetear Password</a>
                                             </div>
                                         </div> --}}
-                                        
-                                        {{-- <div class="text-center"> 
-                                            <button type="button" title="Editar" class="btn btn-danger" onclick="resetPass({{ Auth::user()->id }})">                                            
+
+                                        {{-- <div class="text-center">
+                                            <button type="button" title="Editar" class="btn btn-danger" onclick="resetPass({{ Auth::user()->id }})">
                                             <i class="fa fa-pencil"> Resetear Password</i>
                                             </button>
                                         </div> --}}
@@ -143,19 +143,19 @@
                                         {{-- <div class="form-group row">
                                             <label class="col-sm-2"></label>
                                             <div class="col-sm-2">
-                                                <button type="button" title="Editar" class="btn btn-danger" onclick="resetPass({{ Auth::user()->id }})">                                            
-                                                    <i>Resetear Password</i>                                                    
+                                                <button type="button" title="Editar" class="btn btn-danger" onclick="resetPass({{ Auth::user()->id }})">
+                                                    <i>Resetear Password</i>
                                             </div>
                                         </div> --}}
 
-                                        
 
-                                        {{-- @php                                            
-                                            var_dump(Auth::user()->id);exit();                                            
+
+                                        {{-- @php
+                                            var_dump(Auth::user()->id);exit();
                                         @endphp --}}
-                                            
 
-                                        {{-- <div class="text-left">                                                
+
+                                        {{-- <div class="text-left">
                                             {{-- <a href="{{ route('orders.files.create', $order->id) }}" class="btn btn-primary">Cargar Archivos</a> --}}
                                             {{-- <a class="btn btn-primary" onclick="updateDependencies({{ Auth::user()->id }})>Cargar Archivos</a> --}}
                                         {{-- </div> --}}
@@ -195,7 +195,7 @@ $(document).ready(function(){
             $.ajax({
                 // url : '/orders/'+id+'/reset_pass',
                 url : '/users/reset_pass/'+id,
-                // users/reset_pass/{id}                
+                // users/reset_pass/{id}
                 method: 'POST',
                 data: '_token='+'{{ csrf_token() }}',
                 success: function(data){
@@ -203,7 +203,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -223,7 +223,7 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
     };

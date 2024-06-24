@@ -91,7 +91,7 @@
                                                     {{-- @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']) || $item->dependency_id == Auth::user()->dependency_id) --}}
                                                         <button type="button" title="Editar" class="btn btn-warning btn-icon" onclick="updateItem({{ $item->itemAwardHistories[$i]->id }})">
                                                             <i class="fa fa-pencil"></i>
-                                                        </button>                                                        
+                                                        </button>
                                                     {{-- @endif --}}
                                                     {{-- @if (Auth::user()->hasPermission(['admin.items.delete','contracts.items.update']) || $item->dependency_id == Auth::user()->dependency_id) --}}
                                                         <button type="button" title="Borrar" class="btn btn-danger btn-icon" onclick="deleteItemAwardHistories({{$item->itemAwardHistories[$i]->id }})">
@@ -133,7 +133,7 @@
 $(document).ready(function(){
     $('#item_award_histories').DataTable();
 
-    updateItem = function(item){               
+    updateItem = function(item){
         location.href = '/items/{{ $item->id }}/item_award_histories/'+item+'/edit/';
     }
 
@@ -150,14 +150,17 @@ $(document).ready(function(){
         function(isConfirm){
           if(isConfirm){
             $.ajax({
-              url : '/items/{{ $item->id }}/items_award_histories/'+item_id,            
+              url : '/items/{{ $item->id }}/items_award_histories/'+item_id,
+            
               method : 'POST',
               data: {_method: 'DELETE', _token: '{{ csrf_token() }}'},
               success: function(data){
                 try{
                     response = (typeof data == "object") ? data : JSON.parse(data);
                     if(response.status == "success"){
-                        location.href = "{{ route('contracts.show', $item->contract->id) }}";
+                        // location.href = "{{ route('contracts.show', $item->contract->id) }}";
+                        swal("Éxito!", "Endoso eliminado correctamente", "success");
+                        location.reload();
                     }else{
                         swal("Error!", response.message, "error");
                     }

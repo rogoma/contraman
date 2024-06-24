@@ -37,7 +37,7 @@ p.centrado {
                 <div class="page-header-title">
                     <i class="fa fa-list bg-c-blue"></i>
                     <div class="d-inline">
-                        <h5>Visualizar Pedido</h5>                        
+                        <h5>Visualizar Pedido</h5>
                         <span>Pedido Nº {{ $order->id }}</span>
                     </div>
                     <br>
@@ -67,14 +67,14 @@ p.centrado {
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="card">
-                                <div class="card-header">                                    
+                                <div class="card-header">
                                     <div class="row">
                                         <div class="col-sm-10 text-left">
                                             {{-- <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."-".$order->description }} --}}
-                                            {{-- @if ($order->covid==0)                                                
-                                                <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}   
-                                            @else                                                
-                                                <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}    
+                                            {{-- @if ($order->covid==0)
+                                                <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}
+                                            @else
+                                                <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}
                                                 <label style="font-size: 16px; font-weight: bold; color:blue;background-color:yellow;">Proceso COVID</label></h5>
                                             @endif  --}}
 
@@ -84,17 +84,17 @@ p.centrado {
                                                     <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}
                                                 @else
                                                     <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}
-                                                    <label style="color:red;font-weight: bold;background-color:yellow">(URGENCIA IMPOSTERGABLE)</span> </td></label></h5>                                                        
+                                                    <label style="color:red;font-weight: bold;background-color:yellow">(URGENCIA IMPOSTERGABLE)</span> </td></label></h5>
                                                 @endif
                                             @else
-                                                @if ($order->unpostponable==0)                                                        
-                                                    <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }} 
+                                                @if ($order->unpostponable==0)
+                                                    <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}
                                                     <label style="font-size: 16px; font-weight: bold; color:blue;background-color:yellow;">Proceso COVID</label></h5>
                                                 @else
-                                                    <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }} 
+                                                    <h5>{{ is_null($order->number)? $order->description : $order->modality->description." N° ".$order->number."/".$order->year."-".$order->description }}
                                                         <label style="font-size: 16px; font-weight: bold; color:blue;background-color:yellow;">Proceso COVID </label>
                                                         <label style="color:red;font-weight: bold;background-color:yellow"> (URGENCIA IMPOSTERGABLE)</label></h5>
-                                                @endif                                                        
+                                                @endif
                                             @endif
 
                                             @if ($order->urgency_state == "ALTA")
@@ -104,9 +104,9 @@ p.centrado {
                                                     <label class="label label-warning m-l-5">Prioridad {{ $order->urgency_state }}</label></h5>
                                                 @else
                                                     <label class="label label-info m-l-5">Prioridad {{ $order->urgency_state }}</label></h5>
-                                                @endif    
+                                                @endif
                                             @endif
-                                            
+
                                             <h5><p style="font-size: 17px; font-weight: bold; color:blue">SIMESE: {{ is_null($order->simese->first()) ? '' : number_format($order->simese->first()['simese'],'0', ',','.')."/".$order->simese->first()['year'] }}</p></h5>
 
                                             @if ($order->open_contract == 1)
@@ -116,65 +116,65 @@ p.centrado {
                                                     <h5><a style="font-size: 15px; font-weight: bold; color:red"> Tipo Contrato: Cerrado</a></h5>
                                                 @else
                                                     <h5><a style="font-size: 15px; font-weight: bold; color:red"> Tipo Contrato: Abierto con MontoMin y MontoMáx</a></h5>
-                                                @endif        
+                                                @endif
                                             @endif
                                         </div>
-                                        <div class="col-sm-2">                                           
-                                                @if (Auth::user()->hasPermission(['dgafs.orders.derive']) && $order->actual_state == 6) 
+                                        <div class="col-sm-2">
+                                                @if (Auth::user()->hasPermission(['dgafs.orders.derive']) && $order->actual_state == 6)
                                                     {{-- <button class="btn btn-danger dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Recibir</button> --}}
                                                     <button class="btn btn-primary dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Acciones</button>
                                                     <a class="dropdown-item waves-effect f-w-600" style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" href="{{ route('derive_orders.create', $order->id) }}">Procesar Pedido en DGAF</a>
                                                 @else
-                                                    @if (Auth::user()->hasPermission(['dgafs.orders.derive']) && in_array($order->actual_state, [115]))                                                        
-                                                        <button class="btn btn-danger dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Recibir</button>                                                        
+                                                    @if (Auth::user()->hasPermission(['dgafs.orders.derive']) && in_array($order->actual_state, [115]))
+                                                        <button class="btn btn-danger dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Recibir</button>
                                                         <a class="dropdown-item waves-effect f-w-600" style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" href="javascript::void(0);" onclick="deriveDictamen({{ $order->id }});">V°B° a Dictamen de PBC en DGAF</a>
                                                     @else
-                                                        @if (Auth::user()->hasPermission(['dgafs.orders.derive']) && in_array($order->actual_state, [155]))                                                                                                                    
-                                                            <button class="btn btn-danger dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Recibir</button>                                                             
+                                                        @if (Auth::user()->hasPermission(['dgafs.orders.derive']) && in_array($order->actual_state, [155]))
+                                                            <button class="btn btn-danger dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Recibir</button>
                                                             <a class="dropdown-item waves-effect f-w-600" style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" href="javascript::void(0);" onclick="deriveDictamenEVAL({{ $order->id }});">V°B° a Dictamen de Evaluación en DGAF</a>
                                                         @else
-                                                            <button class="btn btn-primary dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Acciones</button>    
+                                                            <button class="btn btn-primary dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Acciones</button>
                                                         @endif
                                                     @endif
-                                                @endif                                                                                                  
+                                                @endif
 
                                                 {{-- PARA RECIBIR PEDIDOS EN DGAF --}}
-                                                @if (Auth::user()->hasPermission(['dgafs.orders.derive']) && $order->actual_state == 4) 
+                                                @if (Auth::user()->hasPermission(['dgafs.orders.derive']) && $order->actual_state == 4)
                                                     {{-- <button class="btn btn-danger dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Recibir</button>--}}
-                                                    <a class="dropdown-item waves-effect f-w-600" style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" href="javascript::void(0);" onclick="recibeOrderDGAF({{ $order->id }});">Recibir Pedido en DGAF</a> 
+                                                    <a class="dropdown-item waves-effect f-w-600" style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" href="javascript::void(0);" onclick="recibeOrderDGAF({{ $order->id }});">Recibir Pedido en DGAF</a>
                                                 @endif
-                                                                                                
+
                                                 {{-- <div class="dropdown-menu" aria-labelledby="acciones" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut"> --}}
-                                               
+
                                                 {{-- Pemite Editar Proceso Pedido (Colocar Prioridad) - Cambiar rechazo (estado 10) y Derivar--}}
                                                 @if (Auth::user()->hasPermission(['dgafs.orders.derive']) && in_array($order->actual_state, [8]))
                                                     {{-- <button class="btn btn-danger dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Recibir</button>
                                                     <a class="dropdown-item waves-effect f-w-600" style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" href="{{ route('derive_orders.edit', $order->id) }}">Modificar Procesar Pedido en DGAF</a> --}}
-                                                
+
                                                     <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="{{ route('derive_orders.edit', $order->id) }}">Modificar Procesar Pedido en DGAF</a>
-                                                    <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="deriveOrderDGAF({{ $order->id }});">Derivar Pedido desde DGAF</a> 
+                                                    <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="deriveOrderDGAF({{ $order->id }});">Derivar Pedido desde DGAF</a>
                                                 @endif
 
                                                 {{-- Pemite Editar Proceso Pedido (Colocar Prioridad) - Cambiar rechazo (estado 10) --}}
                                                 @if (Auth::user()->hasPermission(['dgafs.orders.derive']) && in_array($order->actual_state, [10]))
-                                                    <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="{{ route('derive_orders.edit', $order->id) }}">Modificar Procesar Pedido en DGAF</a>                                                    
+                                                    <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="{{ route('derive_orders.edit', $order->id) }}">Modificar Procesar Pedido en DGAF</a>
                                                 @endif
-                                                    
+
                                                 {{-- Pemite Derivar Pedido (Cuando estado = 117 Verificado dictamen --}}
-                                                @if (Auth::user()->hasPermission(['dgafs.orders.derive']) && in_array($order->actual_state, [117]))                                                        
+                                                @if (Auth::user()->hasPermission(['dgafs.orders.derive']) && in_array($order->actual_state, [117]))
                                                     <a style="font-size: 14px; font-weight: bold; color:blue;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" href="javascript::void(0);" onclick="deriveDictamen({{ $order->id }});">V°B° a Dictamen de CVE en DGAF</a>
                                                 @endif
-                                                
+
                                                 <div class="dropdown-menu" aria-labelledby="acciones" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
                                             </div>
                                         </div>
-                                    </div>                                    
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="card">
                                 <div class="card-block">
-                                    
+
                                     <ul class="nav nav-tabs md-tabs" role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link active" data-toggle="tab" href="#tab1" role="tab"><i class="fa fa-tasks"></i> Datos del Pedido</a>
@@ -199,7 +199,7 @@ p.centrado {
                                             <a class="nav-link" data-toggle="tab" href="#tab4" role="tab"><i class="fa fa-file-pdf-o"></i> Formularios</a>
                                             <div class="slide"></div>
                                         </li>
-                                        
+
                                         {{-- <li class="nav-item">
                                                 <a class="nav-link" data-toggle="tab" href="#tab5" role="tab"><i class="fa fa-file-text-o"></i> SIMESE Relacionado</a>
                                                 <div class="slide"></div>
@@ -212,7 +212,7 @@ p.centrado {
                                                     <div class="slide"></div>
                                             </li>
                                         {{-- @endif --}}
-                                        
+
                                     </ul>
                                     <div class="tab-content card-block">
                                         <div class="tab-pane active" id="tab1" role="tabpanel">
@@ -285,7 +285,7 @@ p.centrado {
                                                     <tr>
                                                         <td><label class="col-form-label f-w-600">Autorización del Fabricante:</label></td>
                                                         <td><label class="col-form-label f-w-600">Anticipo financiero, porcentaje, monto:</label></td>
-                                                        <td colspan="3"><label class="col-form-label f-w-600">Especificaciones Técnicas detalladas del bien o servicio a ser adquirido, 
+                                                        <td colspan="3"><label class="col-form-label f-w-600">Especificaciones Técnicas detalladas del bien o servicio a ser adquirido,
                                                         en caso de obras anexar el programa de entrega, en caso de combustibles describir el valor en cupos y tarjetas:</label></td>
                                                         <td><label class="col-form-label f-w-600">Solicitud de muestras:</label></td>
                                                     </tr>
@@ -320,9 +320,9 @@ p.centrado {
                                                     <tr>
                                                         <td><label class="col-form-label f-w-600">Administrador del Contrato:</label></td>
                                                         <td><label class="col-form-label f-w-600">Vigencia del Contrato:</label></td>
-                                                        <td colspan="2"><label class="col-form-label f-w-600">Documentos adicionales que deberá presentar el oferente que 
+                                                        <td colspan="2"><label class="col-form-label f-w-600">Documentos adicionales que deberá presentar el oferente que
                                                             demuestran que los bienes ofertados cumplen con las especificaciones técnicas:</label></td>
-                                                        <td colspan="2"><label class="col-form-label f-w-600">Documentos adicionales que deberá presentar el oferente que demuestran 
+                                                        <td colspan="2"><label class="col-form-label f-w-600">Documentos adicionales que deberá presentar el oferente que demuestran
                                                             que el oferente se halla calificado para ejecutar el contrato:</label></td>
                                                     </tr>
                                                     <tr>
@@ -362,7 +362,7 @@ p.centrado {
                                                 </tbody>
                                             </table>
                                         </div>
-                                        
+
                                         @if ($order->actual_state <= 20)
                                             <div class="tab-pane" id="tab2" role="tabpanel">
                                                 <table id="budget_request_providers" class="table table-striped table-bordered">
@@ -399,8 +399,8 @@ p.centrado {
                                                 @endif
                                                 </div>
                                             </div>
-                                        @else    
-                                            {{-- PARA EMPRESAS PARTICIPANTES --}}                                        
+                                        @else
+                                            {{-- PARA EMPRESAS PARTICIPANTES --}}
                                             <div class="tab-pane" id="tab2" role="tabpanel">
                                                 {{-- @php
                                                     var_dump($order->budgetRequestProviders->where('request_provider_type', 3)->count());
@@ -409,7 +409,7 @@ p.centrado {
                                                 <table id="budget_request_providers" class="table table-striped table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <th style="font-weight: bold; color:red">#</th>                                                       
+                                                            <th style="font-weight: bold; color:red">#</th>
                                                             <th style="font-weight: bold; color:red">Empresa participante</th>
                                                             <th style="font-weight: bold; color:red">RUC</th>
                                                             <th style="font-weight: bold; color:red">Teléfono</th>
@@ -421,9 +421,9 @@ p.centrado {
                                                     <tbody>
 
                                                     @for ($j = 0; $j < count($order->budgetRequestProviders);($j++))
-                                                        <tr>                                                        
+                                                        <tr>
                                                             {{-- Muestra las empresas invitadas (request_provider_type=3) --}}
-                                                            @if ($order->budgetRequestProviders[$j]->request_provider_type==3)                                                                
+                                                            @if ($order->budgetRequestProviders[$j]->request_provider_type==3)
                                                                 <td>{{ ($j+1) }}</td>
                                                                 <td>{{ $order->budgetRequestProviders[$j]->provider->description }}</td>
                                                                 <td>{{ $order->budgetRequestProviders[$j]->provider->ruc }}</td>
@@ -434,10 +434,10 @@ p.centrado {
                                                             @endif
                                                         </tr>
                                                     @endfor
-                                                    </tbody>                                                
+                                                    </tbody>
                                                 </table>
                                                 {{-- <div class="text-right">
-                                                    En caso de no tener pedidos de tipo 3 (empresas participantes)                                                
+                                                    En caso de no tener pedidos de tipo 3 (empresas participantes)
                                                     @if($order->budgetRequestProviders->where('request_provider_type', 3)->count() == 0)
                                                         Si pedido está anulado no muestra botón agregar
                                                         @if ($order->actual_state == 0)
@@ -452,12 +452,12 @@ p.centrado {
                                                         @if ($order->actual_state == 0)
                                                         @else
                                                             @if (Auth::user()->hasPermission(['admin.budget_request_providers.update','exceptions.budget_request_providers.update']))
-                                                                <a href="{{ route('orders.budget_request_providers.edit_providers_participants', $order->id) }}" class="btn btn-success">Editar Empresas participantes</a>                                                    
-                                                            @endif                                                        
+                                                                <a href="{{ route('orders.budget_request_providers.edit_providers_participants', $order->id) }}" class="btn btn-success">Editar Empresas participantes</a>
+                                                            @endif
                                                         @endif
-                                                    @endif                                            
+                                                    @endif
                                                 </div> --}}
-                                            </div> 
+                                            </div>
                                         @endif
 
                                         <div class="tab-pane" id="tab3" role="tabpanel">
@@ -474,8 +474,8 @@ p.centrado {
                                                             <th>Present.</th>
                                                             <th>U.M.</th>
                                                             {{-- Mostramos ítemes de Contrato Abierto --}}
-                                                            @if ($order->open_contract == 1) 
-                                                                <th>Precio Unitario</th> 
+                                                            @if ($order->open_contract == 1)
+                                                                <th>Precio Unitario</th>
                                                                 <th>Pedido Mínimo</th>
                                                                 <th>Pedido Máximo</th>
                                                                 <th>Monto Mínimo</th>
@@ -483,21 +483,21 @@ p.centrado {
                                                                 {{-- <th>Acciones</th> --}}
                                                             @else
                                                                 {{-- Mostramos ítemes de Contrato Cerrado --}}
-                                                                @if ($order->open_contract == 2) 
+                                                                @if ($order->open_contract == 2)
                                                                     <th>Cantidad</th>
-                                                                    <th>Precio Unitario</th>                                                                
+                                                                    <th>Precio Unitario</th>
                                                                     <th>Monto Total</th>
                                                                     {{-- <th>Acciones</th> --}}
                                                                 @else
                                                                 {{-- Mostramos ítemes de Contrato Abierto con Mmin y Mmax --}}
                                                                     <th>Cantidad</th>
-                                                                    <th>Precio Unitario IVA INCL.</th>                                                                
+                                                                    <th>Precio Unitario IVA INCL.</th>
                                                                     <th>Monto Mínimo</th>
                                                                     <th>Monto Máximo</th>
                                                                     {{-- <th>Acciones</th> --}}
-                                                                @endif    
+                                                                @endif
                                                             @endif
-                                                            
+
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -505,41 +505,41 @@ p.centrado {
                                                         <tr>
                                                             <td>{{ ($i+1) }}</td>
                                                             <td>{{ $order->items[$i]->batch }}</td>
-                                                            <td>{{ $order->items[$i]->item_number }}</td>                                                                
-                                                            @if ($order->items[$i]->level5CatalogCode->code == '99999999-9999')                                                                    
+                                                            <td>{{ $order->items[$i]->item_number }}</td>
+                                                            @if ($order->items[$i]->level5CatalogCode->code == '99999999-9999')
                                                                 <td class="columna3" style="color:red;font-weight: bold">{{ $order->items[$i]->level5CatalogCode->code }}</td>
                                                                 <td style="color:red;font-weight: bold">{{ $order->items[$i]->level5CatalogCode->description }}</td>
                                                             @else
                                                                 <td class="columna3"> {{ $order->items[$i]->level5CatalogCode->code }}</td>
                                                                 <td>{{ $order->items[$i]->level5CatalogCode->description }}</td>
-                                                            @endif                                                                
+                                                            @endif
                                                             <td>{{ $order->items[$i]->technical_specifications }}</td>
                                                             <td>{{ $order->items[$i]->orderPresentation->description }}</td>
                                                             <td>{{ $order->items[$i]->orderMeasurementUnit->description }}</td>
 
                                                             {{-- Mostramos ítemes de Contrato Abierto --}}
-                                                            @if ($order->open_contract == 1) 
-                                                                <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>                                                            
+                                                            @if ($order->open_contract == 1)
+                                                                <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>
                                                                 <td class="columna9"style="text-align: center">{{ $order->items[$i]->min_quantityFormat() }}</td>
                                                                 <td class="columna10"style="text-align: center">{{ $order->items[$i]->max_quantityFormat() }}</td>
                                                                 <td class="columna11"style="text-align: center">{{ 'Gs. '.$order->items[$i]->totalAmount_min_Format() }}</td>
                                                                 <td class="columna12">{{ 'Gs. '.$order->items[$i]->totalAmountFormat() }}</td>
                                                             @else
                                                                 {{-- Mostramos ítemes de Contrato Cerrado --}}
-                                                                @if ($order->open_contract == 2) 
-                                                                    <td class="columna8"style="text-align: center">{{ $order->items[$i]->quantityFormat() }}</td> 
-                                                                    <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>                                                                                                                                               
+                                                                @if ($order->open_contract == 2)
+                                                                    <td class="columna8"style="text-align: center">{{ $order->items[$i]->quantityFormat() }}</td>
+                                                                    <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>
                                                                     <td class="columna12">{{ 'Gs. '.$order->items[$i]->totalAmountFormat() }}</td>
                                                                 @else
-                                                                    {{-- Mostramos ítemes de Contrato Abierto con Mmin y Mmax --}}                                                                        
+                                                                    {{-- Mostramos ítemes de Contrato Abierto con Mmin y Mmax --}}
                                                                     <td class="columna10"style="text-align: center">{{ $order->items[$i]->quantityFormat() }}</td>
-                                                                    <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td> 
+                                                                    <td class="columna12" style="text-align: center">{{ 'Gs. '.$order->items[$i]->unitPriceFormat() }}</td>
                                                                     <td class="columna11"style="text-align: center">{{ 'Gs. '.$order->items[$i]->totalAmount_min_Format() }}</td>
                                                                     <td class="columna12">{{ 'Gs. '.$order->items[$i]->totalAmountFormat() }}</td>
                                                                 @endif
                                                             @endif
-                                                            
-                                                            
+
+
                                                             <td style="white-space:nowrap">
                                                                 {{-- <button type="button" title="Listado de Precios Referenciales" class="btn btn-primary btn-icon" onclick="itemAwardHistories({{ $order->items[$i]->id }})">
                                                                     <i class="fa fa-list"></i>
@@ -568,7 +568,7 @@ p.centrado {
                                                     </a>
                                                 @endif
                                             </div>
-                                            <span style="font-size: 16px; font-weight: bold; color:red;background-color:yellow;" >MONTO TOTAL DEL LLAMADO: {{ $order->totalAmountFormat() }}</span> 
+                                            <span style="font-size: 16px; font-weight: bold; color:red;background-color:yellow;" >MONTO TOTAL DEL LLAMADO: {{ $order->totalAmountFormat() }}</span>
                                     </div>
 
                                         <div class="tab-pane" id="tab4" role="tabpanel">
@@ -676,7 +676,7 @@ p.centrado {
                                                             <a href="{{ route('orders.files.download', $other_files[$i]->id) }}" title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a>
                                                         </td>
                                                     </tr>
-                                                    @endfor                                                    
+                                                    @endfor
                                                         @for ($i=0; $i < count($user_files); $i++)
                                                         <tr>
                                                             <td>{{ $i+1 }}</td>
@@ -689,15 +689,15 @@ p.centrado {
                                                                 <button title="Eliminar Archivo" onclick="deleteFile({{ $user_files[$i]->id }})" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                                                             </td>
                                                         </tr>
-                                                        @endfor                                                    
+                                                        @endfor
                                                 </tbody>
                                             </table>
                                             <div class="text-right">
                                                 @if (Auth::user()->hasPermission(['admin.files.create', 'orders.files.create', 'dgafs.files.create','utas.files.create']))
                                                     <a href="{{ route('orders.files.create', $order->id) }}" class="btn btn-primary">Cargar Archivos</a>
-                                                @endif 
+                                                @endif
                                             </div>
-                                        </div>                                     
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -731,7 +731,7 @@ p.centrado {
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
 </div>
 @endsection
 
@@ -798,7 +798,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -818,7 +818,7 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
     };
@@ -844,7 +844,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -864,7 +864,7 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
     };
@@ -890,7 +890,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -910,7 +910,7 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
     };
@@ -936,7 +936,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -956,11 +956,11 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
     };
-        
+
     deriveDictamen = function(order_id){
       swal({
             title: "Atención",
@@ -982,7 +982,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -1002,7 +1002,7 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
     };
@@ -1028,7 +1028,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -1048,7 +1048,7 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
     };
@@ -1074,7 +1074,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -1094,12 +1094,12 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
     };
 
-        
+
     deriveDictamenEVAL = function(order_id){
       swal({
             title: "Atención",
@@ -1121,7 +1121,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -1141,10 +1141,10 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
-    };           
+    };
 
     anuleDerive = function(order_id){
       swal({
@@ -1167,7 +1167,7 @@ $(document).ready(function(){
                         response = (typeof data == "object") ? data : JSON.parse(data);
                         if(response.status == "success"){
                             swal({
-                                title: "Exito!",
+                                title: "Éxito!",
                                 text: response.message,
                                 type: "success"
                             },
@@ -1187,11 +1187,11 @@ $(document).ready(function(){
                     console.log(error);
                 }
             });
-          }    
+          }
         }
       );
     };
-    
+
     deleteFile = function(file){
       swal({
             title: "Atención",
@@ -1230,7 +1230,7 @@ $(document).ready(function(){
         }
       );
     };
-    
+
 });
 </script>
 @endpush

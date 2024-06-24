@@ -234,7 +234,7 @@ p.centrado {
 
                                                                     <button type="button" title="Endosos de Pólizas" class="btn btn-primary btn-icon" onclick="itemAwardHistories({{ $contract->items[$i]->id }})">
                                                                         <i class="fa fa-list"></i>
-                                                                    </button>                                                                
+                                                                    </button>
                                                                 </td>
                                                             </tr>
                                                         @endfor
@@ -432,12 +432,14 @@ $(document).ready(function(){
           if(isConfirm){
             $.ajax({
               url : '/contracts/{{ $contract->id }}/items/'+item,
+
               method : 'POST',
               data: {_method: 'DELETE', _token: '{{ csrf_token() }}'},
               success: function(data){
                 try{
                     response = (typeof data == "object") ? data : JSON.parse(data);
                     if(response.status == "success"){
+                        swal("Éxito!", "Póliza eliminada correctamente", "success");
                         location.reload();
                     }else{
                         swal("Error!", response.message, "error");
@@ -473,7 +475,7 @@ $(document).ready(function(){
                     response = (typeof data == "object") ? data : JSON.parse(data);
                     if(response.status == "success"){
                         swal({
-                            title: "Exito!",
+                            title: "Éxito!",
                             text: response.message,
                             type: "success"
                         },
@@ -505,7 +507,7 @@ $(document).ready(function(){
                     response = (typeof data == "object") ? data : JSON.parse(data);
                     if(response.status == "success"){
                         swal({
-                            title: "Exito!",
+                            title: "Éxito!",
                             text: response.message,
                             type: "success"
                         },

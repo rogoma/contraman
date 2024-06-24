@@ -65,7 +65,7 @@
       $(document).ready(function() {
 
         @if (session()->has('success'))
-            swal("Exito!", "{{session()->get('success')}}", "success");
+            swal("Éxito!", "{{session()->get('success')}}", "success");
         @endif
 
         @if (session()->has('error'))
