@@ -339,7 +339,7 @@ class ItemAwardHistoriesController extends Controller
      */
     public function destroy(Request $request, $item_id, $itemA_id)
     {
-        $item = ItemAwardHistory::findOrFail($item_id);
+        $item = ItemAwardHistory::findOrFail($itemA_id);
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
         if(!$request->user()->hasPermission(['admin.item_award_histories.delete']) &&

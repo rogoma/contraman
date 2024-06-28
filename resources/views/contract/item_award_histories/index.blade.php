@@ -151,14 +151,13 @@ $(document).ready(function(){
           if(isConfirm){
             $.ajax({
               url : '/items/{{ $item->id }}/items_award_histories/'+item_id,
-            
+
               method : 'POST',
               data: {_method: 'DELETE', _token: '{{ csrf_token() }}'},
               success: function(data){
                 try{
                     response = (typeof data == "object") ? data : JSON.parse(data);
                     if(response.status == "success"){
-                        // location.href = "{{ route('contracts.show', $item->contract->id) }}";
                         swal("Éxito!", "Endoso eliminado correctamente", "success");
                         location.reload();
                     }else{
