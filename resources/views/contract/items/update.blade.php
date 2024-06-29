@@ -28,11 +28,11 @@
             <div class="col-lg-4">
                 <div class="page-header-breadcrumb">
                     <ul class=" breadcrumb breadcrumb-title">
-                        <li class="breadcrumb-item">
-                            <a><i class="feather icon-home"></i></a>
+                        <li class="breadcrumb-item">                            
+                            <a href="{{ route('home') }}"><i class="feather icon-home"></i></a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{ route('contracts.show', $contract->id) }}">Llamados {{ $contract->number_year }}</a>
+                            <a href="{{ route('contracts.show', $contract->id) }}">Llamado: {{ $contract->number_year }}</a>
                         </li>
                     </ul>
                 </div>
@@ -158,7 +158,7 @@
                                         <div class="col-sm-12">
                                             <br>
                                             <div class="form-group text-center">
-                                                <button type="submit" class="btn btn-warning m-b-0 f-12">Modificar Póliza</button>
+                                                <button type="submit" class="btn btn-primary">Modificar Póliza</button>
                                             </div>
                                         </div>
                                     </form>

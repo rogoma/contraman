@@ -75,26 +75,7 @@ class ItemAwardHistoriesController extends Controller
         return view('contract.item_award_histories.create', compact('item'));
     }
 
-    // CREATE ORIGINAL
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    // public function create(Request $request, $item_id)
-    // {
-    //     $item = Item::findOrFail($item_id);
-
-    //     // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
-    //     if(!$request->user()->hasPermission(['admin.item_award_histories.create', 'contracts.item_award_histories.create']) &&
-    //     $item->contract->dependency_id != $request->user()->dependency_id){
-    //         return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
-    //     }
-
-    //     $budget_request_providers = $item->contract->budgetRequestProviders;
-    //     return view('contract.item_award_histories.create', compact('item', 'budget_request_providers'));
-    // }
-
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -142,119 +123,7 @@ class ItemAwardHistoriesController extends Controller
         return redirect()->route('items.item_award_histories.index', $item_id)->with('success', 'Endoso agregado correctamente'); // Caso usuario posee rol pedidos
     }
 
-    // ORIGINAL ITEM AWARD HOSTORIES STORE CON JSCRIPT
-    // /**
-    //  * Store a newly created resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function store(Request $request, $item_id)
-    // {
-    //     $rules = array(
-    //         'policy_id' => 'numeric|required|max:2147483647',
-    //         'number_policy' => 'string|required|unique:items,number_policy',
-    //         'item_from' => 'date_format:d/m/Y',
-    //         'item_to' => 'required|date_format:d/m/Y',
-    //         'amount' => 'nullable|string|max:9223372036854775807',
-    //         'comments' => 'nullable|max:300'
-    //     );
-
-    //     $validator =  Validator::make($request->input(), $rules);
-    //     if ($validator->fails()) {
-    //         return back()->withErrors($validator)->withInput();
-    //     }
-
-    //     $item = Item::find($item_id);
-    //     $types = $request->input('type');
-    //     $numbers_policy = $request->input('number_policy');
-    //     $items_from = $request->input('item_from');
-    //     $items_to = $request->input('item_to');
-    //     $amounts = $request->input('amount');
-    //     $comments = $request->input('comments');
-
-    //     for ($i=0; $i < count($types); $i++) {
-    //         $item_award_history = new ItemAwardHistory;
-    //         $item_award_history->item_id = $item->id;
-    //         $item_award_history->number_policy = $request->input('number_policy');
-    //         $item_award_history->item_from = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_from'))));
-    //         $item_award_history->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));
-
-    //         $amount = str_replace('.', '',($request->input('amount')));
-    //         if ($amount === '' ) {
-    //             $validator->errors()->add('amount', 'Ingrese Monto');
-    //             return back()->withErrors($validator)->withInput();
-    //         }
-
-    //         if ($amount < 0 ) {
-    //             $validator->errors()->add('amount', 'Monto no puede ser negativo');
-    //             return back()->withErrors($validator)->withInput();
-    //         }else{
-    //             $item_award_history->amount = $amount;
-    //         }
-
-    //         $item_award_history->comments = $request->input('comments');
-    //         $item_award_history->creator_user_id = $request->user()->id;  // usuario logueado
-    //         $item_award_history->save();
-    //     }
-
-    //     $request->session()->flash('success', 'Se han agregado exitosamente los endosos');
-    //     return response()->json(['status' => 'success', 'code' => 200], 200);
-    // }
-
-    /**
-     * Funcionalidad de guardado del pedido de ítemes Contrato Abierto.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    // public function store(Request $request, $contract_id)
-    // {
-    //     $rules = array(
-    //         'policy_id' => 'numeric|required|max:2147483647',
-    //         'number_policy' => 'string|required|unique:items,number_policy',
-    //         'item_from' => 'date_format:d/m/Y',
-    //         'item_to' => 'required|date_format:d/m/Y',
-    //         'amount' => 'nullable|string|max:9223372036854775807',
-    //         'comments' => 'nullable|max:300'
-    //     );
-
-    //     $validator =  Validator::make($request->input(), $rules);
-    //     if ($validator->fails()) {
-    //         return back()->withErrors($validator)->withInput();
-    //     }
-
-    //     $item_award_history = new ItemAwardHistory;
-    //     $item_award_history->contract_id = $contract_id;
-    //     $item_award_history->policy_id = $request->input('policy_id');
-    //     $item_award_history->number_policy = $request->input('number_policy');
-    //     $item_award_history->item_from = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_from'))));
-    //     $item_award_history->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));
-
-    //     $amount = str_replace('.', '',($request->input('amount')));
-    //     if ($amount === '' ) {
-    //         $validator->errors()->add('amount', 'Ingrese Monto');
-    //         return back()->withErrors($validator)->withInput();
-    //     }
-
-    //     if ($amount < 0 ) {
-    //         $validator->errors()->add('amount', 'Monto no puede ser negativo');
-    //         return back()->withErrors($validator)->withInput();
-    //     }else{
-    //         $item_award_history->amount = $amount;
-    //     }
-    //     $item_award_history->comments = $request->input('comments');
-    //     $item_award_history->creator_user_id = $request->user()->id;  // usuario logueado
-    //     $item_award_history->save();
-    //     return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza agregada correctamente'); // Caso usuario posee rol pedidos
-    // }
-
-
-
-
-
-
-    /**
+        /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -289,8 +158,7 @@ class ItemAwardHistoriesController extends Controller
         $item = Item::findOrFail($item_id);
         $itemA = ItemAwardHistory::findOrFail($itemA_id);
 
-        $rules = array(
-            // 'policy_id' => 'numeric|required|max:2147483647|unique:items,policy_id',
+        $rules = array(            
             'number_policy' => 'string|required|unique:items,number_policy',
             'item_from' => 'date_format:d/m/Y',
             'item_to' => 'required|date_format:d/m/Y',
@@ -302,10 +170,7 @@ class ItemAwardHistoriesController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-
-        // $itemA = new ItemAwardHistory;
-        // $itemA->item_id = $item_id;
-        // $item->policy_id = $request->input('policy_id');
+        
         $itemA->number_policy = $request->input('number_policy');
         $itemA->item_from = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_from'))));
         $itemA->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));
@@ -326,8 +191,6 @@ class ItemAwardHistoriesController extends Controller
         $itemA->creator_user_id = $request->user()->id;  // usuario logueado
         $itemA->save();
 
-        // $request->session()->flash('success', 'Se ha modificado exitosamente el endoso de la póliza');
-        // return response()->json(['status' => 'success', 'code' => 200], 200);
         return redirect()->route('items.item_award_histories.index',$item_id)->with('success', 'Se ha modificado exitosamente el endoso de la póliza'); // Caso usuario posee rol pedidos
     }
 
@@ -337,9 +200,11 @@ class ItemAwardHistoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $item_id, $itemA_id)
+    public function destroy(Request $request, $item_id, $itemA_id)    
     {
-        $item = ItemAwardHistory::findOrFail($itemA_id);
+        $item = Item::findOrFail($item_id);
+
+        $itemA = ItemAwardHistory::findOrFail($itemA_id);
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
         if(!$request->user()->hasPermission(['admin.item_award_histories.delete']) &&
@@ -348,13 +213,13 @@ class ItemAwardHistoriesController extends Controller
         }
 
         // Eliminamos en caso de no existir registros referenciando al item
-        $item->delete();
+        $itemA->delete();
         session()->flash('status', 'success');
-        session()->flash('message', 'Se ha eliminado la póliza ' . $item->number_policy);
+        session()->flash('message', 'Se ha eliminado el endoso ' . $itemA->number_policy);
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Se ha eliminado la póliza'. $item->number_policy,
+            'message' => 'Se ha eliminado el endoso'. $itemA->number_policy,
             'code' => 200
         ], 200);
 

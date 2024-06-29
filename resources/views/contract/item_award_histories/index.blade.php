@@ -46,22 +46,7 @@
                                         {{-- <h5>Producto {{ $item->level5_catalog_code->description }}</h5> --}}
                                     </div>
                                     <div class="float-right">
-
-                                    {{-- En caso de no tener precios referenciales relacionados--}}
-                                    {{-- @if($item_award_histories->count() == 0)
-                                        @if (Auth::user()->hasPermission(['admin.item_award_histories.create', 'contracts.item_award_histories.create']) || $item->contract->dependency_id == Auth::user()->dependency_id)
-                                            <a href="{{ route('item_award_histories.create', $item->id) }}" class="btn btn-primary">Agregar Endoso</a>
-                                        @endif
-                                    @else
-                                        @if (Auth::user()->hasPermission(['admin.item_award_histories.update', 'contracts.item_award_histories.update']) || $item->contract->dependency_id == Auth::user()->dependency_id)
-                                            <a href="{{ route('item_award_histories.edit', $item->id) }}" class="btn btn-warning">Editar</a>
-                                        @endif
-                                        @if (Auth::user()->hasPermission(['admin.item_award_histories.delete', 'contracts.item_award_histories.delete']) || $item->contract->dependency_id == Auth::user()->dependency_id)
-                                            <button type="button" title="Borrar" class="btn btn-danger" onclick="deleteItemAwardHistories({{ $item->id }})">
-                                                Borrar
-                                            </button>
-                                        @endif
-                                    @endif --}}
+                                    
                                     </div>
                                 </div>
                                 <div class="card-block">
@@ -150,7 +135,7 @@ $(document).ready(function(){
         function(isConfirm){
           if(isConfirm){
             $.ajax({
-              url : '/items/{{ $item->id }}/items_award_histories/'+item_id,
+              url : '/items/{{ $item->id }}/item_award_histories/'+item_id,                    
 
               method : 'POST',
               data: {_method: 'DELETE', _token: '{{ csrf_token() }}'},

@@ -192,7 +192,7 @@ p.centrado {
                                             <table id="items" class="table table-striped table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <th>#</th>
+                                                            <th>#</th>                                                            
                                                             <th>Póliza</th>
                                                             <th>N° de Póliza</th>
                                                             <th>Vigencia Desde</th>
@@ -205,7 +205,7 @@ p.centrado {
                                                     <tbody>
                                                         @for ($i = 0; $i < count($contract->items); $i++)
                                                             <tr>
-                                                                <td>{{ ($i+1) }}</td>
+                                                                <td>{{ ($i+1) }}</td>                                                                
                                                                 <td>{{ $contract->items[$i]->policy->description }}</td>
                                                                 <td>{{ $contract->items[$i]->number_policy }}</td>
                                                                 <td>{{ $contract->items[$i]->itemFromDateFormat() }}</td>
@@ -232,7 +232,7 @@ p.centrado {
                                                                     </button>
                                                                 @endif
 
-                                                                    <button type="button" title="Endosos de Pólizas" class="btn btn-primary btn-icon" onclick="itemAwardHistories({{ $contract->items[$i]->id }})">
+                                                                    <button type="button" title="Endosos de Póliza" class="btn btn-primary btn-icon" onclick="itemAwardHistories({{ $contract->items[$i]->id }})">
                                                                         <i class="fa fa-list"></i>
                                                                     </button>
                                                                 </td>

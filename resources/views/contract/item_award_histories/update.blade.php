@@ -16,11 +16,11 @@
             <div class="col-lg-4">
                 <div class="page-header-breadcrumb">
                     <ul class=" breadcrumb breadcrumb-title">
-                        <li class="breadcrumb-item">
-                            <a><i class="feather icon-home"></i></a>
+                        <li class="breadcrumb-item">                            
+                            <a href="{{ route('home') }}"><i class="feather icon-home"></i></a>
                         </li>
                         <li class="breadcrumb-item">
-                            {{-- <a href="{{ route('items.show', $itemA->id) }}">Llamados {{ $itemA->number_year }}</a> --}}
+                            <a href="{{ route('items.item_award_histories.index', $item->id) }}">Endosos</a>                            
                         </li>
                     </ul>
                 </div>
@@ -51,20 +51,7 @@
                                         <div class="container">
                                             <h3 style="text-align: center;">Modificar Endoso</h3>
                                             <br>
-                                            {{-- <div class="form-group row @error('policy_id') has-danger @enderror">
-                                                <label class="col-sm-2 col-form-label">Tipo de Póliza</label>
-                                                <div class="col-sm-10">
-                                                    <select id="policy_id" name="policy_id" class="form-control">
-                                                        <option value="">--- Seleccionar Tipo de Póliza ---</option>
-                                                        @foreach ($policies as $policie)
-                                                            <option value="{{ $policie ->id }}" @if ($policie-> id == old('policy_id'  , $itemA->policy_id)) selected @endif>{{ $policie->description }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                    @error('policy_id')
-                                                        <div class="col-form-label">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
-                                            </div> --}}
+                                            
                                             <div class="form-group row @error('number_policy') has-danger @enderror">
                                                 <label class="col-sm-2 col-form-label">N° de Endoso</label>
                                                 <div class="col-sm-10">
@@ -92,8 +79,7 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                         <label class="col-form-label @error('item_to') has-danger @enderror">Vigencia Hasta</label>
-                                                        <div class="input-group @error('item_to') has-danger @enderror">
-                                                            {{-- <input type="text" id="item_to" name="item_to" value="{{ old('item_to') }}" class="form-control" autocomplete="off"> --}}
+                                                        <div class="input-group @error('item_to') has-danger @enderror">                                                            
                                                             <input type="text" id="item_to" name="item_to" value="{{ old('item_to',date('d/m/Y', strtotime($itemA->item_to))) }}" class="form-control text-align: left" autocomplete="off">
                                                             <span class="input-group-append" id="basic-addon">
                                                                 <label class="input-group-text" onclick="show('item_to');"><i class="fa fa-calendar"></i></label>
@@ -149,7 +135,7 @@
                                         <div class="col-sm-12">
                                             <br>
                                             <div class="form-group text-center">
-                                                <button type="submit" class="btn btn-warning m-b-0 f-12">Modificar Endoso</button>
+                                                <button type="submit" class="btn btn-primary">Modificar Endoso</button>                                                
                                             </div>
                                         </div>
                                     </form>

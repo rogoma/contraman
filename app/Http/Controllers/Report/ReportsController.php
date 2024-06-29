@@ -89,7 +89,7 @@ class ReportsController extends Controller{
 
             //Donde contracts3 muestra endosos (itemawards_histories)
             $contracts3 = DB::table('vista_contracts_full2')//vista que muestra los datos
-            ->select(['polizas', 'number_policy1','item_from1','item_to1',
+            ->select(['polizas', 'number_policy','number_policy1','item_from1','item_to1',
             'amount1', 'comments1', 'contratista', 'dependencia'])
             ->where('contract_id', '=', $contract_id)
             ->whereNotNull('number_policy1')
