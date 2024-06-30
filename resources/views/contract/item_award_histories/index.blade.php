@@ -69,7 +69,8 @@
                                                     <td>{{ ($i+1) }}</td>
                                                     <td>{{ $item->itemAwardHistories[$i]->number_policy }}</td>
                                                     <td>{{ $item->itemAwardHistories[$i]->itemFromDateFormat() }}</td>
-                                                    <td>{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td>
+                                                    {{-- <td>{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td> --}}
+                                                    <td style="color:red;font-weight">{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td>
                                                     <td>{{ $item->itemAwardHistories[$i]->amountFormat() }}</td>
                                                     <td>{{ $item->itemAwardHistories[$i]->comments }}</td>
                                                     <td>

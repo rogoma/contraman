@@ -216,7 +216,8 @@ p.centrado {
                                                                 {{-- @if ((($contract->items[$i]->item_to)))
                                                                     <td style="color:#ff0000">{{ $contract->items[$i]->itemToDateFormat() }}</td>
                                                                 @endif --}}
-                                                                <td>{{ $contract->items[$i]->itemToDateFormat() }}</td>
+                                                                {{-- <td>{{ $contract->items[$i]->itemToDateFormat() }}</td> --}}
+                                                                <td style="color:red;font-weight">{{ $contract->items[$i]->itemToDateFormat() }}</td>
                                                                 <td>{{ $contract->items[$i]->AmountFormat()}} </td>
                                                                 <td>{{ $contract->items[$i]->comments }}</td>
 
