@@ -59,6 +59,7 @@ p.centrado {
             </div>
         </div>
     </div>
+    
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="page-wrapper">
@@ -87,15 +88,9 @@ p.centrado {
 
                                                     @if ((Auth::user()->hasPermission(['admin.contracts.delete'])) || Auth::user()->hasPermission(['contracts.contracts.delete']))
                                                             {{-- <a href="#" style="font-size: 14px; font-weight: bold; color:red;background-color:lightblue;" class="dropdown-item waves-effect f-w-600" onclick="deleteContract('{{ $contract->id }}')">Eliminar Llamado</a> --}}
-
-
                                                             {{-- <button type="button" title="Borrar" class="btn btn-danger btn-icon" onclick="deleteItem({{ $contract->id }})"><i class="fa fa-trash"></i></button>                                                         --}}
                                                     @endif
 
-                                                    {{-- Verificamos permisos de derivación del pedido y que el pedido tenga estado PROCESADO PEDIDO --}}
-                                                    {{-- @if (Auth::user()->hasPermission(['derive_contracts.contracts.derive']) && $contract->contract_state_id == 4)
-                                                    <a class="dropdown-item waves-effect f-w-600" href="{{ route('derive_contracts.create', $contract->id) }}">Procesar Pedido en DGAF</a>
-                                                    @endif --}}
                                                 </div>
                                         </div>
                                     </div>

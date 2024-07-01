@@ -36,8 +36,8 @@
                             <div class="dropdown-primary dropdown">
                                 <div class="dropdown-toggle" data-toggle="dropdown">
                                     <img src="{{ asset('img/user.png') }}" class="img-radius" alt="User-Profile-Image">
-                                    <span style="color:blue">{{ Auth::user()->getFullName() }} -</span>
-                                    <span style="color:#ff0000">{{ Auth::user()->role->description }}</span>
+                                    <span style="color:blue">{{ Auth::user()->getFullName() }} </span>
+                                    {{-- <span style="color:#ff0000">{{ Auth::user()->role->description }}</span> --}}
 
                                     <i class="feather icon-chevron-down"></i>
                                 </div>
