@@ -168,7 +168,13 @@ class ItemsController extends Controller
     public function store(Request $request, $contract_id)
     {
         $rules = array(
-            'policy_id' => 'numeric|required|max:2147483647|unique:items,policy_id',
+            // 'policy_id' => 'numeric|required|max:2147483647|unique:items,policy_id',
+            'policy_id' => [
+            'numeric','required','max:2147483647',
+            Rule::unique('items')->where(function ($query) use ($contract_id) {
+                return $query->where('contract_id', $contract_id);
+                })
+            ],
             'number_policy' => 'string|required|unique:items,number_policy',
             'item_from' => 'date_format:d/m/Y',
             'item_to' => 'required|date_format:d/m/Y',
