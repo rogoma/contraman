@@ -108,6 +108,7 @@
         <tr>
             <th>Tipo Póliza</th>
             <th>N° Póliza</th>
+            <th>Monto</th>
             <th>Vencimiento</th>
             {{-- <th>Cumple1</th>
             <th>Cumple2</th>
@@ -119,7 +120,7 @@
         <tr>
             <td> {{ $contracts2[$i]->polizas }}</td>
             <td> {{ $contracts2[$i]->number_policy }}</td>
-            {{-- <td> {{ $contracts2[$i]->year_adj }}</td> --}}
+            <td> {{ number_format($contracts2[$i]->amount,'0', ',','.') }} </td>
             <td> {{ date('d/m/Y', strtotime($contracts2[$i]->item_to )) }}</td>
             {{-- <td> {{ $contracts2[$i]->comments}}</td>
             <td> {{ $contracts2[$i]->comments}}</td>
@@ -135,10 +136,12 @@
         <tr>
             <th>Referencia-Endoso</th>
             <th>N° Póliza(Endoso) </th>
+            <th>Monto</th>
             <th>Vencimiento</th>
             {{-- <th>Cumple1</th>
             <th>Cumple2</th>
             <th>Cumple3</th> --}}
+            <th>Estado</th>
             <th>Comentarios</th>
         </tr>
 
@@ -146,11 +149,12 @@
         <tr>
             <td> {{ $contracts3[$i]->polizas}} - N° Póliza: {{ $contracts3[$i]->number_policy}}</td>
             <td> {{ $contracts3[$i]->number_policy1 }}</td>
-            {{-- <td> {{ $contracts2[$i]->year_adj }}</td> --}}
+            <td> {{ number_format($contracts3[$i]->amount1,'0', ',','.') }} </td>
             <td> {{ date('d/m/Y', strtotime($contracts3[$i]->item_to1 )) }}</td>
             {{-- <td> {{ $contracts3[$i]->comments1}}</td>
             <td> {{ $contracts3[$i]->comments1}}</td>
             <td> {{ $contracts3[$i]->comments1}}</td> --}}
+            <td> {{ $contracts3[$i]->state1}}</td>
             <td> {{ $contracts3[$i]->comments1}}</td>
         </tr>
         @endfor

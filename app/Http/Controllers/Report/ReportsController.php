@@ -56,11 +56,17 @@ class ReportsController extends Controller{
             ->get();
 
             //Donde contracts_full es una vista
-            $contracts2 = DB::table('vista_contracts_full')//vista que muestra los datos
-            ->select(['polizas', 'number_policy','tipo_contrato','item_from','item_to',
-            'amount', 'comments', 'contratista', 'dependencia'])
-            ->where('contract_id', '=', $contract_id)
-            ->get();
+            // $contracts2 = DB::table('vista_contracts_full')//vista que muestra los datos
+            // ->select(['polizas', 'number_policy','tipo_contrato','item_from','item_to',
+            // 'amount', 'comments', 'contratista', 'dependencia'])
+            // ->where('contract_id', '=', $contract_id)
+            // ->get();
+            $contracts2 = DB::table('vista_contracts_full')
+    ->select(DB::raw('DISTINCT ON (polizas) polizas, number_policy, tipo_contrato, item_from, item_to, amount, comments, contratista, dependencia'))
+    ->where('contract_id', '=', $contract_id)
+    ->where('dependency_id', $request->user()->dependency_id)
+    ->orderBy('polizas')
+    ->get();
 
             //Donde contracts3 muestra endosos (itemawards_histories)
             $contracts3 = DB::table('vista_contracts_full2')//vista que muestra los datos
@@ -80,17 +86,23 @@ class ReportsController extends Controller{
             ->get();
 
             //Donde contracts_full es una vista
-            $contracts2 = DB::table('vista_contracts_full')//vista que muestra los datos
-            ->select(['polizas', 'number_policy','tipo_contrato','item_from','item_to',
-            'amount', 'comments', 'contratista', 'dependencia'])
-            ->where('contract_id', '=', $contract_id)
-            ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
-            ->get();
+            // $contracts2 = DB::table('vista_contracts_full')//vista que muestra los datos
+            // ->select (['polizas', 'number_policy','tipo_contrato','item_from','item_to',
+            // 'amount', 'comments', 'contratista', 'dependencia'])
+            // ->where('contract_id', '=', $contract_id)
+            // ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
+            // ->get();
+            $contracts2 = DB::table('vista_contracts_full')
+    ->select(DB::raw('DISTINCT ON (polizas) polizas, number_policy, tipo_contrato, item_from, item_to, amount, comments, contratista, dependencia'))
+    ->where('contract_id', '=', $contract_id)
+    ->where('dependency_id', $request->user()->dependency_id)
+    ->orderBy('polizas')
+    ->get();
 
             //Donde contracts3 muestra endosos (itemawards_histories)
             $contracts3 = DB::table('vista_contracts_full2')//vista que muestra los datos
             ->select(['polizas', 'number_policy','number_policy1','item_from1','item_to1',
-            'amount1', 'comments1', 'contratista', 'dependencia'])
+            'amount1', 'comments1', 'contratista', 'dependencia', 'state1'])
             ->where('contract_id', '=', $contract_id)
             ->whereNotNull('number_policy1')
             ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
@@ -275,14 +287,25 @@ class ReportsController extends Controller{
 
         if($request->user()->hasPermission(['admin.contracts.show'])){
             $contracts = DB::table('vista_contracts_vctos')//vista que muestra los datos
-            ->select(['iddncp','number_year','contratista','tipo_contrato','total_amount','fecha_tope_advance',
-            'vcto_adv','dias_advance', 'llamado', 'polizas', 'number_policy', 'modalidad', 'comentarios','dependencia'])
+            ->select(DB::raw('DISTINCT ON (number_policy)  iddncp, number_year, contratista, tipo_contrato, total_amount, fecha_tope_advance, vcto_adv, dias_advance,llamado,polizas,number_policy,modalidad,comentarios,dependencia'))
             ->where('dias_advance', '<=', 0)
             ->get();
+
+            // $contracts = DB::table('vista_contracts_vctos')//vista que muestra los datos
+            // ->select(['iddncp','number_year','contratista','tipo_contrato','total_amount','fecha_tope_advance',
+            // 'vcto_adv','dias_advance', 'llamado', 'polizas', 'number_policy', 'modalidad', 'comentarios','dependencia'])
+            // ->where('dias_advance', '<=', 0)
+            // ->get();
+
+    //         $contracts2 = DB::table('vista_contracts_full')
+    // ->select(DB::raw('DISTINCT ON (polizas) polizas, number_policy, tipo_contrato, item_from, item_to, amount, comments, contratista, dependencia'))
+    // ->where('dependency_id', $request->user()->dependency_id)
+    // ->orderBy('polizas')
+    // ->get();
+
         }else{
             $contracts = DB::table('vista_contracts_vctos')//vista que muestra los datos
-            ->select(['iddncp','number_year','contratista','tipo_contrato','total_amount','fecha_tope_advance',
-            'vcto_adv','dias_advance', 'llamado', 'polizas', 'number_policy', 'modalidad', 'comentarios','dependencia'])
+            ->select(DB::raw('DISTINCT ON (number_policy)  iddncp, number_year, contratista, tipo_contrato, total_amount, fecha_tope_advance, vcto_adv, dias_advance,llamado,polizas,number_policy,modalidad,comentarios,dependencia'))
             ->where('dias_advance', '<=', 0)
             ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
             ->get();

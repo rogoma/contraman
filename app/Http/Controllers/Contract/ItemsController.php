@@ -246,12 +246,11 @@ class ItemsController extends Controller
         $item = Item::findOrFail($item_id);
 
         $rules = array(
-            // 'policy_id' => 'numeric|required|max:2147483647',
             'policy_id' => [
-                'numeric',
-                'required',
-                'max:2147483647',
-                Rule::unique('items')->ignore($item->id),
+            'numeric','required','max:2147483647',
+            Rule::unique('items')->ignore($item->id)->where(function ($query) use ($contract_id) {
+                return $query->where('contract_id', $contract_id);
+                })
             ],
             'number_policy' => [
                 'string',

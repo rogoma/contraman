@@ -46,7 +46,7 @@
                                         {{-- <h5>Producto {{ $item->level5_catalog_code->description }}</h5> --}}
                                     </div>
                                     <div class="float-right">
-                                    
+
                                     </div>
                                 </div>
                                 <div class="card-block">
@@ -59,6 +59,7 @@
                                                     <th>Vigencia Desde</th>
                                                     <th>Vigencia Hasta</th>
                                                     <th>Monto</th>
+                                                    <th>Estado</th>
                                                     <th>Comentarios</th>
                                                     <th>Acciones</th>
                                                 </tr>
@@ -72,6 +73,12 @@
                                                     {{-- <td>{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td> --}}
                                                     <td style="color:red;font-weight">{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td>
                                                     <td>{{ $item->itemAwardHistories[$i]->amountFormat() }}</td>
+                                                    @if ($item->itemAwardHistories[$i]->state_id == 1)
+                                                        <td>Activo</td>
+                                                    @else
+                                                        <td>Inactivo</td>
+                                                    @endif
+                                                    {{-- <td>{{ $item->itemAwardHistories[$i]->state_id }}</td> --}}
                                                     <td>{{ $item->itemAwardHistories[$i]->comments }}</td>
                                                     <td>
                                                     {{-- @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']) || $item->dependency_id == Auth::user()->dependency_id) --}}
@@ -136,7 +143,7 @@ $(document).ready(function(){
         function(isConfirm){
           if(isConfirm){
             $.ajax({
-              url : '/items/{{ $item->id }}/item_award_histories/'+item_id,                    
+              url : '/items/{{ $item->id }}/item_award_histories/'+item_id,
 
               method : 'POST',
               data: {_method: 'DELETE', _token: '{{ csrf_token() }}'},
