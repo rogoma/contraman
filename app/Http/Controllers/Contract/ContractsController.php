@@ -937,7 +937,7 @@ class ContractsController extends Controller
     }
 
     /**
-     * Obtener notificaciones de alertas
+     * Obtener notificaciones de alertas de vencimientos
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -995,5 +995,5 @@ class ContractsController extends Controller
             }
             // return response()->json(['status' => 'success', 'alerta_advance' => $alerta_advance,'alerta_fidelity' => $alerta_fidelity], 200);
             return response()->json(['status' => 'success', 'alerta_advance' => $alerta_advance], 200);
-    }   
+    }
 }
