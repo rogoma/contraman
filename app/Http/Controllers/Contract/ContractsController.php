@@ -162,6 +162,7 @@ class ContractsController extends Controller
             'contract_type_id' => 'numeric|required|max:999999',
             'total_amount' => 'string|required|max:9223372036854775807',
             'dependency_id' => 'numeric|required|max:999999',
+            'contract_admin_id' => 'numeric|required|max:999999',            
             'comments' => 'nullable|max:300',
 
             // 'advance_validity_from' => 'nullable|date_format:d/m/Y',
@@ -522,6 +523,7 @@ class ContractsController extends Controller
             'contract_type_id' => 'numeric|required|max:999999',
             'total_amount' => 'string|required|max:9223372036854775807',
             'dependency_id' => 'numeric|required|max:999999',
+            'contract_admin_id' => 'numeric|required|max:999999',
             'comments' => 'nullable|max:300',
 
             // 'advance_validity_from' => 'nullable|date_format:d/m/Y',

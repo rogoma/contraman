@@ -118,6 +118,7 @@ class ItemAwardHistoriesController extends Controller
             $itemA->amount = $amount;
         }
         $itemA->comments = $request->input('comments');
+        $itemA->state_id = 1;
         $itemA->creator_user_id = $request->user()->id;  // usuario logueado
         $itemA->save();
         return redirect()->route('items.item_award_histories.index', $item_id)->with('success', 'Endoso agregado correctamente'); // Caso usuario posee rol pedidos

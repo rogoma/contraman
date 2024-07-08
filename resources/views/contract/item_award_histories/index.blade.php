@@ -71,15 +71,21 @@
                                                     <td>{{ $item->itemAwardHistories[$i]->number_policy }}</td>
                                                     <td>{{ $item->itemAwardHistories[$i]->itemFromDateFormat() }}</td>
                                                     {{-- <td>{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td> --}}
-                                                    <td style="color:red;font-weight">{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td>
+                                                    @if ($item->itemAwardHistories[$i]->state_id == 1)
+                                                        <td style="color:red;font-weight">{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td>
+                                                    @else
+                                                    <td>{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td>
+                                                    @endif
                                                     <td>{{ $item->itemAwardHistories[$i]->amountFormat() }}</td>
                                                     @if ($item->itemAwardHistories[$i]->state_id == 1)
                                                         <td>Activo</td>
                                                     @else
-                                                        <td>Inactivo</td>
+                                                        <td style="color:red;font-weight">Inactivo</td>
                                                     @endif
                                                     {{-- <td>{{ $item->itemAwardHistories[$i]->state_id }}</td> --}}
                                                     <td>{{ $item->itemAwardHistories[$i]->comments }}</td>
+
+                                                    @if ($item->itemAwardHistories[$i]->state_id == 1)
                                                     <td>
                                                     {{-- @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']) || $item->dependency_id == Auth::user()->dependency_id) --}}
                                                         <button type="button" title="Editar" class="btn btn-warning btn-icon" onclick="updateItem({{ $item->itemAwardHistories[$i]->id }})">
@@ -92,6 +98,11 @@
                                                         </button>
                                                     {{-- @endif --}}
                                                     </td>
+                                                    @else
+                                                        <td>                                                       
+                                                            
+                                                        </td>
+                                                    @endif
                                                 </tr>
                                             @endfor
                                             </tbody>
