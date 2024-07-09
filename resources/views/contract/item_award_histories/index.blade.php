@@ -36,7 +36,9 @@
         <div class="main-body">
             <div class="page-wrapper">
                 <div class="page-body">
-                    <h5>Póliza: {{ $item->policy->description }} - N°: {{ $item->number_policy }}</h5>
+                    {{-- <h5>Póliza: {{ $item->policy->description }} - N°: {{ $item->number_policy }}</h5> --}}
+                    <h3 style="font-size: 20px;color: blue;">Póliza: {{ $item->policy->description }} - N°: {{ $item->number_policy }} - Gs.: {{ $item->amountFormat() }}</h3>
+
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="card">
@@ -99,8 +101,8 @@
                                                     {{-- @endif --}}
                                                     </td>
                                                     @else
-                                                        <td>                                                       
-                                                            
+                                                        <td>
+
                                                         </td>
                                                     @endif
                                                 </tr>

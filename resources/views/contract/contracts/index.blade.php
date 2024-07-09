@@ -75,7 +75,8 @@ p.centrado {
                                         <h5>Listado de Llamados de Licitaciones</h5>
                                     </div>
                                     <br>
-                                    @if (Auth::user()->hasPermission(['derive_contracts.contracts.show','contracts.contracts.create','admin.orders.create']))
+                                    {{-- @if (Auth::user()->hasPermission(['derive_contracts.contracts.show','contracts.contracts.create','admin.orders.create'])) --}}
+                                    @if (Auth::user()->hasPermission(['admin.orders.create']))
                                         <div class="float-left">
                                             <br>
                                             <a href="{{ route('contracts.create') }}" title="Agregar llamado" class="btn btn-primary">Agregar Llamado</a>

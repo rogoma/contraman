@@ -16,7 +16,7 @@
             <div class="col-lg-4">
                 <div class="page-header-breadcrumb">
                     <ul class=" breadcrumb breadcrumb-title">
-                        <li class="breadcrumb-item">                            
+                        <li class="breadcrumb-item">
                             <a href="{{ route('home') }}"><i class="feather icon-home"></i></a>
                         </li>
                         <li class="breadcrumb-item">
@@ -37,7 +37,7 @@
                             <div class="card">
                                 <div class="card-header">
                                     {{-- <h5>Agregar Endoso al Llamado Nº {{ $item->iddncp }}</h5> --}}
-                                    <h5>Póliza: {{ $item->policy->description }} - N°: {{ $item->number_policy }}</h5>
+                                    <h4 style="font-size: 20px;color: blue;float: left;">Póliza: {{ $item->policy->description }} - N°: {{ $item->number_policy }} - Gs.: {{ $item->amountFormat() }}</h4>
                                     <br><br>
                                     <label id="fecha_actual" name="fecha_actual"  style="font-size: 20px;color: #FF0000;float: left;" for="fecha_actual">{{ Carbon\Carbon::now()->format('d/m/Y') }}</label>
                                     {{-- <label style="font-size: 20px;color: #FF0000;float: left;">FECHA: </label> --}}
@@ -46,6 +46,9 @@
                                     <form method="POST" action="{{ route('items.item_award_histories.store', $item->id) }}">
                                         @csrf
                                         <div class="container">
+                                            {{-- se captura en modo hidden el monto para pasar al controlador, se debe controlar monto poliza vs monto endoso --}}
+                                            <input type="hidden" id="tot" name="tot" value="{{ $item->amount }}">
+
                                             <h3 style="text-align: center;">Agregar Endoso</h3>
                                             {{-- <br>
                                             <div class="form-group row @error('policy_id') has-danger @enderror">
@@ -187,10 +190,10 @@ $(document).ready(function(){
         event.target.value = '0';
         return;
     }
-    
+
     // Convertimos a número
     monto = parseFloat(monto);
-    
+
     // Verificamos si el monto es un número válido y no NaN
     if (isNaN(monto) || monto < 0) {
         event.target.value = '0';

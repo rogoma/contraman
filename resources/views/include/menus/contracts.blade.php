@@ -33,22 +33,22 @@
                                     <span class="pcoded-mtext">Listado de Llamados</span>
                                     </a>
                                 </li>
-                                <li class="@if(Route::currentRouteName() == 'contracts.create') active @endif">
+                                {{-- <li class="@if(Route::currentRouteName() == 'contracts.create') active @endif">
                                     <a href="{{ route('contracts.create') }}" class="waves-effect waves-dark">
                                     <span class="pcoded-mtext">Agregar Llamado</span>
                                     </a>
-                                </li>
+                                </li> --}}
                             </ul>
                         </li>
                     </ul>
-                    <div class="pcoded-navigation-label">Panel de Administración</div>
+                    {{-- <div class="pcoded-navigation-label">Panel de Administración</div>
                     <ul class="pcoded-item pcoded-left-item">
                         <li class="pcoded-hasmenu">
                             <a href="javascript:void(0)" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="fa fa-folder-open"></i></span>
                             <span class="pcoded-mtext">Admin. Contratos</span>
                             </a>
-                                <ul class="pcoded-submenu">
+                                <ul class="pcoded-submenu"> --}}
                                     {{-- <li class="@if(Route::currentRouteName() == 'departments.index') active @endif">
                                         <a href="{{ route('departments.index') }}" class="waves-effect waves-dark">
                                         <span class="pcoded-mtext">Tipos de Contratos</span>
@@ -69,7 +69,7 @@
                                         <span class="pcoded-mtext">Tipos de Estados</span>
                                         </a>
                                     </li> --}}
-                                    <li class="@if(Route::currentRouteName() == 'providers.index') active @endif">
+                                    {{-- <li class="@if(Route::currentRouteName() == 'providers.index') active @endif">
                                         <a href=" {{ route('providers.index') }} " class="waves-effect waves-dark">
                                         <span class="pcoded-micon"><i class="fa fa-suitcase"></i></span>
                                         <span class="pcoded-mtext">Contratistas</span>
@@ -78,7 +78,7 @@
                                 </ul>
                             </li>
                         </ul>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </nav>

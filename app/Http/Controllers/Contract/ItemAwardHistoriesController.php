@@ -75,7 +75,7 @@ class ItemAwardHistoriesController extends Controller
         return view('contract.item_award_histories.create', compact('item'));
     }
 
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -106,6 +106,9 @@ class ItemAwardHistoriesController extends Controller
         $itemA->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));
 
         $amount = str_replace('.', '',($request->input('amount')));
+        // monto de póliza del form create
+        $amount_poliza = $request->input('tot');
+
         if ($amount === '' ) {
             $validator->errors()->add('amount', 'Ingrese Monto');
             return back()->withErrors($validator)->withInput();
@@ -113,6 +116,19 @@ class ItemAwardHistoriesController extends Controller
 
         if ($amount < 0 ) {
             $validator->errors()->add('amount', 'Monto no puede ser negativo');
+            return back()->withErrors($validator)->withInput();
+        }else{
+            $itemA->amount = $amount;
+        }
+
+        // consulta si monto de endoso en mayor a monto de poliza
+        // var_dump ($amount);
+        // var_dump ($amount_poliza);
+        // exit;
+
+
+        if ($amount > $amount_poliza) {
+            $validator->errors()->add('amount', 'Monto no puede ser mayor a monto póliza');
             return back()->withErrors($validator)->withInput();
         }else{
             $itemA->amount = $amount;
@@ -159,7 +175,7 @@ class ItemAwardHistoriesController extends Controller
         $item = Item::findOrFail($item_id);
         $itemA = ItemAwardHistory::findOrFail($itemA_id);
 
-        $rules = array(            
+        $rules = array(
             'number_policy' => 'string|required|unique:items,number_policy',
             'item_from' => 'date_format:d/m/Y',
             'item_to' => 'required|date_format:d/m/Y',
@@ -171,7 +187,7 @@ class ItemAwardHistoriesController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-        
+
         $itemA->number_policy = $request->input('number_policy');
         $itemA->item_from = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_from'))));
         $itemA->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));
@@ -201,7 +217,7 @@ class ItemAwardHistoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $item_id, $itemA_id)    
+    public function destroy(Request $request, $item_id, $itemA_id)
     {
         $item = Item::findOrFail($item_id);
 

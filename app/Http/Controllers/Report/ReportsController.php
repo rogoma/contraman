@@ -237,11 +237,18 @@ class ReportsController extends Controller{
             ->get();
         }
 
-        $view = View::make('reports.contracts', compact('contracts', 'nombreMetodo'))->render();
-        $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML($view);
-        $pdf->setPaper('A4', 'landscape');//coloca en apaisado
-        return $pdf->stream('LLAMADO-CONTRATOS RESCINDIDOS'.'.pdf');
+        // CONTROLA SI HAY DATOS PARA GENERAR REPORTE
+        $val = $contracts->count();
+
+        if ($val > 0) {
+            $view = View::make('reports.contracts', compact('contracts', 'nombreMetodo'))->render();
+            $pdf = App::make('dompdf.wrapper');
+            $pdf->loadHTML($view);
+            $pdf->setPaper('A4', 'landscape');//coloca en apaisado
+            return $pdf->stream('LLAMADO-CONTRATOS RESCINDIDOS'.'.pdf');
+        }else{
+            return redirect()->route('contracts.index')->with('error', 'NO HAY DATOS PARA GENERAR EL REPORTE');
+        }
     }
 
     // // Para mostrar detalles de las pólizas

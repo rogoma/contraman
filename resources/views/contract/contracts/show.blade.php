@@ -59,7 +59,7 @@ p.centrado {
             </div>
         </div>
     </div>
-    
+
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="page-wrapper">
@@ -76,8 +76,10 @@ p.centrado {
                                             <h5 style="font-size: 17px; font-weight: bold; color:#FF0000">Dependencia Responsable: {{ $contract->dependency->description }}</h5>
                                         </div>
                                         <div class="col-sm-2">
-                                                @if (in_array($contract->contract_state_id, [1,2]))
-                                                    <button class="btn btn-primary dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Acciones</button>
+                                                @if (Auth::user()->hasPermission(['admin.orders.create']))
+                                                    @if (in_array($contract->contract_state_id, [1,2]))
+                                                        <button class="btn btn-primary dropdown-toggle waves-effect" type="button" id="acciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Acciones</button>
+                                                    @endif
                                                 @endif
 
                                                 <div class="dropdown-menu" aria-labelledby="acciones" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
@@ -187,7 +189,7 @@ p.centrado {
                                             <table id="items" class="table table-striped table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <th>#</th>                                                            
+                                                            <th>#</th>
                                                             <th>Póliza</th>
                                                             <th>N° de Póliza</th>
                                                             <th>Vigencia Desde</th>
@@ -200,7 +202,7 @@ p.centrado {
                                                     <tbody>
                                                         @for ($i = 0; $i < count($contract->items); $i++)
                                                             <tr>
-                                                                <td>{{ ($i+1) }}</td>                                                                
+                                                                <td>{{ ($i+1) }}</td>
                                                                 <td>{{ $contract->items[$i]->policy->description }}</td>
                                                                 <td>{{ $contract->items[$i]->number_policy }}</td>
                                                                 <td>{{ $contract->items[$i]->itemFromDateFormat() }}</td>
@@ -239,7 +241,8 @@ p.centrado {
                                             </table>
 
                                                 <div class="text-right">
-                                                    @if (Auth::user()->hasPermission(['contracts.contracts.create','admin.orders.create']))
+                                                    {{-- @if (Auth::user()->hasPermission(['contracts.contracts.create','admin.orders.create'])) --}}
+                                                    @if (Auth::user()->hasPermission(['admin.orders.create']))
                                                         {{-- Si pedido está anulado no muestra agregar ítems --}}
                                                         @if (in_array($contract->contract_state_id, [1,2]))
                                                         <a href="{{ route('contracts.items.create', $contract->id) }}" class="btn btn-primary">Agregar Póliza</a>
@@ -313,8 +316,10 @@ p.centrado {
                                                 </tbody>
                                             </table>
                                             <div class="text-right">
-                                                @if (in_array($contract->contract_state_id, [1,2]))
-                                                    <a href="{{ route('contracts.files.create', $contract->id) }}" class="btn btn-danger">Cargar Pólizas</a>
+                                                @if (Auth::user()->hasPermission(['admin.orders.create']))
+                                                    @if (in_array($contract->contract_state_id, [1,2]))
+                                                        <a href="{{ route('contracts.files.create', $contract->id) }}" class="btn btn-danger">Cargar Pólizas</a>
+                                                    @endif
                                                 @endif
                                             </div>
                                         </div>
@@ -361,8 +366,10 @@ p.centrado {
                                                     </tbody>
                                                 </table>
                                                 <div class="text-right">
-                                                    @if (in_array($contract->contract_state_id, [1,2]))
-                                                        <a href="{{ route('contracts.files.create_con', $contract->id) }}" class="btn btn-primary">Cargar Contratos</a>
+                                                    @if (Auth::user()->hasPermission(['admin.orders.create']))
+                                                        @if (in_array($contract->contract_state_id, [1,2]))
+                                                            <a href="{{ route('contracts.files.create_con', $contract->id) }}" class="btn btn-primary">Cargar Contratos</a>
+                                                        @endif
                                                     @endif
                                                 </div>
                                             </div>
