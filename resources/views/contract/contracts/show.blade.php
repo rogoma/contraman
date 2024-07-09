@@ -229,10 +229,11 @@ p.centrado {
                                                                         <i class="fa fa-trash"></i>
                                                                     </button>
                                                                 @endif
-
+                                                                @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']) || $contract->dependency_id == Auth::user()->dependency_id)
                                                                     <button type="button" title="Endosos de Póliza" class="btn btn-primary btn-icon" onclick="itemAwardHistories({{ $contract->items[$i]->id }})">
                                                                         <i class="fa fa-list"></i>
                                                                     </button>
+                                                                @endif
                                                                 </td>
                                                             </tr>
                                                         @endfor
@@ -533,6 +534,7 @@ $(document).ready(function(){
     }
 
     itemAwardHistories = function(item){
+        //lleva a itemawardhistories index
         location.href = '/items/'+item+'/item_award_histories';
     }
 

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Item;
 use App\Models\ItemAwardHistory;
+use App\Models\ItemAwardType;
 
 class ItemAwardHistoriesController extends Controller
 {
@@ -46,8 +47,7 @@ class ItemAwardHistoriesController extends Controller
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
         if(!$request->user()->hasPermission(['admin.item_award_histories.index','process_contracts.item_award_histories.index',
-        'derive_contracts.item_award_histories.index','plannings.item_award_histories.index']) &&
-        $item->contract->dependency_id != $request->user()->dependency_id){
+        'derive_contracts.item_award_histories.index','plannings.item_award_histories.index'])){
             return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
         }
 
@@ -64,15 +64,16 @@ class ItemAwardHistoriesController extends Controller
     public function create(Request $request, $item_id)
     {
         $item = Item::findOrFail($item_id);
+        // $item_award_types = ItemAwardType::all();
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
         if(!$request->user()->hasPermission(['admin.item_award_histories.create', 'contracts.item_award_histories.create']) &&
         $item->contract->dependency_id != $request->user()->dependency_id){
-            return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
+            // return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
         }
 
-        // $budget_request_providers = $item->contract->budgetRequestProviders;
         return view('contract.item_award_histories.create', compact('item'));
+        return view('contract.item_award_histories.create', compact('item', 'item_award_types'));
     }
 
 

@@ -24,6 +24,13 @@ class ItemAwardHistory extends Model
     }
 
     /**
+     * Para obtener el vinculo con la tabla Item_award_types
+     */
+    public function itemAwardType(){
+        return $this->belongsTo('App\Models\ItemAwardType');
+    }
+
+    /**
      * Para obtener el vinculo con la tabla budget_request_providers
      */
     public function budgetRequestProvider(){
