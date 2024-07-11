@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Item;
 use App\Models\ItemAwardHistory;
 use App\Models\ItemAwardType;
+use Illuminate\Validation\Rule;
 
 class ItemAwardHistoriesController extends Controller
 {
@@ -86,8 +87,8 @@ class ItemAwardHistoriesController extends Controller
     public function store(Request $request, $item_id)
     {
         $rules = array(
-            // 'policy_id' => 'numeric|required|max:2147483647|unique:items,policy_id',
-            'number_policy' => 'string|required|unique:items,number_policy',
+            'item_award_type_id' => 'numeric|required|max:2147483647',
+            'number_policy' => 'string|required|unique:items,number_policy|unique:item_award_histories,number_policy',
             'item_from' => 'date_format:d/m/Y',
             'item_to' => 'required|date_format:d/m/Y',
             'amount' => 'nullable|string|max:9223372036854775807',
@@ -101,7 +102,7 @@ class ItemAwardHistoriesController extends Controller
 
         $itemA = new ItemAwardHistory;
         $itemA->item_id = $item_id;
-        // $item->policy_id = $request->input('policy_id');
+        $itemA->item_award_type_id = $request->input('item_award_type_id');
         $itemA->number_policy = $request->input('number_policy');
         $itemA->item_from = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_from'))));
         $itemA->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));
@@ -152,6 +153,7 @@ class ItemAwardHistoriesController extends Controller
         // $item = ItemAwardHistory::findOrFail($item_id);
 
         $item = Item::findOrFail($item_id);
+        $item_award_types = ItemAwardType::all();
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
         if(!$request->user()->hasPermission(['admin.item_award_histories.create', 'contracts.item_award_histories.create']) &&
@@ -161,7 +163,7 @@ class ItemAwardHistoriesController extends Controller
 
         $itemA = ItemAwardHistory::findOrFail($itemA_id);
 
-        return view('contract.item_award_histories.update', compact('item','itemA'));
+        return view('contract.item_award_histories.update', compact('item','itemA','item_award_types'));
     }
 
     /**
@@ -177,7 +179,23 @@ class ItemAwardHistoriesController extends Controller
         $itemA = ItemAwardHistory::findOrFail($itemA_id);
 
         $rules = array(
-            'number_policy' => 'string|required|unique:items,number_policy',
+            'item_award_type_id' => 'numeric|required|max:2147483647',
+            // esto se usa en caso de que no permita el mismo tipo de endoso en una misma póliza
+            // 'item_award_type_id' => [
+            // 'numeric','required','max:2147483647',
+            // Rule::unique('item_award_histories')->ignore($itemA->id)->where(function ($query) use ($item_id) {
+            //     return $query->where('item_id', $item_id);
+            //     })
+            // ],
+
+            // 'number_policy' => [
+            //     'string',
+            //     'required',
+            //     Rule::unique('item_award_histories')->ignore($itemA->id),
+            //     Rule::unique('items')->ignore($item->id),
+            // ],
+
+            'number_policy' => 'string|required|unique:items,number_policy|unique:item_award_histories,number_policy',
             'item_from' => 'date_format:d/m/Y',
             'item_to' => 'required|date_format:d/m/Y',
             'amount' => 'nullable|string|max:9223372036854775807',
@@ -189,6 +207,7 @@ class ItemAwardHistoriesController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
+        $itemA->item_award_type_id = $request->input('item_award_type_id');
         $itemA->number_policy = $request->input('number_policy');
         $itemA->item_from = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_from'))));
         $itemA->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));

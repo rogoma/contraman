@@ -39,7 +39,7 @@
                                     <h5>Editar Llamado</h5>
                                     <br>
                                     <label id="fecha_actual" name="fecha_actual"  style="font-size: 20px;color: #FF0000;float: left;" for="fecha_actual">{{ Carbon\Carbon::now()->format('d/m/Y') }}</label>
-                                    {{-- <label style="font-size: 20px;color: #FF0000;float: left;">FECHA: </label> --}}                                    
+                                    {{-- <label style="font-size: 20px;color: #FF0000;float: left;">FECHA: </label> --}}
                                 </div>
                                 <div class="card-block">
                                     <h3 class="text-center">Datos para editar Llamado</h3>
@@ -123,9 +123,9 @@
                                         </div>
                                         <div class="col-sm-4">
                                             <div class="form-group @error('provider_id') has-danger @enderror">
-                                                <label class="col-form-label">Contratista </label>
+                                                <label class="col-form-label">Contratista</label>
                                                 <select id="provider_id" name="provider_id" class="form-control">
-                                                    <option value="">Seleccionar</option>
+                                                    <option value="">Seleccionar Contratista</option>
                                                 @foreach ($providers as $provider)
                                                     <option value="{{ $provider->id }}" @if ($provider->id == old('provider_id', $contract->provider_id)) selected @endif>{{ $provider->description }}</option>
                                                     {{-- <option value="{{ $modality->id }}" @if ($modality->id == old('modality', $contract->modality_id)) selected @endif>{{ $modality->description }}</option> --}}
@@ -139,9 +139,9 @@
                                         {{-- #8 --}}
                                         <div class="col-sm-2">
                                             <div class="form-group @error('contract_state_id') has-danger @enderror">
-                                                <label class="col-form-label">Estado <br></label>
+                                                <label class="col-form-label">Estado<br></label>
                                                 <select id="contract_state_id" name="contract_state_id" class="form-control">
-                                                    <option value="">Seleccionar</option>
+                                                    <option value="">Seleccionar Estado</option>
                                                 @foreach ($contr_states as $state)
                                                     <option value="{{ $state->id }}" @if ($state->id == old('contract_state_id', $contract->contract_state_id)) selected @endif>{{ $state->description }}</option>
                                                 @endforeach
@@ -154,9 +154,9 @@
 
                                         <div class="col-sm-3">
                                             <div class="form-group @error('modality_id') has-danger @enderror">
-                                                <label class="col-form-label">Modalidad <br></small></label>
+                                                <label class="col-form-label">Modalidad<br></small></label>
                                                 <select id="modality_id" name="modality_id" class="form-control"">
-                                                    <option value="">Seleccionar</option>
+                                                    <option value="">Seleccionar Modalidad</option>
                                                 @foreach ($modalities as $modality)
                                                     <option value="{{ $modality->id }}" @if ($modality->id == old('modality_id', $contract->modality_id)) selected @endif>{{ $modality->description }}</option>
                                                 @endforeach
@@ -170,7 +170,7 @@
                                             <div class="form-group @error('financial_organism_id') has-danger @enderror">
                                                 <label class="col-form-label">Organismo Financiador<br></label>
                                                 <select id="financial_organism_id" name="financial_organism_id" class="form-control">
-                                                    <option value="">Seleccionar</option>
+                                                    <option value="">Seleccionar Organismo Financiador</option>
                                                 @foreach ($financial_organisms as $financial_organism)
                                                     <option value="{{ $financial_organism->id }}" @if ($financial_organism->id == old('financial_organism_id', $contract->financial_organism_id)) selected @endif>{{ $financial_organism->code.' - '.$financial_organism->description }}</option>
                                                 @endforeach
@@ -184,7 +184,7 @@
                                             <div class="form-group @error('contract_type_id') has-danger @enderror">
                                                 <label class="col-form-label">Tipo de Contrato</label>
                                                 <select id="contract_type_id" name="contract_type_id" class="form-control">
-                                                    <option value="">Seleccionar</option>
+                                                    <option value="">Seleccionar Tipo de Contrato</option>
                                                 @foreach ($contract_types as $contract_type)
                                                     <option value="{{ $contract_type->id }}" @if ($contract_type->id == old('contract_type_id', $contract->contract_type_id)) selected @endif>{{$contract_type->description }}</option>
                                                 @endforeach
@@ -207,7 +207,7 @@
                                             <div class="form-group @error('dependency_id') has-danger @enderror">
                                                 <label class="col-form-label">Depedendencia Responsable </label>
                                                 <select id="dependency_id" name="dependency_id" class="form-control">
-                                                    <option value="">Seleccionar</option>
+                                                    <option value="">Seleccionar Depedendencia</option>
                                                 @foreach ($dependencies as $dependency)
                                                     <option value="{{ $dependency->id    }}" @if ($dependency->id    == old('dependency_id', $contract->dependency_id      )) selected @endif>{{$dependency->description }}</option>
                                                     {{-- <option value="{{ $contract_type->id }}" @if ($contract_type->id == old('contract_type_id', $contract->contract_type_id)) selected @endif>{{$contract_type->description }}</option> --}}
@@ -222,7 +222,7 @@
                                             <div class="form-group @error('contract_admin_id') has-danger @enderror">
                                                 <label class="col-form-label">Administrador del Contrato</label>
                                                 <select id="contract_admin_id" name="contract_admin_id" class="form-control">
-                                                    <option value="">Seleccionar</option>
+                                                    <option value="">Seleccionar Administrador del Contrato</option>
                                                 @foreach ($dependencies as $dependency)
                                                     <option value="{{ $dependency->id    }}" @if ($dependency->id    == old('contract_admin_id', $contract->dependency_id      )) selected @endif>{{$dependency->description }}</option>
                                                     {{-- <option value="{{ $contract_type->id }}" @if ($contract_type->id == old('contract_type_id', $contract->contract_type_id)) selected @endif>{{$contract_type->description }}</option> --}}

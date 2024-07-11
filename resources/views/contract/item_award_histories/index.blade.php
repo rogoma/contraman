@@ -57,6 +57,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
+                                                    <th>Tipo de Endoso</th>
                                                     <th>N° de Póliza</th>
                                                     <th>Vigencia Desde</th>
                                                     <th>Vigencia Hasta</th>
@@ -70,9 +71,9 @@
                                             @for ($i = 0; $i < count($item->itemAwardHistories); $i++)
                                                 <tr>
                                                     <td>{{ ($i+1) }}</td>
+                                                    <td>{{ $item->itemAwardHistories[$i]->itemAwardType->description }}</td>
                                                     <td>{{ $item->itemAwardHistories[$i]->number_policy }}</td>
                                                     <td>{{ $item->itemAwardHistories[$i]->itemFromDateFormat() }}</td>
-                                                    {{-- <td>{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td> --}}
                                                     @if ($item->itemAwardHistories[$i]->state_id == 1)
                                                         <td style="color:red;font-weight">{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td>
                                                     @else

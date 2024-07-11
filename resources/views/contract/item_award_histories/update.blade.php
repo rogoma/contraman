@@ -16,11 +16,11 @@
             <div class="col-lg-4">
                 <div class="page-header-breadcrumb">
                     <ul class=" breadcrumb breadcrumb-title">
-                        <li class="breadcrumb-item">                            
+                        <li class="breadcrumb-item">
                             <a href="{{ route('home') }}"><i class="feather icon-home"></i></a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{ route('items.item_award_histories.index', $item->id) }}">Endosos</a>                            
+                            <a href="{{ route('items.item_award_histories.index', $item->id) }}">Endosos</a>
                         </li>
                     </ul>
                 </div>
@@ -51,7 +51,22 @@
                                         <div class="container">
                                             <h3 style="text-align: center;">Modificar Endoso</h3>
                                             <br>
-                                            
+                                            <div class="form-group row @error('item_award_type_id') has-danger @enderror">
+                                                <label class="col-sm-2 col-form-label">Tipo de Endoso</label>
+                                                    <div class="col-sm-10">
+                                                    <select id="item_award_type_id" name="item_award_type_id" class="form-control">
+                                                            <option value="">Seleccionar Tipo de Endoso</option>
+                                                        @foreach ($item_award_types as $item_award_type)
+                                                            <option value="{{ $item_award_type->id }}" @if ($item_award_type->id == old('item_award_type_id', $itemA->state_id)) selected @endif>{{ $item_award_type->description }}</option>
+                                                            {{-- <option value="{{        $policie ->id }}" @if (       $policie-> id == old('policy_id'         , $item->policy_id           )) selected @endif>{{ $policie->description }}</option> --}}
+                                                        @endforeach
+                                                        </select>
+                                                        @error('item_award_type_id')
+                                                            <div class="col-form-label">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                            </div>
+
                                             <div class="form-group row @error('number_policy') has-danger @enderror">
                                                 <label class="col-sm-2 col-form-label">N° de Endoso</label>
                                                 <div class="col-sm-10">
@@ -79,7 +94,7 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                         <label class="col-form-label @error('item_to') has-danger @enderror">Vigencia Hasta</label>
-                                                        <div class="input-group @error('item_to') has-danger @enderror">                                                            
+                                                        <div class="input-group @error('item_to') has-danger @enderror">
                                                             <input type="text" id="item_to" name="item_to" value="{{ old('item_to',date('d/m/Y', strtotime($itemA->item_to))) }}" class="form-control text-align: left" autocomplete="off">
                                                             <span class="input-group-append" id="basic-addon">
                                                                 <label class="input-group-text" onclick="show('item_to');"><i class="fa fa-calendar"></i></label>
@@ -135,7 +150,7 @@
                                         <div class="col-sm-12">
                                             <br>
                                             <div class="form-group text-center">
-                                                <button type="submit" class="btn btn-primary">Modificar Endoso</button>                                                
+                                                <button type="submit" class="btn btn-primary">Modificar Endoso</button>
                                             </div>
                                         </div>
                                     </form>
@@ -186,6 +201,7 @@ $(document).ready(function(){
     //*******************************
 
     $('#policy_id').select2();
+    $('#item_award_type_id').select2();
 
     // Script para formatear el valor con separador de miles mientras se ingresa Monto
     document.getElementById('amount').addEventListener('input', function(event) {
@@ -199,7 +215,7 @@ $(document).ready(function(){
 
     // Convertimos a número
     monto = parseFloat(monto);
-    
+
     // Verificamos si el monto es un número válido y no NaN
     if (isNaN(monto) || monto < 0) {
         event.target.value = '0';
