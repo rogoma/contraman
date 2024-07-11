@@ -50,40 +50,27 @@
                                             <input type="hidden" id="tot" name="tot" value="{{ $item->amount }}">
 
                                             <h3 style="text-align: center;">Agregar Endoso</h3>
-                                            {{-- <br>
-                                            <div class="form-group row @error('policy_id') has-danger @enderror">
+                                            <br>
+                                            <div class="form-group row @error('item_award_type_id') has-danger @enderror">
                                                 <label class="col-sm-2 col-form-label">Tipo de Endoso</label>
-                                                <div class="col-sm-10">
-                                                    <select id="policy_id" name="policy_id" class="form-control">
-                                                        <option value="">--- Seleccionar Tipo de Endoso ---</option>
-                                                        @foreach ($policies as $policie)
-                                                            <option value="{{ $policie->id }}" @if ($policie->id == old('policy_id')) selected @endif>{{ $policie->description }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                    @error('policy_id')
-                                                        <div class="col-form-label">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
-                                            </div> --}}
-                                            <div class="col-sm-3">
-                                                <div class="form-group @error('item_award_type_id') has-danger @enderror">
-                                                    <label class="col-form-label">Tipo de Endoso</label>
+                                                    <div class="col-sm-10">
                                                     <select id="item_award_type_id" name="item_award_type_id" class="form-control">
-                                                        <option value="">Seleccionar</option>
-                                                    {{-- @foreach ($item_award_types as $item_award_type)
-                                                        <option value="{{ $item_award_type->id }}" @if ($item_award_type->id == old('item_award_type_id')) selected @endif>{{$item_award_type->description }}</option>
-                                                    @endforeach --}}
-                                                    </select>
-                                                    @error('item_award_type_id')
-                                                        <div class="col-form-label">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
+                                                            <option value="">Seleccionar</option>
+                                                        @foreach ($item_award_types as $item_award_type)
+                                                            <option value="{{ $item_award_type->id }}" @if ($item_award_type->id == old('item_award_type_id')) selected @endif>{{$item_award_type->description }}</option>
+                                                        @endforeach
+                                                        </select>
+                                                        @error('item_award_type_id')
+                                                            <div class="col-form-label">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
                                             </div>
-                                            <div class="form-group row @error('number_policy') has-danger @enderror">
-                                                <label class="col-sm-2 col-form-label">N° de Endoso</label>
+
+                                            <div class="form-group row @error('amount') has-danger @enderror">
+                                                <label class="col-sm-2 col-form-label">Monto</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" id="number_policy" name="number_policy" maxlength="300" value="{{ old('number_policy') }}" class="form-control">
-                                                    @error('number_policy')
+                                                    <input type="text" id="amount" name="amount" value="{{ old('amount') }}" class="form-control @error('amount') form-control-danger @enderror" maxlength="23">
+                                                    @error('amount')
                                                         <div class="col-form-label">{{ $message }}</div>
                                                     @enderror
                                                 </div>
@@ -194,6 +181,8 @@
 $(document).ready(function(){
 
     $('#policy_id').select2();
+    $('#item_award_type_id').select2();
+
 
     // Script para formatear el valor con separador de miles mientras se ingresa Monto
     document.getElementById('amount').addEventListener('input', function(event) {

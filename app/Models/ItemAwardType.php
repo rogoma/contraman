@@ -9,12 +9,12 @@ class ItemAwardType extends Model
 {
     use HasFactory;
 
-    protected $table = 'Item_award_types';
+    protected $table = 'item_award_types';
 
     /**
-     * Para obtener el vinculo con la tabla contracts
+     * Para obtener el vinculo con la tabla ItemAwardHistories
      */
-    public function contracts(){
+    public function itemAwardHistories(){
         return $this->hasMany('App\Models\ItemAwardHistory');
     }
 

@@ -64,7 +64,7 @@ class ItemAwardHistoriesController extends Controller
     public function create(Request $request, $item_id)
     {
         $item = Item::findOrFail($item_id);
-        // $item_award_types = ItemAwardType::all();
+        $item_award_types = ItemAwardType::all();
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
         if(!$request->user()->hasPermission(['admin.item_award_histories.create', 'contracts.item_award_histories.create']) &&
@@ -72,7 +72,7 @@ class ItemAwardHistoriesController extends Controller
             // return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
         }
 
-        return view('contract.item_award_histories.create', compact('item'));
+        // return view('contract.item_award_histories.create', compact('item'));
         return view('contract.item_award_histories.create', compact('item', 'item_award_types'));
     }
 
