@@ -77,11 +77,11 @@
                                                     @if ($item->itemAwardHistories[$i]->state_id == 1)
                                                         <td style="color:red;font-weight">{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td>
                                                     @else
-                                                    <td>{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td>
+                                                        <td>{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td>
                                                     @endif
                                                     <td>{{ $item->itemAwardHistories[$i]->amountFormat() }}</td>
                                                     @if ($item->itemAwardHistories[$i]->state_id == 1)
-                                                        <td>Activo</td>
+                                                        <td style="color:blue;font-weight">Activo</td>
                                                     @else
                                                         <td style="color:red;font-weight">Inactivo</td>
                                                     @endif

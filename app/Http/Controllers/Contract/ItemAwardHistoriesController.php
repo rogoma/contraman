@@ -44,7 +44,8 @@ class ItemAwardHistoriesController extends Controller
      */
     public function index(Request $request, $item_id)
     {
-        $item = Item::findOrFail($item_id);
+        // ordenamos por fecha de creación
+        $item = Item::where('id', $item_id)->orderBy('created_at', 'asc')->first();
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
         if(!$request->user()->hasPermission(['admin.item_award_histories.index','process_contracts.item_award_histories.index',
@@ -124,26 +125,41 @@ class ItemAwardHistoriesController extends Controller
 
         // consulta si tipo endoso = 1 o 2 (plazo, vigencia o monto) para cambiar a estado inactivo el registo anterior que posee mismo tipo de endoso
         $tipo_endoso_id = $request->input('item_award_type_id');
+        
+        //tipo endoso (item_award_type_id): 1 = PLAZO O VIGENCIA 2= MONTO 3= OTRAS MODIF.
         if ($tipo_endoso_id == 1 || $tipo_endoso_id == 2) {
-            $check = ItemAwardHistory::where('item_award_type_id', $request->input('item_award_type_id'))->
-                                where('item_id', '=', $item_id)->count();
-
-            if($check > 0){
-                // $validator->errors()->add('number', 'Número de Llamado ya se encuentra vinculado a un pedido.');
-                // return back()->withErrors($validator)->withInput();
-                $itemA->item_award_type_id = 2;
+            // se consulta si hay endosos con tipo_endoso 1 o 2 y si su estado es 1 = ACTIVO
+            $check1 = ItemAwardHistory::where('item_award_type_id', '=', 1)//PLAZO O VIGENCIA                   
+                                    ->where('item_id', '=', $item_id)
+                                    ->where('state_id', '=', 1)
+                                    ->first();
+            
+            $check2 = ItemAwardHistory::where('item_award_type_id', '=', 2)//MONTO
+                                    ->where('item_id', '=', $item_id)
+                                    ->where('state_id', '=', 1)
+                                    ->first();
+            
+            //Si hay resultado de la consulta, sino se asume el item_award_type_id
+            if ($check1) {                
+                $check1->state_id = 2; // Cambia el state_id a 2 (inactivo) del registro de la sentencia consultado
+                $check1->save();
+                $itemA->item_award_type_id = $request->input('item_award_type_id');                                
+            }else{
+                $itemA->item_award_type_id = $request->input('item_award_type_id');
             }
 
+            //Si hay resultado de la consulta, sino se asume el item_award_type_id
+            if ($check2) {
+                $check2->state_id = 2; // Cambia el state_id a 2 (inactivo) del registro de la sentencia consultado
+                $check2->save();
+                $itemA->item_award_type_id = $request->input('item_award_type_id');                                
+            }else{
+                $itemA->item_award_type_id = $request->input('item_award_type_id');
+            }
+        //tipo endoso (item_award_type_id): 3= OTRAS MODIF.    
         }else{
             $itemA->item_award_type_id = $request->input('item_award_type_id');
         }
-
-
-        // consulta si monto de endoso en mayor a monto de poliza
-        // var_dump ($amount);
-        // var_dump ($amount_poliza);
-        // exit;
-
 
         if ($amount > $amount_poliza) {
             $validator->errors()->add('amount', 'Monto no puede ser mayor a monto póliza');
