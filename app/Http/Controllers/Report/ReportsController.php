@@ -51,27 +51,21 @@ class ReportsController extends Controller{
             //Donde contracts es una vista
             $contracts1 = DB::table('vista_contracts')//vista que muestra los datos
             ->select(['iddncp','llamado','number_year','year_adj','estado', 'modalidad', 'tipo_contrato',
-            'total_amount', 'comentarios', 'contratista', 'dependencia'])
+            'total_amount', 'comentarios', 'contratista', 'dependencia', 'dependency_id'])
             ->where('contract_id', '=', $contract_id)
             ->get();
 
-            //Donde contracts_full es una vista
-            // $contracts2 = DB::table('vista_contracts_full')//vista que muestra los datos
-            // ->select(['polizas', 'number_policy','tipo_contrato','item_from','item_to',
-            // 'amount', 'comments', 'contratista', 'dependencia'])
-            // ->where('contract_id', '=', $contract_id)
-            // ->get();
+            
             $contracts2 = DB::table('vista_contracts_full')
-    ->select(DB::raw('DISTINCT ON (polizas) polizas, number_policy, tipo_contrato, item_from, item_to, amount, comments, contratista, dependencia'))
-    ->where('contract_id', '=', $contract_id)
-    ->where('dependency_id', $request->user()->dependency_id)
-    ->orderBy('polizas')
-    ->get();
+            ->select(DB::raw('DISTINCT ON (polizas) polizas, number_policy, tipo_contrato, item_from, item_to, amount, comments, contratista, dependencia'))
+            ->where('contract_id', '=', $contract_id)
+            ->orderBy('polizas')
+            ->get();
 
             //Donde contracts3 muestra endosos (itemawards_histories)
             $contracts3 = DB::table('vista_contracts_full2')//vista que muestra los datos
-            ->select(['polizas', 'number_policy1','item_from1','item_to1',
-            'amount1', 'comments1', 'contratista', 'dependencia'])
+            ->select(['number_policy','polizas', 'number_policy1','item_from1','item_to1',
+            'amount1', 'comments1', 'contratista', 'dependencia','state1'])
             ->where('contract_id', '=', $contract_id)
             ->whereNotNull('number_policy1')
             // ->where('monto_adjudica', null)
@@ -80,9 +74,9 @@ class ReportsController extends Controller{
             //Donde contracts es una vista
             $contracts1 = DB::table('vista_contracts')//vista que muestra los datos
             ->select(['iddncp','llamado','number_year','year_adj','estado', 'modalidad', 'tipo_contrato',
-            'total_amount', 'comentarios', 'contratista', 'dependencia'])
+            'total_amount', 'comentarios', 'contratista', 'dependencia', 'dependency_id'])
             ->where('contract_id', '=', $contract_id)
-            ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
+            // ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
             ->get();
 
             //Donde contracts_full es una vista
@@ -93,15 +87,15 @@ class ReportsController extends Controller{
             // ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
             // ->get();
             $contracts2 = DB::table('vista_contracts_full')
-    ->select(DB::raw('DISTINCT ON (polizas) polizas, number_policy, tipo_contrato, item_from, item_to, amount, comments, contratista, dependencia'))
-    ->where('contract_id', '=', $contract_id)
-    ->where('dependency_id', $request->user()->dependency_id)
-    ->orderBy('polizas')
-    ->get();
+            ->select(DB::raw('DISTINCT ON (polizas) polizas, number_policy, tipo_contrato, item_from, item_to, amount, comments, contratista, dependencia'))
+            ->where('contract_id', '=', $contract_id)                        
+            ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
+            ->orderBy('polizas')
+            ->get();            
 
             //Donde contracts3 muestra endosos (itemawards_histories)
             $contracts3 = DB::table('vista_contracts_full2')//vista que muestra los datos
-            ->select(['polizas', 'number_policy','number_policy1','item_from1','item_to1',
+            ->select(['number_policy','polizas', 'number_policy','number_policy1','item_from1','item_to1',
             'amount1', 'comments1', 'contratista', 'dependencia', 'state1'])
             ->where('contract_id', '=', $contract_id)
             ->whereNotNull('number_policy1')

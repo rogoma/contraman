@@ -147,14 +147,22 @@
 
         @for ($i = 0; $i < count($contracts3); $i++)
         <tr>
-            <td> {{ $contracts3[$i]->polizas}} - N° Póliza: {{ $contracts3[$i]->number_policy}}</td>
+            {{-- <td> {{ $contracts3[$i]->number_policy}} - N° Póliza: {{ $contracts3[$i]->number_policy1}}</td> --}}
+            <td> N° Póliza: {{ $contracts3[$i]->number_policy}}</td>
             <td> {{ $contracts3[$i]->number_policy1 }}</td>
             <td> {{ number_format($contracts3[$i]->amount1,'0', ',','.') }} </td>
             <td> {{ date('d/m/Y', strtotime($contracts3[$i]->item_to1 )) }}</td>
             {{-- <td> {{ $contracts3[$i]->comments1}}</td>
             <td> {{ $contracts3[$i]->comments1}}</td>
             <td> {{ $contracts3[$i]->comments1}}</td> --}}
-            <td> {{ $contracts3[$i]->state1}}</td>
+            @if ($contracts3[$i]->state1 == 1)
+                <td style="color:blue;font-weight">Activo</td>
+            @else
+                <td style="color:red;font-weight">Inactivo</td>
+            @endif
+
+            {{-- <td> {{ $contracts3[$i]->state1}}</td> --}}
+            
             <td> {{ $contracts3[$i]->comments1}}</td>
         </tr>
         @endfor
