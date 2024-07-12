@@ -102,7 +102,6 @@ class ItemAwardHistoriesController extends Controller
 
         $itemA = new ItemAwardHistory;
         $itemA->item_id = $item_id;
-        $itemA->item_award_type_id = $request->input('item_award_type_id');
         $itemA->number_policy = $request->input('number_policy');
         $itemA->item_from = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_from'))));
         $itemA->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));
@@ -122,6 +121,23 @@ class ItemAwardHistoriesController extends Controller
         }else{
             $itemA->amount = $amount;
         }
+
+        // consulta si tipo endoso = 1 o 2 (plazo, vigencia o monto) para cambiar a estado inactivo el registo anterior que posee mismo tipo de endoso
+        $tipo_endoso_id = $request->input('item_award_type_id');
+        if ($tipo_endoso_id == 1 || $tipo_endoso_id == 2) {
+            $check = ItemAwardHistory::where('item_award_type_id', $request->input('item_award_type_id'))->
+                                where('item_id', '=', $item_id)->count();
+
+            if($check > 0){
+                // $validator->errors()->add('number', 'Número de Llamado ya se encuentra vinculado a un pedido.');
+                // return back()->withErrors($validator)->withInput();
+                $itemA->item_award_type_id = 2;
+            }
+
+        }else{
+            $itemA->item_award_type_id = $request->input('item_award_type_id');
+        }
+
 
         // consulta si monto de endoso en mayor a monto de poliza
         // var_dump ($amount);
