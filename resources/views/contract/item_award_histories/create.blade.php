@@ -210,7 +210,7 @@ $(document).ready(function(){
     event.target.value = monto;
     });
 
-    // function checkAwardType() {
+    function checkAwardType() {
         var awardType = document.getElementById('item_award_type_id').value;
         var itemFrom = document.getElementById('item_from');
 
@@ -219,7 +219,7 @@ $(document).ready(function(){
         } else {
             itemFrom.disabled = false;
         }
-    // }
+    }
 
     $('#item_from').datepicker({
         language: 'es',
