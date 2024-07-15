@@ -219,17 +219,20 @@ p.centrado {
                                                                 <td>{{ $contract->items[$i]->comments }}</td>
 
                                                                 <td>
-                                                                @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']) || $contract->dependency_id == Auth::user()->dependency_id)
+                                                                {{-- @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']) || $contract->dependency_id == Auth::user()->dependency_id) --}}
+                                                                @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']))
                                                                     <button type="button" title="Editar" class="btn btn-warning btn-icon" onclick="updateItem({{ $contract->items[$i]->id }})">
                                                                         <i class="fa fa-pencil"></i>
                                                                     </button>
                                                                 @endif
-                                                                @if (Auth::user()->hasPermission(['admin.items.delete','contracts.items.update']) || $contract->dependency_id == Auth::user()->dependency_id)
+                                                                {{-- @if (Auth::user()->hasPermission(['admin.items.delete','contracts.items.delete']) || $contract->dependency_id == Auth::user()->dependency_id) --}}
+                                                                @if (Auth::user()->hasPermission(['admin.items.delete','contracts.items.delete']))
                                                                     <button type="button" title="Borrar" class="btn btn-danger btn-icon" onclick="deleteItem({{ $contract->items[$i]->id }})">
                                                                         <i class="fa fa-trash"></i>
                                                                     </button>
                                                                 @endif
                                                                 @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']) || $contract->dependency_id == Auth::user()->dependency_id)
+                                                                {{-- @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update'])) --}}
                                                                     <button type="button" title="Endosos de Póliza" class="btn btn-primary btn-icon" onclick="itemAwardHistories({{ $contract->items[$i]->id }})">
                                                                         <i class="fa fa-list"></i>
                                                                     </button>

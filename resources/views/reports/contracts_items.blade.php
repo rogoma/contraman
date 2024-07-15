@@ -134,8 +134,8 @@
     <h2>ENDOSOSO DE PÓLIZAS Y GARANTÍAS</h2>
     <table>
         <tr>
-            <th>Referencia-Endoso</th>
-            <th>N° Póliza(Endoso) </th>
+            <th>Ref. N° Póliza</th>
+            <th>(Endoso)N° Póliza</th>
             <th>Monto</th>
             <th>Vencimiento</th>
             {{-- <th>Cumple1</th>
@@ -162,7 +162,7 @@
             @endif
 
             {{-- <td> {{ $contracts3[$i]->state1}}</td> --}}
-            
+
             <td> {{ $contracts3[$i]->comments1}}</td>
         </tr>
         @endfor
