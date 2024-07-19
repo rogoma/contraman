@@ -26,6 +26,8 @@ use Illuminate\Support\Facades\DB;
 
 class ItemsController extends Controller
 {
+    protected $postMaxSize;
+
     /**
      * Create a new controller instance.
      *
@@ -46,6 +48,30 @@ class ItemsController extends Controller
         $this->middleware('checkPermission:'.implode(',',$index_permissions))->only('index'); // Permiso para index
         $this->middleware('checkPermission:'.implode(',',$create_permissions))->only(['create', 'store']);   // Permiso para create
         $this->middleware('checkPermission:'.implode(',',$update_permissions))->only(['edit', 'update']);   // Permiso para update
+
+        // obtenemos el tamaño permitido de subida de archivos del servidor
+        if (is_numeric(ini_get('post_max_size'))) {
+            $postMaxSize = ini_get('post_max_size');
+        }else{
+            $metric = strtoupper(substr(ini_get('post_max_size'), -1));
+            $postMaxSize = (int) ini_get('post_max_size');
+
+            switch ($metric) {
+                case 'K':
+                    $postMaxSize = $postMaxSize * 1024;
+                    break;
+                case 'M':
+                    $postMaxSize = $postMaxSize * 1048576;
+                    break;
+                case 'G':
+                    $postMaxSize = $postMaxSize * 1073741824;
+                    break;
+                default:
+                    $postMaxSize = 8 * 1024 * 1024;
+                    break;
+            }
+        }
+        $this->postMaxSize = $postMaxSize;
     }
 
     /**
@@ -127,6 +153,7 @@ class ItemsController extends Controller
     public function create(Request $request, $contract_id)
     {
         $contract = Contract::findOrFail($contract_id);
+        $post_max_size = $this->postMaxSize;
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
         if($request->user()->hasPermission(['admin.items.create', 'contracts.items.create']) || $contract->dependency_id == $request->user()->dependency_id){
@@ -137,7 +164,7 @@ class ItemsController extends Controller
 
         $policies = Policy::all();
 
-        return view('contract.items.create', compact('contract','policies'));
+        return view('contract.items.create', compact('contract','policies','post_max_size'));
     }
 
     /**
@@ -179,6 +206,7 @@ class ItemsController extends Controller
             'item_from' => 'date_format:d/m/Y',
             'item_to' => 'required|date_format:d/m/Y',
             'amount' => 'nullable|string|max:9223372036854775807',
+            'file' => 'required',
             'comments' => 'nullable|max:300'
         );
 
@@ -186,6 +214,25 @@ class ItemsController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
+
+        // if(!$request->hasFile('file')){
+        //     $validator = Validator::make($request->input(), []);
+        //     $validator->errors()->add('file', 'El campo es requerido, debe ingresar un archivo WORD, PDF o EXCEL.');
+        //     return back()->withErrors($validator)->withInput();
+        // }
+
+        // // chequeamos la extension del archivo subido
+        // $extension = $request->file('file')->getClientOriginalExtension();
+        // if(!in_array($extension, array('pdf'))){
+        //     $validator = Validator::make($request->input(), []); // Creamos un objeto validator
+        //     $validator->errors()->add('file', 'El archivo introducido debe corresponder al siguiente formato: pdf'); // Agregamos el error
+        //     return back()->withErrors($validator)->withInput();
+        // }
+
+        // // Pasó todas las validaciones, guardamos el archivo
+        // $fileName = time().'-contract-file.'.$extension; // nombre a guardar
+        // // Cargamos el archivo (ruta storage/app/public/files, enlace simbólico desde public/files)
+        // $path = $request->file('file')->storeAs('public/files', $fileName);
 
         $item = new Item;
         $item->contract_id = $contract_id;
@@ -207,6 +254,8 @@ class ItemsController extends Controller
             $item->amount = $amount;
         }
         $item->comments = $request->input('comments');
+        // $item->file = $fileName;
+        // $item->file_type = 1;//pólizas
         $item->creator_user_id = $request->user()->id;  // usuario logueado
         $item->save();
         return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza agregada correctamente'); // Caso usuario posee rol pedidos
@@ -296,6 +345,7 @@ class ItemsController extends Controller
             $item->amount = $amount;
         }
         $item->comments = $request->input('comments');
+
         $item->creator_user_id = $request->user()->id;  // usuario logueado
         $item->save();
         return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza modificada correctamente'); // Caso usuario posee rol pedidos

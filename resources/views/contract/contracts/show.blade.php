@@ -320,7 +320,7 @@ p.centrado {
                                                 </tbody>
                                             </table>
                                             <div class="text-right">
-                                                @if (Auth::user()->hasPermission(['admin.orders.create']))
+                                                @if (Auth::user()->hasPermission(['admin.files.create','contracts.files.create']))
                                                     @if (in_array($contract->contract_state_id, [1,2]))
                                                         <a href="{{ route('contracts.files.create', $contract->id) }}" class="btn btn-danger">Cargar Pólizas</a>
                                                     @endif
@@ -370,7 +370,7 @@ p.centrado {
                                                     </tbody>
                                                 </table>
                                                 <div class="text-right">
-                                                    @if (Auth::user()->hasPermission(['admin.orders.create']))
+                                                    @if (Auth::user()->hasPermission(['admin.orders.create', 'contracts.orders.create']))
                                                         @if (in_array($contract->contract_state_id, [1,2]))
                                                             <a href="{{ route('contracts.files.create_con', $contract->id) }}" class="btn btn-primary">Cargar Contratos</a>
                                                         @endif

@@ -135,6 +135,14 @@
                                                 </div>
                                             </div>
 
+                                            <div class="form-group @error('file') has-danger @enderror">
+                                                <label class="col-form-label">Cargar archivo <small>(Formato permitido: PDF)</small></label>
+                                                <input id="file" type="file" class="form-control" name="file">
+                                                @error('file')
+                                                    <div class="col-form-label">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+
                                             {{-- <div class="form-group @error('file') has-danger @enderror">
                                                 <label class="col-sm-2 col-form-label">Cargar archivo <small>(Archivos permitidos: WORD, PDF, EXCEL)</small></label>
                                                 <input id="file" type="file" class="form-control" name="file">
@@ -186,10 +194,10 @@ $(document).ready(function(){
         event.target.value = '0';
         return;
     }
-    
+
     // Convertimos a número
     monto = parseFloat(monto);
-    
+
     // Verificamos si el monto es un número válido y no NaN
     if (isNaN(monto) || monto < 0) {
         event.target.value = '0';
@@ -313,6 +321,18 @@ $(document).ready(function(){
             var f3= $('#fecha_actual').text();//fecha actual
             $('#control_1').val(restaFechas(f1,f2));//resultado fecha vigencia
             $('#control_a').val(restaFechas2(f2,f3));//resultado fecha días para vencer
+        }
+    });
+
+    $('#file').bind('change', function() {
+        max_upload_size = {{ $post_max_size }};
+        if(this.files[0].size > max_upload_size){
+            $('#guardar').attr("disabled", "disabled");
+            file_size = Math.ceil((this.files[0].size/1024)/1024);
+            max_allowed = Math.ceil((max_upload_size/1024)/1024);
+            swal("Error!", "El tamaño del archivo seleccionado ("+file_size+" Mb) supera el tamaño maximo de carga permitido ("+max_allowed+" Mb).", "error");
+        }else{
+            $('#guardar').removeAttr("disabled");
         }
     });
 
