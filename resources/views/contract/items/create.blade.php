@@ -136,12 +136,19 @@
                                             </div>
 
                                             <div class="form-group @error('file') has-danger @enderror">
-                                                <label class="col-form-label">Cargar archivo <small>(Formato permitido: PDF)</small></label>
+                                                <label class="col-form-label">Cargar archivo <small>(Archivos permitidos: WORD, PDF, EXCEL)</small></label>
                                                 <input id="file" type="file" class="form-control" name="file">
                                                 @error('file')
                                                     <div class="col-form-label">{{ $message }}</div>
                                                 @enderror
                                             </div>
+                                            {{-- <div class="form-group row @error('file') has-danger @enderror">
+                                                <label class="col-form-label">Cargar archivo <small>(Formato permitido: PDF)</small></label>
+                                                <input id="file" type="file" class="form-control" name="file">
+                                                @error('file')
+                                                    <div class="col-form-label">{{ $message }}</div>
+                                                @enderror
+                                            </div> --}}
 
                                             {{-- <div class="form-group @error('file') has-danger @enderror">
                                                 <label class="col-sm-2 col-form-label">Cargar archivo <small>(Archivos permitidos: WORD, PDF, EXCEL)</small></label>

@@ -206,7 +206,7 @@ class ItemsController extends Controller
             'item_from' => 'date_format:d/m/Y',
             'item_to' => 'required|date_format:d/m/Y',
             'amount' => 'nullable|string|max:9223372036854775807',
-            'file' => 'required',
+            // 'file' => 'required',
             'comments' => 'nullable|max:300'
         );
 
@@ -215,24 +215,24 @@ class ItemsController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        // if(!$request->hasFile('file')){
-        //     $validator = Validator::make($request->input(), []);
-        //     $validator->errors()->add('file', 'El campo es requerido, debe ingresar un archivo WORD, PDF o EXCEL.');
-        //     return back()->withErrors($validator)->withInput();
-        // }
+        if(!$request->hasFile('file')){
+            $validator = Validator::make($request->input(), []);
+            $validator->errors()->add('file', 'El campo es requerido, debe ingresar un archivo WORD, PDF o EXCEL.');
+            return back()->withErrors($validator)->withInput();
+        }
 
-        // // chequeamos la extension del archivo subido
-        // $extension = $request->file('file')->getClientOriginalExtension();
-        // if(!in_array($extension, array('pdf'))){
-        //     $validator = Validator::make($request->input(), []); // Creamos un objeto validator
-        //     $validator->errors()->add('file', 'El archivo introducido debe corresponder al siguiente formato: pdf'); // Agregamos el error
-        //     return back()->withErrors($validator)->withInput();
-        // }
+        // chequeamos la extension del archivo subido
+        $extension = $request->file('file')->getClientOriginalExtension();
+        if(!in_array($extension, array('doc', 'docx', 'pdf', 'xls', 'xlsx'))){
+            $validator = Validator::make($request->input(), []); // Creamos un objeto validator
+            $validator->errors()->add('file', 'El archivo introducido debe corresponder a alguno de los siguientes formatos: doc, docx, pdf, xls, xlsx.'); // Agregamos el error
+            return back()->withErrors($validator)->withInput();
+        }
 
-        // // Pasó todas las validaciones, guardamos el archivo
-        // $fileName = time().'-contract-file.'.$extension; // nombre a guardar
-        // // Cargamos el archivo (ruta storage/app/public/files, enlace simbólico desde public/files)
-        // $path = $request->file('file')->storeAs('public/files', $fileName);
+        // Pasó todas las validaciones, guardamos el archivo
+        $fileName = time().'-contract-file.'.$extension; // nombre a guardar
+        // Cargamos el archivo (ruta storage/app/public/files, enlace simbólico desde public/files)
+        $path = $request->file('file')->storeAs('public/files', $fileName);
 
         $item = new Item;
         $item->contract_id = $contract_id;

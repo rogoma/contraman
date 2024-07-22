@@ -128,7 +128,10 @@ class ContractsFilesController extends Controller
                     break;
             }
         }
-        $this->postMaxSize = $postMaxSize;
+        // $this->postMaxSize = $postMaxSize;
+        //MÁXIMO PERMITIDO 2 MEGAS POR CADA ARCHIVO
+        $this->postMaxSize = 1048576 * 2;
+
     }
 
     /**
@@ -538,7 +541,7 @@ class ContractsFilesController extends Controller
         $file = File::findOrFail($file_id);
         // Eliminamos caracteres especiales de la descripcion y pasamos como nombre del archivo
         $name = Str::slug($file->description);
-        //Separamos nombre y extensión de la descripción del archivo
+        //Separamos nombre y extensión de Storagela descripción del archivo
         $filename = explode(".", $file->file);
         //Obtenemos extensión del archivo
         $extension = $filename[1];
@@ -554,14 +557,14 @@ class ContractsFilesController extends Controller
     public function destroy(Request $request, $file_id)
     {
         // Chequeamos que el usuario actual disponga de permisos de eliminacion
-        if(!$request->user()->hasPermission(['admin.files.delete', 'contracts.files.delete',
-            'process_contracts.files.delete', 'derive_contracts.files.delete',
-            'plannings.files.delete','tenders.files.delete','minor_purchases.files.delete',
-            'exceptions.files.delete','awards.files.delete','contracts.files.delete',
-            'utas.files.delete','legal_advices.files.delete','comites.files.delete',
-            'coordinations.files.delete','dgafs.files.delete','documentals.files.delete'])){
-            return response()->json(['status' => 'error', 'message' => 'No posee los suficientes permisos para realizar esta acción.', 'code' => 200], 200);
-        }
+        // if(!$request->user()->hasPermission(['admin.files.delete', 'contracts.files.delete',
+        //     'process_contracts.files.delete', 'derive_contracts.files.delete',
+        //     'plannings.files.delete','tenders.files.delete','minor_purchases.files.delete',
+        //     'exceptions.files.delete','awards.files.delete','contracts.files.delete',
+        //     'utas.files.delete','legal_advices.files.delete','comites.files.delete',
+        //     'coordinations.files.delete','dgafs.files.delete','documentals.files.delete'])){
+        //     return response()->json(['status' => 'error', 'message' => 'No posee los suficientes permisos para realizar esta acción.', 'code' => 200], 200);
+        // }
 
         $file = File::find($file_id);
         // Eliminamos el archivo

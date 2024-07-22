@@ -38,7 +38,7 @@
                                 <div class="card-header">
                                     <h5>Cargar Archivo de Pólizas</h5>
                                 </div>
-                                <div class="col-sm-8 text-left">
+                                <div class="col-sm-12 text-left">
                                     <h5>{{ $contract->description." - ".$contract->modality->description." N° ".$contract->number_year." - ".$contract->provider->description }}
                                     {{-- <h5>{{ $contract->items_contract->id}} --}}
                                     {{-- <h5>SIMESE: {{ number_format($contract->simese->first()['simese'],'0', ',','.') }} </h5> --}}
@@ -48,6 +48,11 @@
                                 <div class="card-block">
                                     <form method="POST" action="{{ route('contracts.files.store', $contract->id) }}" enctype="multipart/form-data">
                                     @csrf
+
+                                        @php                                      
+                                            var_dump ($contract->id);
+                                            var_dump ($post_max_size);
+                                        @endphp
 
                                         <div class="form-group @error('description') has-danger @enderror">
                                             <label class="col-form-label">Descripción</label>
@@ -90,7 +95,7 @@ $(document).ready(function(){
             $('#guardar').attr("disabled", "disabled");
             file_size = Math.ceil((this.files[0].size/1024)/1024);
             max_allowed = Math.ceil((max_upload_size/1024)/1024);
-            swal("Error!", "El tamaño del archivo seleccionado ("+file_size+" Mb) supera el tamaño maximo de carga permitido ("+max_allowed+" Mb).", "error");
+            swal("Error!", "El tamaño del archivo seleccionado ("+file_size+" Mb) supera el tamaño máximo de carga permitido ("+max_allowed+" Mb).", "error");
         }else{
             $('#guardar').removeAttr("disabled");
         }
