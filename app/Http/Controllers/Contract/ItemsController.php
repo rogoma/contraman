@@ -71,7 +71,9 @@ class ItemsController extends Controller
                     break;
             }
         }
-        $this->postMaxSize = $postMaxSize;
+        // $this->postMaxSize = $postMaxSize;
+        //MÁXIMO PERMITIDO 2 MEGAS POR CADA ARCHIVO
+        $this->postMaxSize = 1048576 * 2;
     }
 
     /**
@@ -217,15 +219,15 @@ class ItemsController extends Controller
 
         if(!$request->hasFile('file')){
             $validator = Validator::make($request->input(), []);
-            $validator->errors()->add('file', 'El campo es requerido, debe ingresar un archivo WORD, PDF o EXCEL.');
+            $validator->errors()->add('file', 'El campo es requerido, debe ingresar un archivo WORD o PDF');
             return back()->withErrors($validator)->withInput();
         }
 
         // chequeamos la extension del archivo subido
         $extension = $request->file('file')->getClientOriginalExtension();
-        if(!in_array($extension, array('doc', 'docx', 'pdf', 'xls', 'xlsx'))){
+        if(!in_array($extension, array('doc', 'docx', 'pdf'))){
             $validator = Validator::make($request->input(), []); // Creamos un objeto validator
-            $validator->errors()->add('file', 'El archivo introducido debe corresponder a alguno de los siguientes formatos: doc, docx, pdf, xls, xlsx.'); // Agregamos el error
+            $validator->errors()->add('file', 'El archivo introducido debe corresponder a alguno de los siguientes formatos: doc, docx, pdf'); // Agregamos el error
             return back()->withErrors($validator)->withInput();
         }
 
@@ -254,8 +256,8 @@ class ItemsController extends Controller
             $item->amount = $amount;
         }
         $item->comments = $request->input('comments');
-        // $item->file = $fileName;
-        // $item->file_type = 1;//pólizas
+        $item->file = $fileName;
+        $item->file_type = 1;//pólizas
         $item->creator_user_id = $request->user()->id;  // usuario logueado
         $item->save();
         return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza agregada correctamente'); // Caso usuario posee rol pedidos

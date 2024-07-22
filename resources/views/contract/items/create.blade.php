@@ -42,7 +42,8 @@
                                     {{-- <label style="font-size: 20px;color: #FF0000;float: left;">FECHA: </label> --}}
                                 </div>
                                 <div class="card-block">
-                                    <form method="POST" action="{{ route('contracts.items.store', $contract->id) }}">
+                                    <form method="POST" action="{{ route('contracts.items.store', $contract->id) }}" enctype="multipart/form-data">
+                                    {{-- <form method="POST" action="{{ route('contracts.files.store', $contract->id) }}" enctype="multipart/form-data"> --}}
                                         @csrf
                                         <div class="container">
                                             <h3 style="text-align: center;">Agregar Póliza</h3>
@@ -136,7 +137,7 @@
                                             </div>
 
                                             <div class="form-group @error('file') has-danger @enderror">
-                                                <label class="col-form-label">Cargar archivo <small>(Archivos permitidos: WORD, PDF, EXCEL)</small></label>
+                                                <label class="col-form-label">Cargar archivo <small>(Archivos permitidos: WORD, PDF)</small></label>
                                                 <input id="file" type="file" class="form-control" name="file">
                                                 @error('file')
                                                     <div class="col-form-label">{{ $message }}</div>
@@ -171,9 +172,9 @@
                                         <div class="col-sm-12">
                                             <br>
                                             <div class="form-group text-center">
-                                                <button type="submit" class="btn btn-primary m-b-0 f-12">Guardar</button>
+                                                <button id="guardar" type="submit" class="btn btn-primary m-b-0">Guardar</button>
                                             </div>
-                                        </div>
+                                        </div>                                        
                                     </form>
                                 </div>
                             </div>
