@@ -239,22 +239,7 @@ p.centrado {
                                                                 @endif
                                                                 </td>
                                                                 <td>
-                                                                    {{-- <button type="button" title="Ver Archivo" class="btn btn-success btn-icon" onclick="itemAwardHistories({{ $contract->items[$i]->id }})">
-                                                                        <i class="fa fa-eye"></i> --}}
-                                                                        <a href="{{ asset('storage/files/'.$contract->items[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-success btn-icon"><i class="fa fa-eye"></i></a>
-                                                                        {{-- <a href="{{ asset('storage/files/'.$user_files_pol[$i]->file)}}" title="Ver Archivo" target="_blank" class="btn btn-success btn-icon"><i class="fa fa-eye"></i></a> --}}
-
-                                                                    {{-- </button> --}}
-
-                                                                    {{-- <button type="button" title="Descargar Archivo" class="btn btn-secondary btn-icon" onclick="itemAwardHistories({{ $contract->items[$i]->id }})">
-                                                                        <i class="fa fa-download"></i> --}}
-                                                                        {{-- <a title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a> --}}
-                                                                    {{-- </button> --}}
-
-                                                                    {{-- <button type="button" title="Endosos de Póliza" class="btn btn-danger btn-icon" onclick="itemAwardHistories({{ $contract->items[$i]->id }})">
-                                                                        <i class="fa fa-trash"></i> --}}
-                                                                        {{-- <button title="Eliminar Archivo"  class="btn btn-danger"><i class="fa fa-trash"></i></a> --}}
-                                                                    {{-- </button> --}}
+                                                                    <a href="{{ asset('storage/files/'.$contract->items[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-success btn-icon"><i class="fa fa-eye"></i></a>
                                                                 </td>
                                                             </tr>
                                                         @endfor

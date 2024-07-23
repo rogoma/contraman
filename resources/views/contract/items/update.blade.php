@@ -28,7 +28,7 @@
             <div class="col-lg-4">
                 <div class="page-header-breadcrumb">
                     <ul class=" breadcrumb breadcrumb-title">
-                        <li class="breadcrumb-item">                            
+                        <li class="breadcrumb-item">
                             <a href="{{ route('home') }}"><i class="feather icon-home"></i></a>
                         </li>
                         <li class="breadcrumb-item">
@@ -50,7 +50,7 @@
                                 <div class="card-header">
                                     <h5>Modificar Póliza al Llamado Nº {{ $contract->number_year }}</h5>
                                     <br><br>
-                                    <label id="fecha_actual" name="fecha_actual"  style="font-size: 20px;color: #FF0000;float: left;" for="fecha_actual">{{ Carbon\Carbon::now()->format('d/m/Y') }}</label>                                    
+                                    <label id="fecha_actual" name="fecha_actual"  style="font-size: 20px;color: #FF0000;float: left;" for="fecha_actual">{{ Carbon\Carbon::now()->format('d/m/Y') }}</label>
                                 </div>
                                 <div class="card-block">
                                         <form method="POST" action="{{ route('contracts.items.update', [$contract->id, $item->id]) }}">
@@ -147,14 +147,27 @@
                                                     @enderror
                                                 </div>
                                             </div>
-                                        </div>
-                                        {{-- <div class="col-sm-12">
-                                            <div class="form-group text-center">
-                                                @if (in_array($contract->contract_state_id, [1,2]))
-                                                    <a href="{{ route('contracts.files.create', $contract->id) }}" class="btn btn-danger">Cargar PDF Póliza</a>
-                                                @endif
+                                            <div class="form-group row @error('file') has-danger @enderror">
+                                                <label class="col-sm-2 col-form-label">Archivo:</label>
+                                                <div class="col-sm-10">
+                                                    <label>
+                                                        <a href="{{ asset('storage/files/' . old('file', $item->file)) }}" target="_blank">
+                                                            <i class="fa fa-file-pdf-o" style="font-size:24px;color:red"></i>
+                                                            {{ old('file', $item->file) }}
+                                                        </a>
+                                                    </label>
+                                                    {{-- <label> <a href="{{ asset('storage/files/'.old('file',$item->file))}}" target="_blank"> <i class="fa fa-file-pdf-o" style="font-size:24px;color:red"></i> {{ old('file',$item->file) }}</label> --}}
+                                                </div>
                                             </div>
-                                        </div> --}}
+
+                                            <div class="form-group @error('file') has-danger @enderror">
+                                                <label class="col-form-label">Cargar nuevo archivo <small>(Archivos permitidos: WORD, PDF)</small></label>
+                                                <input id="file" type="file" class="form-control" name="file">
+                                                @error('file')
+                                                    <div class="col-form-label">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
                                         <div class="col-sm-12">
                                             <br>
                                             <div class="form-group text-center">
@@ -222,7 +235,7 @@ $(document).ready(function(){
 
     // Convertimos a número
     monto = parseFloat(monto);
-    
+
     // Verificamos si el monto es un número válido y no NaN
     if (isNaN(monto) || monto < 0) {
         event.target.value = '0';
@@ -350,6 +363,18 @@ $(document).ready(function(){
     });
 
     $('#item_to').datepicker('date', null); // Limpiar el datapicker
+
+    $('#file').bind('change', function() {
+        max_upload_size = {{ $post_max_size }};
+        if(this.files[0].size > max_upload_size){
+            $('#guardar').attr("disabled", "disabled");
+            file_size = Math.ceil((this.files[0].size/1024)/1024);
+            max_allowed = Math.ceil((max_upload_size/1024)/1024);
+            swal("Error!", "El tamaño del archivo seleccionado ("+file_size+" Mb) supera el tamaño maximo de carga permitido ("+max_allowed+" Mb).", "error");
+        }else{
+            $('#guardar').removeAttr("disabled");
+        }
+    });
 });
 </script>
 @endpush

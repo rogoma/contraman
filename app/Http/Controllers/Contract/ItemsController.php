@@ -273,6 +273,7 @@ class ItemsController extends Controller
     public function edit(Request $request, $contract_id, $item_id)
     {
         $contract = Contract::findOrFail($contract_id);
+        $post_max_size = $this->postMaxSize;
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
         if(!$request->user()->hasPermission(['admin.items.update','contracts.items.update']) &&  $contract->dependency_id != $request->user()->dependency_id){
@@ -281,7 +282,7 @@ class ItemsController extends Controller
 
         $item = Item::findOrFail($item_id);
         $policies = Policy::all();
-        return view('contract.items.update', compact('contract','item','policies'));
+        return view('contract.items.update', compact('contract','item','policies','post_max_size'));
     }
 
 
@@ -327,6 +328,25 @@ class ItemsController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
+        if(!$request->hasFile('file')){
+            $validator = Validator::make($request->input(), []);
+            $validator->errors()->add('file', 'El campo es requerido, debe ingresar un archivo WORD o PDF');
+            return back()->withErrors($validator)->withInput();
+        }
+
+        // chequeamos la extension del archivo subido
+        $extension = $request->file('file')->getClientOriginalExtension();
+        if(!in_array($extension, array('doc', 'docx', 'pdf'))){
+            $validator = Validator::make($request->input(), []); // Creamos un objeto validator
+            $validator->errors()->add('file', 'El archivo introducido debe corresponder a alguno de los siguientes formatos: doc, docx, pdf'); // Agregamos el error
+            return back()->withErrors($validator)->withInput();
+        }
+
+        // Pasó todas las validaciones, guardamos el archivo
+        $fileName = time().'-contract-file.'.$extension; // nombre a guardar
+        // Cargamos el archivo (ruta storage/app/public/files, enlace simbólico desde public/files)
+        $path = $request->file('file')->storeAs('public/files', $fileName);
+
         // $item = new Item;
         // $item->contract_id = $contract_id;
         $item->policy_id = $request->input('policy_id');
@@ -347,7 +367,8 @@ class ItemsController extends Controller
             $item->amount = $amount;
         }
         $item->comments = $request->input('comments');
-
+        $item->file = $fileName;
+        $item->file_type = 1;//pólizas
         $item->creator_user_id = $request->user()->id;  // usuario logueado
         $item->save();
         return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza modificada correctamente'); // Caso usuario posee rol pedidos
