@@ -197,6 +197,7 @@ p.centrado {
                                                             <th>Monto</th>
                                                             <th>Comentarios</th>
                                                             <th>Acciones</th>
+                                                            <th>Archivo</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -217,7 +218,6 @@ p.centrado {
                                                                 <td style="color:red;font-weight">{{ $contract->items[$i]->itemToDateFormat() }}</td>
                                                                 <td>{{ $contract->items[$i]->AmountFormat()}} </td>
                                                                 <td>{{ $contract->items[$i]->comments }}</td>
-
                                                                 <td>
                                                                 {{-- @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']) || $contract->dependency_id == Auth::user()->dependency_id) --}}
                                                                 @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']))
@@ -237,6 +237,24 @@ p.centrado {
                                                                         <i class="fa fa-list"></i>
                                                                     </button>
                                                                 @endif
+                                                                </td>
+                                                                <td>
+                                                                    {{-- <button type="button" title="Ver Archivo" class="btn btn-success btn-icon" onclick="itemAwardHistories({{ $contract->items[$i]->id }})">
+                                                                        <i class="fa fa-eye"></i> --}}
+                                                                        <a href="{{ asset('storage/files/'.$contract->items[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-success btn-icon"><i class="fa fa-eye"></i></a>
+                                                                        {{-- <a href="{{ asset('storage/files/'.$user_files_pol[$i]->file)}}" title="Ver Archivo" target="_blank" class="btn btn-success btn-icon"><i class="fa fa-eye"></i></a> --}}
+
+                                                                    {{-- </button> --}}
+
+                                                                    {{-- <button type="button" title="Descargar Archivo" class="btn btn-secondary btn-icon" onclick="itemAwardHistories({{ $contract->items[$i]->id }})">
+                                                                        <i class="fa fa-download"></i> --}}
+                                                                        {{-- <a title="Descargar Archivo" class="btn btn-info"><i class="fa fa-download"></i></a> --}}
+                                                                    {{-- </button> --}}
+
+                                                                    {{-- <button type="button" title="Endosos de Póliza" class="btn btn-danger btn-icon" onclick="itemAwardHistories({{ $contract->items[$i]->id }})">
+                                                                        <i class="fa fa-trash"></i> --}}
+                                                                        {{-- <button title="Eliminar Archivo"  class="btn btn-danger"><i class="fa fa-trash"></i></a> --}}
+                                                                    {{-- </button> --}}
                                                                 </td>
                                                             </tr>
                                                         @endfor
