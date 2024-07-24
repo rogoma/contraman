@@ -151,12 +151,11 @@
                                                 <label class="col-sm-2 col-form-label">Archivo:</label>
                                                 <div class="col-sm-10">
                                                     <label>
-                                                        <a href="{{ asset('storage/files/' . old('file', $item->file)) }}" target="_blank">
-                                                            <i class="fa fa-file-pdf-o" style="font-size:24px;color:red"></i>
+                                                        <a href="{{ asset('storage/files/'. old('file', $item->file)) }}" target="_blank">
+                                                            <i class="fa fa-file-pdf-o" style="font-size:24px;color:red" value="{{ old('file',$item->file) }}"></i>
                                                             {{ old('file', $item->file) }}
                                                         </a>
                                                     </label>
-                                                    {{-- <label> <a href="{{ asset('storage/files/'.old('file',$item->file))}}" target="_blank"> <i class="fa fa-file-pdf-o" style="font-size:24px;color:red"></i> {{ old('file',$item->file) }}</label> --}}
                                                 </div>
                                             </div>
 
