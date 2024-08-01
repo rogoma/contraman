@@ -13,6 +13,7 @@ use Illuminate\Validation\Rule;
 
 class ItemAwardHistoriesController extends Controller
 {
+    protected $postMaxSize;
     /**
      * Create a new controller instance.
      *
@@ -35,6 +36,32 @@ class ItemAwardHistoriesController extends Controller
         $this->middleware('checkPermission:'.implode(',',$index_permissions))->only('index'); // Permiso para index
         $this->middleware('checkPermission:'.implode(',',$create_permissions))->only(['create', 'store']);   // Permiso para create
         $this->middleware('checkPermission:'.implode(',',$update_permissions))->only(['edit', 'update']);   // Permiso para update
+
+         // obtenemos el tamaño permitido de subida de archivos del servidor
+         if (is_numeric(ini_get('post_max_size'))) {
+            $postMaxSize = ini_get('post_max_size');
+        }else{
+            $metric = strtoupper(substr(ini_get('post_max_size'), -1));
+            $postMaxSize = (int) ini_get('post_max_size');
+
+            switch ($metric) {
+                case 'K':
+                    $postMaxSize = $postMaxSize * 1024;
+                    break;
+                case 'M':
+                    $postMaxSize = $postMaxSize * 1048576;
+                    break;
+                case 'G':
+                    $postMaxSize = $postMaxSize * 1073741824;
+                    break;
+                default:
+                    $postMaxSize = 8 * 1024 * 1024;
+                    break;
+            }
+        }
+        // $this->postMaxSize = $postMaxSize;
+        //MÁXIMO PERMITIDO 2 MEGAS POR CADA ARCHIVO
+        $this->postMaxSize = 1048576 * 2;
     }
 
     /**
@@ -66,15 +93,16 @@ class ItemAwardHistoriesController extends Controller
     {
         $item = Item::findOrFail($item_id);
         $item_award_types = ItemAwardType::all();
+        $post_max_size = $this->postMaxSize;
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
         if(!$request->user()->hasPermission(['admin.item_award_histories.create', 'contracts.item_award_histories.create']) &&
-        $item->contract->dependency_id != $request->user()->dependency_id){
+            $item->contract->dependency_id != $request->user()->dependency_id){
             // return back()->with('error', 'No tiene los suficientes permisos para acceder a esta sección.');
         }
 
         // return view('contract.item_award_histories.create', compact('item'));
-        return view('contract.item_award_histories.create', compact('item', 'item_award_types'));
+        return view('contract.item_award_histories.create', compact('item', 'item_award_types','post_max_size'));
     }
 
 
@@ -99,6 +127,31 @@ class ItemAwardHistoriesController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
+
+        // var_dump(
+        //     $request->number_policy,
+        //     $request->amount,
+        //     $request->hasFile('file'),
+        // );exit;
+
+        if(!$request->hasFile('file')){
+            $validator = Validator::make($request->input(), []);
+            $validator->errors()->add('file', 'El campo es requerido, debe ingresar un archivo WORD o PDF');
+            return back()->withErrors($validator)->withInput();
+        }
+
+        // chequeamos la extension del archivo subido
+        $extension = $request->file('file')->getClientOriginalExtension();
+        if(!in_array($extension, array('doc', 'docx', 'pdf'))){
+            $validator = Validator::make($request->input(), []); // Creamos un objeto validator
+            $validator->errors()->add('file', 'El archivo introducido debe corresponder a alguno de los siguientes formatos: doc, docx, pdf'); // Agregamos el error
+            return back()->withErrors($validator)->withInput();
+        }
+
+        // Pasó todas las validaciones, guardamos el archivo
+        $fileName = time().'-addendum-file.'.$extension; // nombre a guardar
+        // Cargamos el archivo (ruta storage/app/public/files, enlace simbólico desde public/files)
+        $path = $request->file('file')->storeAs('public/files', $fileName);
 
         $itemA = new ItemAwardHistory;
         $itemA->item_id = $item_id;
@@ -167,6 +220,8 @@ class ItemAwardHistoriesController extends Controller
             $itemA->amount = $amount;
         }
         $itemA->comments = $request->input('comments');
+        $itemA->file = $fileName;
+        $itemA->file_type = 2;//endoso
         $itemA->state_id = 1;
         $itemA->creator_user_id = $request->user()->id;  // usuario logueado
         $itemA->save();

@@ -208,7 +208,6 @@ class ItemsController extends Controller
             'item_from' => 'date_format:d/m/Y',
             'item_to' => 'required|date_format:d/m/Y',
             'amount' => 'nullable|string|max:9223372036854775807',
-            // 'file' => 'required',
             'comments' => 'nullable|max:300'
         );
 
@@ -216,6 +215,8 @@ class ItemsController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
+
+        // var_dump($request->hasFile('file'));exit;
 
         if(!$request->hasFile('file')){
             $validator = Validator::make($request->input(), []);
@@ -232,7 +233,7 @@ class ItemsController extends Controller
         }
 
         // Pasó todas las validaciones, guardamos el archivo
-        $fileName = time().'-contract-file.'.$extension; // nombre a guardar
+        $fileName = time().'-policy-file.'.$extension; // nombre a guardar
         // Cargamos el archivo (ruta storage/app/public/files, enlace simbólico desde public/files)
         $path = $request->file('file')->storeAs('public/files', $fileName);
 
@@ -257,7 +258,7 @@ class ItemsController extends Controller
         }
         $item->comments = $request->input('comments');
         $item->file = $fileName;
-        $item->file_type = 1;//pólizas
+        $item->file_type = 1;//póliza
         $item->creator_user_id = $request->user()->id;  // usuario logueado
         $item->save();
         return redirect()->route('contracts.show', $contract_id)->with('success', 'Póliza agregada correctamente'); // Caso usuario posee rol pedidos

@@ -65,6 +65,7 @@
                                                     <th>Estado</th>
                                                     <th>Comentarios</th>
                                                     <th>Acciones</th>
+                                                    <th>Archivo</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -108,6 +109,9 @@
 
                                                         </td>
                                                     @endif
+                                                    <td>
+                                                        <a href="{{ asset('storage/files/'.$item->itemAwardHistories[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-success btn-icon"><i class="fa fa-eye"></i></a>
+                                                    </td>
                                                 </tr>
                                             @endfor
                                             </tbody>

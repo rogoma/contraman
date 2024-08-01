@@ -114,12 +114,12 @@ p.centrado {
                                             <a class="nav-link" data-toggle="tab" href="#tab4" role="tab"><i class="fa fa-file-pdf-o"></i> Reportes</a>
                                             <div class="slide"></div>
                                         </li>
-                                        <li class="nav-item">
+                                        {{-- <li class="nav-item">
                                             <a class="nav-link" data-toggle="tab" href="#tab5" role="tab"><i class="fa fa-folder-open-o"></i> Archivos de Pólizas</a>
                                             <div class="slide"></div>
-                                        </li>
+                                        </li> --}}
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tab6" role="tab"><i class="fa fa-file-archive-o"></i> Archivos de Contratos</a>
+                                            <a class="nav-link" data-toggle="tab" href="#tab6" role="tab"><i class="fa fa-file-archive-o"></i> Archivos del Contrato</a>
                                             <div class="slide"></div>
                                         </li>
                                     </ul>
@@ -338,7 +338,7 @@ p.centrado {
                                                         <tr>
                                                             <th>#</th>
                                                             <th>Descripción</th>
-                                                            <th>Dependencia</th>
+                                                            <th>Archivo generado por:</th>
                                                             <th>Fecha/Hora</th>
                                                             <th>Acciones</th>
                                                         </tr>

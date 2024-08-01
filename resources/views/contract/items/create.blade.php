@@ -137,44 +137,21 @@
                                             </div>
 
                                             <div class="form-group @error('file') has-danger @enderror">
-                                                <label class="col-form-label">Cargar archivo <small>(Archivos permitidos: WORD, PDF)</small></label>
+                                                {{-- <h3 style="text-align: center;">Agregar Póliza</h3> --}}
+                                                <label class="col-form-label">Cargar Archivo: <h7>(Tipo de archivos permitidos: WORD, PDF)</h7></label>
                                                 <input id="file" type="file" class="form-control" name="file">
                                                 @error('file')
                                                     <div class="col-form-label">{{ $message }}</div>
                                                 @enderror
                                             </div>
-                                            {{-- <div class="form-group row @error('file') has-danger @enderror">
-                                                <label class="col-form-label">Cargar archivo <small>(Formato permitido: PDF)</small></label>
-                                                <input id="file" type="file" class="form-control" name="file">
-                                                @error('file')
-                                                    <div class="col-form-label">{{ $message }}</div>
-                                                @enderror
-                                            </div> --}}
-
-                                            {{-- <div class="form-group @error('file') has-danger @enderror">
-                                                <label class="col-sm-2 col-form-label">Cargar archivo <small>(Archivos permitidos: WORD, PDF, EXCEL)</small></label>
-                                                <input id="file" type="file" class="form-control" name="file">
-                                                @error('file')
-                                                    <div class="col-form-label">{{ $message }}</div>
-                                                @enderror
-                                            </div> --}}
                                         </div>
-                                        {{-- <div class="col-sm-12">
-                                            <div class="form-group text-center">
-                                                @if (in_array($contract->contract_state_id, [1,2]))
-                                                    <a href="{{ route('contracts.files.create', $contract->id) }}" class="btn btn-danger">Cargar PDF Póliza</a>
-                                                @endif
-                                            </div>
-                                        </div> --}}
-
-
-
+                                        
                                         <div class="col-sm-12">
                                             <br>
                                             <div class="form-group text-center">
                                                 <button id="guardar" type="submit" class="btn btn-primary m-b-0">Guardar</button>
                                             </div>
-                                        </div>                                        
+                                        </div>
                                     </form>
                                 </div>
                             </div>

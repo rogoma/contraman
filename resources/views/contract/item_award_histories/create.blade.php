@@ -43,7 +43,7 @@
                                     {{-- <label style="font-size: 20px;color: #FF0000;float: left;">FECHA: </label> --}}
                                 </div>
                                 <div class="card-block">
-                                    <form method="POST" action="{{ route('items.item_award_histories.store', $item->id) }}">
+                                    <form method="POST" action="{{ route('items.item_award_histories.store', $item->id)}}" enctype="multipart/form-data">
                                         @csrf
                                         <div class="container">
                                             {{-- se captura en modo hidden el monto para pasar al controlador, se debe controlar monto poliza vs monto endoso --}}
@@ -140,28 +140,20 @@
                                                 </div>
                                             </div>
 
-                                            {{-- <div class="form-group @error('file') has-danger @enderror">
-                                                <label class="col-sm-2 col-form-label">Cargar archivo <small>(Archivos permitidos: WORD, PDF, EXCEL)</small></label>
+                                            <div class="form-group row @error('file') has-danger @enderror">
+                                                {{-- <h3 style="text-align: center;">Agregar Póliza</h3> --}}
+                                                <label class="col-form-label">Cargar Archivo: <h7>(Tipo de archivos permitidos: WORD, PDF)</h7></label>
                                                 <input id="file" type="file" class="form-control" name="file">
                                                 @error('file')
                                                     <div class="col-form-label">{{ $message }}</div>
                                                 @enderror
-                                            </div> --}}
-                                        </div>
-                                        {{-- <div class="col-sm-12">
-                                            <div class="form-group text-center">
-                                                @if (in_array($item->item_state_id, [1,2]))
-                                                    <a href="{{ route('items.files.create', $item->id) }}" class="btn btn-danger">Cargar PDF Endoso</a>
-                                                @endif
                                             </div>
-                                        </div> --}}
-
-
+                                        </div>
 
                                         <div class="col-sm-12">
                                             <br>
                                             <div class="form-group text-center">
-                                                <button type="submit" class="btn btn-primary m-b-0 f-12">Guardar</button>
+                                                <button id="guardar" type="submit" class="btn btn-primary m-b-0">Guardar</button>
                                             </div>
                                         </div>
                                     </form>
@@ -330,6 +322,18 @@ $(document).ready(function(){
             var f3= $('#fecha_actual').text();//fecha actual
             $('#control_1').val(restaFechas(f1,f2));//resultado fecha vigencia
             $('#control_a').val(restaFechas2(f2,f3));//resultado fecha días para vencer
+        }
+    });
+
+    $('#file').bind('change', function() {
+        max_upload_size = {{ $post_max_size }};
+        if(this.files[0].size > max_upload_size){
+            $('#guardar').attr("disabled", "disabled");
+            file_size = Math.ceil((this.files[0].size/1024)/1024);
+            max_allowed = Math.ceil((max_upload_size/1024)/1024);
+            swal("Error!", "El tamaño del archivo seleccionado ("+file_size+" Mb) supera el tamaño maximo de carga permitido ("+max_allowed+" Mb).", "error");
+        }else{
+            $('#guardar').removeAttr("disabled");
         }
     });
 
