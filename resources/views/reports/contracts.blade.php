@@ -75,12 +75,16 @@
     <h2 style="color:#ff0000">LISTADO DE LLAMADOS EN CURSO</h2>
 @endif
 
+@if ($nombreMetodo == "App\Http\Controllers\Report\ReportsController::generarContracts2")
+    <h2 style="color:#ff0000">LISTADO DE LLAMADOS RESCINDIDOS</h2>
+@endif
+
 @if ($nombreMetodo == "App\Http\Controllers\Report\ReportsController::generarContracts3")
     <h2 style="color:#ff0000">LISTADO DE LLAMADOS CERRADOS</h2>
 @endif
 
-@if ($nombreMetodo == "App\Http\Controllers\Report\ReportsController::generarContracts2")
-    <h2 style="color:#ff0000">LISTADO DE LLAMADOS RESCINDIDOS</h2>
+@if ($nombreMetodo == "App\Http\Controllers\Report\ReportsController::generarContracts6")
+    <h2 style="color:#ff0000">LISTADO DE LLAMADOS EN PROCESO DE RESCISIÓN</h2>
 @endif
 
 

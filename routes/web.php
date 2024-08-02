@@ -170,7 +170,7 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     // Route::delete('items/{item_id}/item_award_histories', [ItemAwardHistoriesController::class, 'destroy'])->name('item_award_histories.destroy');
 
 
-    
+
 
     //DESDE ACA PARA AGREGAR EMPRESAS ADJUDICADAS
     //Route::resource('orders.budget_request_providers', BudgetRequestProvidersController::class); //Recurso anidado, es igual a /orders/{order_id}/items/{item_id}
@@ -270,10 +270,10 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     // // Contrato Abierto con Mmin y Mmax
     // Route::post('/orders/{id}/uploadExcel3', [ItemsController::class, 'storeExcel3'])->name('orders.items.storeExcel3');
 
-    
+
 
     // location.href = '/items/{{ $item->id }}/item_award_histories/'+item+'/edit/';
-    
+
     //BUSCA ITEMS DE CATALOGO 5
     Route::get('items/search', [ItemsController::class, 'search']);
     //BUSCA ITEMS DE CATALOGO 4
@@ -372,6 +372,8 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     Route::get('pdf/panel_contracts2', [ReportsController::class, 'generarContracts2'])->name('pdf.panel_contracts2');
     //REPORTE DE CONTRATOS CERRADOS
     Route::get('pdf/panel_contracts3', [ReportsController::class, 'generarContracts3'])->name('pdf.panel_contracts3');
+    //REPORTE DE CONTRATOS EN PROCESO RESCISIÓN
+    Route::get('pdf/panel_contracts6', [ReportsController::class, 'generarContracts6'])->name('pdf.panel_contracts6');
     //REPORTE DE DETALLE DE PÓLIZAS
     Route::get('pdf/panel_contracts4', [ReportsController::class, 'generarContracts4'])->name('pdf.panel_contracts4');
     //REPORTE DE ALERTAS DE VENCIMIENTOS DE PÓLIZAS

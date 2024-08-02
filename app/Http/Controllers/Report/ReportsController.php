@@ -55,7 +55,7 @@ class ReportsController extends Controller{
             ->where('contract_id', '=', $contract_id)
             ->get();
 
-            
+
             $contracts2 = DB::table('vista_contracts_full')
             ->select(DB::raw('DISTINCT ON (polizas) polizas, number_policy, tipo_contrato, item_from, item_to, amount, comments, contratista, dependencia'))
             ->where('contract_id', '=', $contract_id)
@@ -88,10 +88,10 @@ class ReportsController extends Controller{
             // ->get();
             $contracts2 = DB::table('vista_contracts_full')
             ->select(DB::raw('DISTINCT ON (polizas) polizas, number_policy, tipo_contrato, item_from, item_to, amount, comments, contratista, dependencia'))
-            ->where('contract_id', '=', $contract_id)                        
+            ->where('contract_id', '=', $contract_id)
             ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
             ->orderBy('polizas')
-            ->get();            
+            ->get();
 
             //Donde contracts3 muestra endosos (itemawards_histories)
             $contracts3 = DB::table('vista_contracts_full2')//vista que muestra los datos
@@ -240,6 +240,43 @@ class ReportsController extends Controller{
             $pdf->loadHTML($view);
             $pdf->setPaper('A4', 'landscape');//coloca en apaisado
             return $pdf->stream('LLAMADO-CONTRATOS RESCINDIDOS'.'.pdf');
+        }else{
+            return redirect()->route('contracts.index')->with('error', 'NO HAY DATOS PARA GENERAR EL REPORTE');
+        }
+    }
+
+    // Para mostrar todos los llamados que estan en proceso de rescisión (estado = 6)
+    public function generarContracts6(Request $request)
+    {
+        //capturamos el nombre del método para poder cambiar el título del reporte en la vista
+        $nombreMetodo = __METHOD__;
+
+        if($request->user()->hasPermission(['admin.contracts.show'])){
+            $contracts = DB::table('vista_contracts')//vista que muestra los datos
+            ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
+            'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
+            'contract_end_date', 'total_amount', 'comentarios','dependencia'])
+            ->where('state_id', '=', 6)
+            ->get();
+        }else{
+            $contracts = DB::table('vista_contracts')//vista que muestra los datos
+            ->select(['llamado', 'iddncp','number_year','year_adj','sign_date','contratista',
+            'estado', 'code', 'modalidad', 'org_financ', 'tipo_contrato','contract_begin_date',
+            'contract_end_date', 'total_amount', 'comentarios','dependencia'])
+            ->where('state_id', '=', 6)
+            ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
+            ->get();
+        }
+
+        // CONTROLA SI HAY DATOS PARA GENERAR REPORTE
+        $val = $contracts->count();
+
+        if ($val > 0) {
+            $view = View::make('reports.contracts', compact('contracts', 'nombreMetodo'))->render();
+            $pdf = App::make('dompdf.wrapper');
+            $pdf->loadHTML($view);
+            $pdf->setPaper('A4', 'landscape');//coloca en apaisado
+            return $pdf->stream('LLAMADO-CONTRATOS EN PROCESO DE RESCISIÓN'.'.pdf');
         }else{
             return redirect()->route('contracts.index')->with('error', 'NO HAY DATOS PARA GENERAR EL REPORTE');
         }

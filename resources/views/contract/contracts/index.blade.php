@@ -39,8 +39,10 @@ p.centrado {
                         <br>
                             <a href="pdf/panel_contracts0" class="btn btn-outline-primary" target="_blank"> TOTAL LLAMADOS</a>
                             <a href="pdf/panel_contracts1" class="btn btn-outline-warning" target="_blank">EN CURSO</a>
+                            <a href="pdf/panel_contracts6" class="btn btn-outline-success" target="_blank">EN PROCESO RESCISIÓN</a>
+                            <a href="pdf/panel_contracts2" class="btn btn-outline-warning" target="_blank">RESCINDIDOS</a>
                             <a href="pdf/panel_contracts3" class="btn btn-outline-danger" target="_blank">CERRADOS</a>
-                            <a href="pdf/panel_contracts2" class="btn btn-outline-success" target="_blank">RESCINDIDOS</a>
+
                             {{-- <a href="pdf/panel_contracts4" class="btn btn-outline-primary" target="_blank">DETALLE PÓLIZAS</a> --}}
 
                             {{-- <a href="/contracts/exportarexcel6" class="btn btn-outline-primary" target="_blank">EXCEL PÓLIZAS</a> --}}
@@ -113,7 +115,7 @@ p.centrado {
                                                     <td>{{ $contracts[$i]->provider->ruc }}-{{ $contracts[$i]->provider->description }}</td>
                                                     <td>{{ $contracts[$i]->modality->code }}-{{ $contracts[$i]->modality->description }}</td>
 
-                                                    @if (in_array($contracts[$i]->contractState->id, [2,3]))
+                                                    @if (in_array($contracts[$i]->contractState->id, [2,3,6]))
                                                         <td style="color:#ff0000">{{ $contracts[$i]->contractState->description }}</td>
                                                     @else
                                                         @if (in_array($contracts[$i]->contractState->id, [4]))

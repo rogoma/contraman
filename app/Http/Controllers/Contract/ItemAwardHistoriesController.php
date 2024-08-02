@@ -213,12 +213,14 @@ class ItemAwardHistoriesController extends Controller
             $itemA->item_award_type_id = $request->input('item_award_type_id');
         }
 
-        if ($amount > $amount_poliza) {
-            $validator->errors()->add('amount', 'Monto no puede ser mayor a monto póliza');
-            return back()->withErrors($validator)->withInput();
-        }else{
-            $itemA->amount = $amount;
-        }
+        //SE DEJA DE CONTROLAR MONTO DE POLIZA VS MONTO DE ENDOSO
+        // if ($amount > $amount_poliza) {
+        //     $validator->errors()->add('amount', 'Monto no puede ser mayor a monto póliza');
+        //     return back()->withErrors($validator)->withInput();
+        // }else{
+             $itemA->amount = $amount;
+        // }
+
         $itemA->comments = $request->input('comments');
         $itemA->file = $fileName;
         $itemA->file_type = 2;//endoso
@@ -304,12 +306,14 @@ class ItemAwardHistoriesController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        if ($amount < 0 ) {
-            $validator->errors()->add('amount', 'Monto no puede ser negativo');
-            return back()->withErrors($validator)->withInput();
-        }else{
-            $itemA->amount = $amount;
-        }
+        //SE DEJA DE CONTROLAR MONTO DE POLIZA VS MONTO DE ENDOSO
+        // if ($amount < 0 ) {
+        //     $validator->errors()->add('amount', 'Monto no puede ser negativo');
+        //     return back()->withErrors($validator)->withInput();
+        // }else{
+             $itemA->amount = $amount;
+        // }
+
         $itemA->comments = $request->input('comments');
         $itemA->creator_user_id = $request->user()->id;  // usuario logueado
         $itemA->save();
