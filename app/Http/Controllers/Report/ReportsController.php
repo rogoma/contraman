@@ -328,19 +328,6 @@ class ReportsController extends Controller{
             ->select(DB::raw('DISTINCT ON (number_policy)  iddncp, number_year, contratista, tipo_contrato, total_amount, fecha_tope_advance, vcto_adv, dias_advance,llamado,polizas,number_policy,modalidad,comentarios,dependencia'))
             ->where('dias_advance', '<=', 0)
             ->get();
-
-            // $contracts = DB::table('vista_contracts_vctos')//vista que muestra los datos
-            // ->select(['iddncp','number_year','contratista','tipo_contrato','total_amount','fecha_tope_advance',
-            // 'vcto_adv','dias_advance', 'llamado', 'polizas', 'number_policy', 'modalidad', 'comentarios','dependencia'])
-            // ->where('dias_advance', '<=', 0)
-            // ->get();
-
-    //         $contracts2 = DB::table('vista_contracts_full')
-    // ->select(DB::raw('DISTINCT ON (polizas) polizas, number_policy, tipo_contrato, item_from, item_to, amount, comments, contratista, dependencia'))
-    // ->where('dependency_id', $request->user()->dependency_id)
-    // ->orderBy('polizas')
-    // ->get();
-
         }else{
             $contracts = DB::table('vista_contracts_vctos')//vista que muestra los datos
             ->select(DB::raw('DISTINCT ON (number_policy)  iddncp, number_year, contratista, tipo_contrato, total_amount, fecha_tope_advance, vcto_adv, dias_advance,llamado,polizas,number_policy,modalidad,comentarios,dependencia'))

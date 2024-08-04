@@ -81,32 +81,31 @@
                                                         <td>{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td>
                                                     @endif
                                                     <td>{{ $item->itemAwardHistories[$i]->amountFormat() }}</td>
+                                                    
+                                                    {{-- ESTADO DEL ENDOSO --}}
                                                     @if ($item->itemAwardHistories[$i]->state_id == 1)
                                                         <td style="color:blue;font-weight">Activo</td>
                                                     @else
                                                         <td style="color:red;font-weight">Inactivo</td>
                                                     @endif
-                                                    {{-- <td>{{ $item->itemAwardHistories[$i]->state_id }}</td> --}}
+                                                    
                                                     <td>{{ $item->itemAwardHistories[$i]->comments }}</td>
 
                                                     @if ($item->itemAwardHistories[$i]->state_id == 1)
-                                                    <td>
-                                                    {{-- @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']) || $item->dependency_id == Auth::user()->dependency_id) --}}
-                                                    @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']))
-                                                        <button type="button" title="Editar" class="btn btn-warning btn-icon" onclick="updateItem({{ $item->itemAwardHistories[$i]->id }})">
-                                                            <i class="fa fa-pencil"></i>
-                                                        </button>
-                                                    @endif
-                                                    {{-- @if (Auth::user()->hasPermission(['admin.items.delete','contracts.items.update']) || $item->dependency_id == Auth::user()->dependency_id) --}}
-                                                    @if (Auth::user()->hasPermission(['admin.items.delete','contracts.items.update']))
-                                                        <button type="button" title="Borrar" class="btn btn-danger btn-icon" onclick="deleteItemAwardHistories({{$item->itemAwardHistories[$i]->id }})">
-                                                            <i class="fa fa-trash"></i>
-                                                        </button>
-                                                    @endif
-                                                    </td>
+                                                        <td>                                                    
+                                                            @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']))
+                                                                <button type="button" title="Editar" class="btn btn-warning btn-icon" onclick="updateItem({{ $item->itemAwardHistories[$i]->id }})">
+                                                                    <i class="fa fa-pencil"></i>
+                                                                </button>
+                                                            @endif
+                                                        </td>                                                        
                                                     @else
                                                         <td>
-
+                                                            @if (Auth::user()->hasPermission(['admin.items.delete','contracts.items.update']))
+                                                                <button type="button" title="Borrar" class="btn btn-danger btn-icon" onclick="deleteItemAwardHistories({{$item->itemAwardHistories[$i]->id }})">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                            @endif
                                                         </td>
                                                     @endif
                                                     <td>
