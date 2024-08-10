@@ -239,7 +239,7 @@ class ReportsController extends Controller{
             $pdf = App::make('dompdf.wrapper');
             $pdf->loadHTML($view);
             $pdf->setPaper('A4', 'landscape');//coloca en apaisado
-            return $pdf->stream('LLAMADO-CONTRATOS RESCINDIDOS'.'.pdf');
+            return $pdf->stream('LLAMADOS-CONTRATOS RESCINDIDOS'.'.pdf');
         }else{
             return redirect()->route('contracts.index')->with('error', 'NO HAY DATOS PARA GENERAR EL REPORTE');
         }
