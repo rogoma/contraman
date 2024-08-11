@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Contract;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\Contract;
 use App\Models\Order;
@@ -164,28 +165,6 @@ class ContractsController extends Controller
             'dependency_id' => 'numeric|required|max:999999',
             'contract_admin_id' => 'numeric|required|max:999999',
             'comments' => 'nullable|max:300',
-
-            // 'advance_validity_from' => 'nullable|date_format:d/m/Y',
-            // 'advance_validity_to' => 'nullable|date_format:d/m/Y',
-            // 'fidelity_validity_from' => 'nullable|date_format:d/m/Y',
-            // 'fidelity_validity_to' => 'nullable|date_format:d/m/Y',
-            // 'accidents_validity_from' => 'nullable|date_format:d/m/Y',
-            // 'accidents_validity_to' => 'nullable|date_format:d/m/Y',
-            // 'risks_validity_from' => 'nullable|date_format:d/m/Y',
-            // 'risks_validity_to' => 'nullable|date_format:d/m/Y',
-            // 'civil_resp_validity_from' => 'nullable|date_format:d/m/Y',
-            // 'civil_resp_validity_to' => 'nullable|date_format:d/m/Y',
-            // 'comments' => 'nullable|max:300',
-            // 'control_1' => 'nullable|numeric',
-            // 'control_a' => 'nullable|numeric',
-            // 'control_2' => 'nullable|numeric',
-            // 'control_b' => 'nullable|numeric',
-            // 'control_3' => 'nullable|numeric',
-            // 'control_c' => 'nullable|numeric',
-            // 'control_4' => 'nullable|numeric',
-            // 'control_d' => 'nullable|numeric',
-            // 'control_5' => 'nullable|numeric',
-            // 'control_e' => 'nullable|numeric'
         );
 
         $validator =  Validator::make($request->all(), $rules);

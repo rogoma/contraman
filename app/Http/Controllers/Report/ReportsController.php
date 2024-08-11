@@ -324,14 +324,14 @@ class ReportsController extends Controller{
         $nombreMetodo = __METHOD__;
 
         if($request->user()->hasPermission(['admin.contracts.show'])){
-            $contracts = DB::table('vista_contracts_vctos')//vista que muestra los datos
+            $contracts = DB::table('vista_contracts_vctos2')//vista que muestra los datos
             ->select(DB::raw('DISTINCT ON (number_policy)  iddncp, number_year, contratista, tipo_contrato, total_amount, fecha_tope_advance, vcto_adv, dias_advance,llamado,polizas,number_policy,modalidad,comentarios,dependencia'))
-            ->where('dias_advance', '<=', 0)
+            ->where('dias_advance2', '<=', 0)
             ->get();
         }else{
-            $contracts = DB::table('vista_contracts_vctos')//vista que muestra los datos
+            $contracts = DB::table('vista_contracts_vctos2')//vista que muestra los datos
             ->select(DB::raw('DISTINCT ON (number_policy)  iddncp, number_year, contratista, tipo_contrato, total_amount, fecha_tope_advance, vcto_adv, dias_advance,llamado,polizas,number_policy,modalidad,comentarios,dependencia'))
-            ->where('dias_advance', '<=', 0)
+            ->where('dias_advance2', '<=', 0)
             ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
             ->get();
         }

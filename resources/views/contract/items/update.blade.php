@@ -53,7 +53,7 @@
                                     <label id="fecha_actual" name="fecha_actual"  style="font-size: 20px;color: #FF0000;float: left;" for="fecha_actual">{{ Carbon\Carbon::now()->format('d/m/Y') }}</label>
                                 </div>
                                 <div class="card-block">
-                                        <form method="POST" action="{{ route('contracts.items.update', [$contract->id, $item->id]) }}">
+                                        <form method="POST" action="{{ route('contracts.items.update', [$contract->id, $item->id]) }}" enctype="multipart/form-data">                                                                       
                                         @csrf
                                         @method('PUT')
 
@@ -147,20 +147,22 @@
                                                     @enderror
                                                 </div>
                                             </div>
-                                            <div class="form-group row @error('file') has-danger @enderror">
+                                            <div class="form-group row @error('filename') has-danger @enderror">
                                                 <label class="col-sm-2 col-form-label">Archivo:</label>
                                                 <div class="col-sm-10">
-                                                    <label>
+                                                    <label id="filename" name="filename">
                                                         <a href="{{ asset('storage/files/'. old('file', $item->file)) }}" target="_blank">
-                                                            <i class="fa fa-file-pdf-o" style="font-size:24px;color:red" value="{{ old('file',$item->file) }}"></i>
-                                                            {{ old('file', $item->file) }}
+                                                            <i class="fa fa-file-pdf-o" style="font-size:24px;color:red" value="{{ old('filename',$item->file) }}"></i>
+                                                            {{ old('filename', $item->file) }}
                                                         </a>
                                                     </label>
+                                                    <!-- Para poder ver el valor del label en el controlador -->
+                                                    <input type="hidden" name="filename" value="{{ old('filename', $item->file) }}">
                                                 </div>
                                             </div>
 
                                             <div class="form-group @error('file') has-danger @enderror">
-                                                <label class="col-form-label">Cargar nuevo archivo <small>(Archivos permitidos: WORD, PDF)</small></label>
+                                                <label class="col-form-label">Reemplazar Archivo <small>(Archivos permitidos: WORD, PDF)</small></label>
                                                 <input id="file" type="file" class="form-control" name="file">
                                                 @error('file')
                                                     <div class="col-form-label">{{ $message }}</div>

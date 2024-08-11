@@ -149,7 +149,8 @@ class ItemAwardHistoriesController extends Controller
         }
 
         // Pasó todas las validaciones, guardamos el archivo
-        $fileName = time().'-addendum-file.'.$extension; // nombre a guardar
+        // $fileName = time().'-addendum-file.'.$extension; // nombre a guardar
+        $fileName = 'endoso_nro_'.$request->input('number_policy').'.'.$extension; // nombre a guardar
         // Cargamos el archivo (ruta storage/app/public/files, enlace simbólico desde public/files)
         $path = $request->file('file')->storeAs('public/files', $fileName);
 
@@ -276,14 +277,14 @@ class ItemAwardHistoriesController extends Controller
             //     })
             // ],
 
-            // 'number_policy' => [
-            //     'string',
-            //     'required',
-            //     Rule::unique('item_award_histories')->ignore($itemA->id),
-            //     Rule::unique('items')->ignore($item->id),
-            // ],
+            'number_policy' => [
+                'string',
+                'required',
+                Rule::unique('item_award_histories')->ignore($itemA->id),
+                Rule::unique('items')->ignore($item->id),
+            ],
 
-            'number_policy' => 'string|required|unique:items,number_policy|unique:item_award_histories,number_policy',
+            // 'number_policy' => 'string|required|unique:items,number_policy|unique:item_award_histories,number_policy',
             'item_from' => 'date_format:d/m/Y',
             'item_to' => 'required|date_format:d/m/Y',
             'amount' => 'nullable|string|max:9223372036854775807',

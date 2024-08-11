@@ -233,7 +233,8 @@ class ItemsController extends Controller
         }
 
         // Pasó todas las validaciones, guardamos el archivo
-        $fileName = time().'-policy-file.'.$extension; // nombre a guardar
+        // $fileName = time().'-policy-file.'.$extension; // nombre a guardar
+        $fileName = 'poliza_nro_'.$request->input('number_policy').'.'.$extension; // nombre a guardar
         // Cargamos el archivo (ruta storage/app/public/files, enlace simbólico desde public/files)
         $path = $request->file('file')->storeAs('public/files', $fileName);
 
@@ -314,6 +315,8 @@ class ItemsController extends Controller
             'item_from' => 'date_format:d/m/Y',
             'item_to' => 'required|date_format:d/m/Y',
             'amount' => 'nullable|string|max:9223372036854775807',
+            // 'file' => 'required_if:has_attachment,false|nullable|file|max:2040', // Ejemplo para archivo de hasta 10 MB
+            'file' => 'nullable|file|max:2040', // Ejemplo para archivo de hasta 10 MB
             'comments' => 'nullable|max:300'
         );
 
@@ -329,27 +332,26 @@ class ItemsController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        if(!$request->hasFile('file')){
-            $validator = Validator::make($request->input(), []);
-            $validator->errors()->add('file', 'El campo es requerido, debe ingresar un archivo WORD o PDF');
-            return back()->withErrors($validator)->withInput();
+        // Muestra desde la vista el nombre del archivo que está en un label 
+        $filename = $request->input('filename');
+        // var_dump($filename);exit;
+        
+        if ($request->hasFile('file')) {
+            // Obtén la extensión del archivo (omite validación)
+            $extension = $request->file('file')->getClientOriginalExtension();
+            
+            // Guarda el archivo con un nombre único
+            // $fileName = time().'-policy-file.'.$extension;
+            $fileName = 'poliza_nro_'.$request->input('number_policy').'.'.$extension; // nombre a guardar
+            $path = $request->file('file')->storeAs('public/files', $fileName);
+            $item->file = $fileName; // Asigna el nombre al modelo
+                       
+            // Eliminamos el archivo del public/files
+            Storage::delete('public/files/'.$filename);
+
+            
         }
 
-        // chequeamos la extension del archivo subido
-        $extension = $request->file('file')->getClientOriginalExtension();
-        if(!in_array($extension, array('doc', 'docx', 'pdf'))){
-            $validator = Validator::make($request->input(), []); // Creamos un objeto validator
-            $validator->errors()->add('file', 'El archivo introducido debe corresponder a alguno de los siguientes formatos: doc, docx, pdf'); // Agregamos el error
-            return back()->withErrors($validator)->withInput();
-        }
-
-        // Pasó todas las validaciones, guardamos el archivo
-        $fileName = time().'-contract-file.'.$extension; // nombre a guardar
-        // Cargamos el archivo (ruta storage/app/public/files, enlace simbólico desde public/files)
-        $path = $request->file('file')->storeAs('public/files', $fileName);
-
-        // $item = new Item;
-        // $item->contract_id = $contract_id;
         $item->policy_id = $request->input('policy_id');
         $item->number_policy = $request->input('number_policy');
         $item->item_from = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_from'))));
@@ -367,8 +369,7 @@ class ItemsController extends Controller
         }else{
             $item->amount = $amount;
         }
-        $item->comments = $request->input('comments');
-        $item->file = $fileName;
+        $item->comments = $request->input('comments');        
         $item->file_type = 1;//pólizas
         $item->creator_user_id = $request->user()->id;  // usuario logueado
         $item->save();
@@ -385,7 +386,7 @@ class ItemsController extends Controller
     {
         $contract = Contract::findOrFail($contract_id);
         $item = Item::find($item_id);
-
+        
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
         if(!$request->user()->hasPermission(['admin.items.delete','contracts.items.delete']) && $item->contract->dependency_id != $request->user()->dependency_id){
             return response()->json(['status' => 'error', 'message' => 'No posee los suficientes permisos para eliminar la póliza.', 'code' => 200], 200);
@@ -396,7 +397,14 @@ class ItemsController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Póliza no puede eliminarse, posee detalle en endosos, verificar ', 'code' => 200], 200);
         }
 
-        // Eliminamos en caso de no existir registros referenciando al item
+        // Capturamos nombre del archivo almacenado en la tabla
+        $filename = $item->file;
+        // var_dump($filename);exit;
+
+        // Eliminamos el archivo del public/files
+        Storage::delete('public/files/'.$filename);
+
+        // Eliminamos en caso de no existir registros referenciando al item        
         $item->delete();
         session()->flash('status', 'success');
         session()->flash('message', 'Se ha eliminado la póliza ' . $item->number_policy);

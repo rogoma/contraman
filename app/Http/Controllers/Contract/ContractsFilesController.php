@@ -158,41 +158,41 @@ class ContractsFilesController extends Controller
         return view('contract.files.create_con', compact('contract', 'post_max_size'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create_filedncp(Request $request, $contract_id)
-    {
-        $contract = Contract::findOrFail($contract_id);
-        $post_max_size = $this->postMaxSize;
-        return view('contract.files.create_filedncp', compact('contract', 'post_max_size'));
-    }
+    // /**
+    //  * Show the form for creating a new resource.
+    //  *
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function create_filedncp(Request $request, $contract_id)
+    // {
+    //     $contract = Contract::findOrFail($contract_id);
+    //     $post_max_size = $this->postMaxSize;
+    //     return view('contract.files.create_filedncp', compact('contract', 'post_max_size'));
+    // }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create_filedncp_con(Request $request, $contract_id)
-    {
-        $contract = Contract::findOrFail($contract_id);
-        $post_max_size = $this->postMaxSize;
-        return view('contract.files.create_filedncp_con', compact('contract', 'post_max_size'));
-    }
+    // /**
+    //  * Show the form for creating a new resource.
+    //  *
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function create_filedncp_con(Request $request, $contract_id)
+    // {
+    //     $contract = Contract::findOrFail($contract_id);
+    //     $post_max_size = $this->postMaxSize;
+    //     return view('contract.files.create_filedncp_con', compact('contract', 'post_max_size'));
+    // }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create_cuadro_compar(Request $request, $contract_id)
-    {
-        $contract = Contract::findOrFail($contract_id);
-        $post_max_size = $this->postMaxSize;
-        return view('contract.files.create_cuadro_compar', compact('contract', 'post_max_size'));
-    }
+    // /**
+    //  * Show the form for creating a new resource.
+    //  *
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function create_cuadro_compar(Request $request, $contract_id)
+    // {
+    //     $contract = Contract::findOrFail($contract_id);
+    //     $post_max_size = $this->postMaxSize;
+    //     return view('contract.files.create_cuadro_compar', compact('contract', 'post_max_size'));
+    // }
 
 
     /**
@@ -228,7 +228,9 @@ class ContractsFilesController extends Controller
         }
 
         // Pasó todas las validaciones, guardamos el archivo
-        $fileName = time().'-contract-file.'.$extension; // nombre a guardar
+        // $fileName = time().'-contract-file.'.$extension; // nombre a guardar
+        // $fileName = 'contrato_nro_'.$contract->number_year.'.'.$extension; // nombre a guardar
+        $fileName = 'contrato_nro_'.$contract->number_year.$contract->year.'.'.time().$extension; // nombre a guardar
         // Cargamos el archivo (ruta storage/app/public/files, enlace simbólico desde public/files)
         $path = $request->file('file')->storeAs('public/files', $fileName);
 
@@ -278,7 +280,9 @@ class ContractsFilesController extends Controller
         }
 
         // Pasó todas las validaciones, guardamos el archivo
-        $fileName = time().'-contract-file.'.$extension; // nombre a guardar
+        // $fileName = time().'-contract-file.'.$extension; // nombre a guardar
+        // $fileName = 'contrato_nro_'.$request->input($contract->number_year).'.'.$extension; // nombre a guardar
+        $fileName = 'contrato'.time().'.'.$extension; // nombre a guardar
         // Cargamos el archivo (ruta storage/app/public/files, enlace simbólico desde public/files)
         $path = $request->file('file')->storeAs('public/files', $fileName);
 
@@ -326,7 +330,8 @@ class ContractsFilesController extends Controller
         }
 
         // Pasó todas las validaciones, guardamos el archivo
-        $fileName = time().'-contract-file.'.$extension; // nombre a guardar
+        // $fileName = time().'-contract-file.'.$extension; // nombre a guardar
+        $fileName = 'contrato_nro_'.$request->input('number_year').'.'.$extension; // nombre a guardar
         // Cargamos el archivo (ruta storage/app/public/files, enlace simbolico desde public/files)
         $path = $request->file('file')->storeAs('public/files', $fileName);
 
@@ -407,7 +412,8 @@ class ContractsFilesController extends Controller
         }
 
         // Pasó todas las validaciones, guardamos el archivo
-        $fileName = time().'-contract-file.'.$extension; // nombre a guardar
+        // $fileName = time().'-contract-file.'.$extension; // nombre a guardar
+        $fileName = 'contrato_nro_'.$request->input('number_year').'.'.$extension; // nombre a guardar
         // Cargamos el archivo (ruta storage/app/public/files, enlace simbolico desde public/files)
         $path = $request->file('file')->storeAs('public/files', $fileName);
 
@@ -484,7 +490,8 @@ class ContractsFilesController extends Controller
         }
 
         // Pasó todas las validaciones, guardamos el archivo
-        $fileName = time().'-contract-file.'.$extension; // nombre a guardar
+        // $fileName = time().'-contract-file.'.$extension; // nombre a guardar
+        $fileName = 'contrato_nro_'.$request->input('number_year').'.'.$extension; // nombre a guardar
         // Cargamos el archivo (ruta storage/app/public/files, enlace simbolico desde public/files)
         $path = $request->file('file')->storeAs('public/files', $fileName);
 
