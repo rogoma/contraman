@@ -317,26 +317,46 @@ class ReportsController extends Controller{
     //     return $pdf->stream('LLAMADOS-DETALLES DE PÓLIZAS'.'.pdf');
     // }
 
-    // Para mostrar alertas de vencimiento de las pólizas
+    // PARA MOSTRAR ALERTAS DE VENCIMIENTOS DE LAS PÓLIZAS Y ENDOSOS
     public function generarContracts5(Request $request)
     {
         //capturamos el nombre del método para poder cambiar el título del reporte en la vista
         $nombreMetodo = __METHOD__;
 
         if($request->user()->hasPermission(['admin.contracts.show'])){
-            $contracts = DB::table('vista_contracts_vctos2')//vista que muestra los datos
-            ->select(DB::raw('DISTINCT ON (number_policy)  iddncp, number_year, contratista, tipo_contrato, total_amount, fecha_tope_advance, vcto_adv, dias_advance,llamado,polizas,number_policy,modalidad,comentarios,dependencia'))
-            ->where('dias_advance2', '<=', 0)
+            $contracts_poli = DB::table('vista_contracts_vctos_poli')//vista que muestra los datos
+            ->select(['iddncp', 'number_year', 'contratista',
+            'tipo_contrato', 'total_amount', 'fecha_tope_advance', 'vcto_adv', 'dias_advance','llamado','polizas',
+            'number_policy','modalidad','dependencia','comments'])
+            ->where('dias_advance', '<=', 0)
             ->get();
+
+            $contracts_endo = DB::table('vista_contracts_vctos_endo')//vista que muestra los datos
+            ->select(['iddncp', 'number_year', 'contratista',
+            'tipo_contrato', 'amount_endoso', 'fecha_tope_advance_endo', 'vcto_adv_endo', 'dias_advance_endo',
+            'llamado','polizas','number_policy_endoso','modalidad','dependencia','comments_endoso'])
+            ->where('dias_advance_endo', '<=', 0)
+            ->get();
+
         }else{
-            $contracts = DB::table('vista_contracts_vctos2')//vista que muestra los datos
-            ->select(DB::raw('DISTINCT ON (number_policy)  iddncp, number_year, contratista, tipo_contrato, total_amount, fecha_tope_advance, vcto_adv, dias_advance,llamado,polizas,number_policy,modalidad,comentarios,dependencia'))
-            ->where('dias_advance2', '<=', 0)
+            $contracts_poli = DB::table('vista_contracts_vctos_poli')//vista que muestra los datos
+            ->select(['iddncp', 'number_year', 'contratista',
+            'tipo_contrato', 'total_amount', 'fecha_tope_advance', 'vcto_adv', 'dias_advance','llamado','polizas',
+            'number_policy','modalidad','dependencia','comments'])
+            ->where('dias_advance', '<=', 0)
+            ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
+            ->get();
+
+            $contracts_endo = DB::table('vista_contracts_vctos_endo')//vista que muestra los datos
+            ->select(['iddncp', 'number_year', 'contratista',
+            'tipo_contrato', 'amount_endoso', 'fecha_tope_advance_endo', 'vcto_adv_endo', 'dias_advance_endo',
+            'llamado','polizas','number_policy_endoso','modalidad','dependencia','comments_endoso'])
+            ->where('dias_advance_endo', '<=', 0)
             ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
             ->get();
         }
 
-        $view = View::make('reports.contracts_vctos_polizas', compact('contracts', 'nombreMetodo'))->render();
+        $view = View::make('reports.contracts_vctos_polizas', compact('contracts_poli','contracts_endo','nombreMetodo'))->render();
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML($view);
         $pdf->setPaper('A4', 'landscape');//coloca en apaisado

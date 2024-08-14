@@ -66,12 +66,19 @@
 <body>
 <p class="centrado"> <img src="img/logoVI.png"> </p>
 
-{{-- SE PREGUNTA POR EL NOMBRE DEL METODO DE ACUERDO A ESO SE ESCOGE EL TITULO DEL REPORTE --}}
-{{-- @if ($nombreMetodo == "App\Http\Controllers\Report\ReportsController::generarContracts5") --}}
-    <h2 style="color:#ff0000">ALERTA DE DETALLES DE PÓLIZAS</h2>
-{{-- @endif --}}
+{{-- @php
+    var_dump ($contracts_poli);
+    var_dump ($contracts_endo);exit;
+@endphp --}}
 
-    {{-- <h2>LLAMADOS</h2> --}}
+{{-- @if(!$contracts_poli->isEmpty()) --}}
+@if(!$contracts_poli->isNotEmpty())
+    {{-- @php
+    var_dump ($contracts_poli);
+    // var_dump ($contracts_endo);exit;
+    @endphp --}}
+@else
+    <h2 style="color:#ff0000">ALERTA DE DETALLES DE PÓLIZAS</h2>
         <table>
             <tr>
                 <th>#</th>
@@ -90,30 +97,82 @@
                 {{-- <th>Modalidad</th> --}}
             </tr>
 
-            @for ($i = 0; $i < count($contracts); $i++)
+            @for ($i = 0; $i < count($contracts_poli); $i++)
             <tr>
                 <td>{{ ($i+1) }}</td>
-                <td> {{ $contracts[$i]->dependencia }}</td>
-                <td> {{ $contracts[$i]->llamado }}</td>
-                <td> {{ number_format($contracts[$i]->iddncp,'0', ',','.') }} </td>
-                <td> {{ $contracts[$i]->number_year }}</td>
-                <td> {{ $contracts[$i]->contratista}}</td>
-                <td> {{ $contracts[$i]->tipo_contrato}}</td>
-                <td> Gs.{{ number_format($contracts[$i]->total_amount,'0', ',','.') }} </td>
+                <td> {{ $contracts_poli[$i]->dependencia }}</td>
+                <td> {{ $contracts_poli[$i]->llamado }}</td>
+                <td> {{ number_format($contracts_poli[$i]->iddncp,'0', ',','.') }} </td>
+                <td> {{ $contracts_poli[$i]->number_year }}</td>
+                <td> {{ $contracts_poli[$i]->contratista}}</td>
+                <td> {{ $contracts_poli[$i]->tipo_contrato}}</td>
+                <td> Gs.{{ number_format($contracts_poli[$i]->total_amount,'0', ',','.') }} </td>
 
-                @if ($contracts[$i]->fecha_tope_advance <= today())
-                    <td style="color:#ff0000">{{ is_null($contracts[$i]->fecha_tope_advance)? "-" : date('d/m/Y', strtotime($contracts[$i]->fecha_tope_advance )) }}</td>
+                @if ($contracts_poli[$i]->fecha_tope_advance <= today())
+                    <td style="color:#ff0000">{{ is_null($contracts_poli[$i]->fecha_tope_advance)? "-" : date('d/m/Y', strtotime($contracts_poli[$i]->fecha_tope_advance )) }}</td>
                 @else
-                    <td>{{ is_null($contracts[$i]->fecha_tope_advance)? "-" : date('d/m/Y', strtotime($contracts[$i]->fecha_tope_advance )) }}</td>
+                    <td>{{ is_null($contracts_poli[$i]->fecha_tope_advance)? "-" : date('d/m/Y', strtotime($contracts_poli[$i]->fecha_tope_advance )) }}</td>
                 @endif
 
-                <td>{{ is_null($contracts[$i]->vcto_adv)? "-" : date('d/m/Y', strtotime($contracts[$i]->vcto_adv )) }}</td>
-                <td> {{ $contracts[$i]->polizas}}</td>
-                <td> {{ $contracts[$i]->number_policy}}</td>
-                <td> {{ $contracts[$i]->comentarios}}</td>
+                <td>{{ is_null($contracts_poli[$i]->vcto_adv)? "-" : date('d/m/Y', strtotime($contracts_poli[$i]->vcto_adv )) }}</td>
+                <td> {{ $contracts_poli[$i]->polizas}}</td>
+                <td> {{ $contracts_poli[$i]->number_policy}}</td>
+                <td> {{ $contracts_poli[$i]->comments}}</td>
             </tr>
             @endfor
         </table>
+@endif
+{{-- @if (empty($contracts_endo)) --}}
+@if(!$contracts_endo->isNotEmpty())
+    {{-- @php
+    // var_dump ($contracts_poli);
+    var_dump ($contracts_endo);exit;
+    @endphp --}}
+@else
+        <br>
+        <h2 style="color:#ff0000">ALERTA DE DETALLES DE ENDOSOS</h2>
+        <table>
+            <tr>
+                <th>#</th>
+                <th>Dependencia</th>
+                <th>Llamado</th>
+                <th>IDDNCP</th>
+                <th>N°Contrato</th>
+                <th>Contratista</th>
+                <th>Tipo Contrato</th>
+                <th>Monto total LLAMADO</th>
+                <th>Fecha Alerta</th>
+                <th>Fecha Vcto.</th>
+                <th>Tipo Póliza</th>
+                <th>N° Póliza</th>
+                <th>Comentarios</th>
+                {{-- <th>Modalidad</th> --}}
+            </tr>
+            @for ($i = 0; $i < count($contracts_endo); $i++)
+            <tr>
+                <td>{{ ($i+1) }}</td>
+                <td> {{ $contracts_endo[$i]->dependencia }}</td>
+                <td> {{ $contracts_endo[$i]->llamado }}</td>
+                <td> {{ number_format($contracts_endo[$i]->iddncp,'0', ',','.') }} </td>
+                <td> {{ $contracts_endo[$i]->number_year }}</td>
+                <td> {{ $contracts_endo[$i]->contratista}}</td>
+                <td> {{ $contracts_endo[$i]->tipo_contrato}}</td>
+                <td> Gs.{{ number_format($contracts_endo[$i]->amount_endoso,'0', ',','.') }} </td>
+
+                @if ($contracts_endo[$i]->fecha_tope_advance_endo <= today())
+                    <td style="color:#ff0000">{{ is_null($contracts_endo[$i]->fecha_tope_advance_endo)? "-" : date('d/m/Y', strtotime($contracts_endo[$i]->fecha_tope_advance_endo )) }}</td>
+                @else
+                    <td>{{ is_null($contracts_endo[$i]->fecha_tope_advance_endo)? "-" : date('d/m/Y', strtotime($contracts_endo[$i]->fecha_tope_advance_endo )) }}</td>
+                @endif
+
+                <td>{{ is_null($contracts_endo[$i]->vcto_adv_endo)? "-" : date('d/m/Y', strtotime($contracts_endo[$i]->vcto_adv_endo )) }}</td>
+                <td> {{ $contracts_endo[$i]->polizas}}</td>
+                <td> {{ $contracts_endo[$i]->number_policy_endoso}}</td>
+                <td> {{ $contracts_endo[$i]->comments_endoso}}</td>
+            </tr>
+            @endfor
+        </table>
+@endif
     </div>
 </body>
 </html>
