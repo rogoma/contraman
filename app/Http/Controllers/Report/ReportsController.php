@@ -320,7 +320,7 @@ class ReportsController extends Controller{
     // PARA MOSTRAR ALERTAS DE VENCIMIENTOS DE LAS PÓLIZAS Y ENDOSOS
     public function generarContracts5(Request $request)
     {
-        //capturamos el nombre del método para poder cambiar el título del reporte en la vista
+        //capturamos el nombre del método para poder cambiar el título del reporte en la VISTA
         $nombreMetodo = __METHOD__;
 
         if($request->user()->hasPermission(['admin.contracts.show'])){
