@@ -327,14 +327,15 @@ class ReportsController extends Controller{
             $contracts_poli = DB::table('vista_contracts_vctos_poli')//vista que muestra los datos
             ->select(['iddncp', 'number_year', 'contratista',
             'tipo_contrato', 'total_amount', 'fecha_tope_advance', 'vcto_adv', 'dias_advance','llamado','polizas',
-            'number_policy','modalidad','dependencia','comments'])
+            'number_policy','modalidad','dependencia','comments','award_type_id','award_type_description'])
             ->where('dias_advance', '<=', 0)
             ->get();
 
             $contracts_endo = DB::table('vista_contracts_vctos_endo')//vista que muestra los datos
             ->select(['iddncp', 'number_year', 'contratista',
             'tipo_contrato', 'amount_endoso', 'fecha_tope_advance_endo', 'vcto_adv_endo', 'dias_advance_endo',
-            'llamado','polizas','number_policy_endoso','modalidad','dependencia','comments_endoso'])
+            'llamado','polizas','number_policy_endoso','modalidad','dependencia','comments_endoso',
+            'state_endoso','award_type_id','award_type_description'])
             ->where('dias_advance_endo', '<=', 0)
             ->get();
 
@@ -342,7 +343,7 @@ class ReportsController extends Controller{
             $contracts_poli = DB::table('vista_contracts_vctos_poli')//vista que muestra los datos
             ->select(['iddncp', 'number_year', 'contratista',
             'tipo_contrato', 'total_amount', 'fecha_tope_advance', 'vcto_adv', 'dias_advance','llamado','polizas',
-            'number_policy','modalidad','dependencia','comments'])
+            'number_policy','modalidad','dependencia','comments','award_type_id','award_type_description'])
             ->where('dias_advance', '<=', 0)
             ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
             ->get();
@@ -350,7 +351,8 @@ class ReportsController extends Controller{
             $contracts_endo = DB::table('vista_contracts_vctos_endo')//vista que muestra los datos
             ->select(['iddncp', 'number_year', 'contratista',
             'tipo_contrato', 'amount_endoso', 'fecha_tope_advance_endo', 'vcto_adv_endo', 'dias_advance_endo',
-            'llamado','polizas','number_policy_endoso','modalidad','dependencia','comments_endoso'])
+            'llamado','polizas','number_policy_endoso','modalidad','dependencia','comments_endoso',
+            'state_endoso','award_type_id','award_type_description'])
             ->where('dias_advance_endo', '<=', 0)
             ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
             ->get();

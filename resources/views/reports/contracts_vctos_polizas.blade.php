@@ -145,6 +145,7 @@
                 <th>Fecha Vcto.</th>
                 <th>Tipo Póliza</th>
                 <th>N° Póliza</th>
+                <th>Tipo Endoso</th>
                 <th>Comentarios</th>
                 {{-- <th>Modalidad</th> --}}
             </tr>
@@ -168,6 +169,7 @@
                 <td>{{ is_null($contracts_endo[$i]->vcto_adv_endo)? "-" : date('d/m/Y', strtotime($contracts_endo[$i]->vcto_adv_endo )) }}</td>
                 <td> {{ $contracts_endo[$i]->polizas}}</td>
                 <td> {{ $contracts_endo[$i]->number_policy_endoso}}</td>
+                <td> {{ $contracts_endo[$i]->award_type_description}}</td>
                 <td> {{ $contracts_endo[$i]->comments_endoso}}</td>
             </tr>
             @endfor
