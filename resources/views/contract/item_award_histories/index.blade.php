@@ -91,23 +91,29 @@
                                                     
                                                     <td>{{ $item->itemAwardHistories[$i]->comments }}</td>
 
-                                                    @if ($item->itemAwardHistories[$i]->state_id == 1)
+                                                    {{-- @if ($item->itemAwardHistories[$i]->state_id == 1) --}}
                                                         <td>                                                    
                                                             @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']))
                                                                 <button type="button" title="Editar" class="btn btn-warning btn-icon" onclick="updateItem({{ $item->itemAwardHistories[$i]->id }})">
                                                                     <i class="fa fa-pencil"></i>
                                                                 </button>
                                                             @endif
+
+                                                            @if (Auth::user()->hasPermission(['admin.items.delete','contracts.items.update']))
+                                                            <button type="button" title="Borrar" class="btn btn-danger btn-icon" onclick="deleteItemAwardHistories({{$item->itemAwardHistories[$i]->id }})">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                        @endif
                                                         </td>                                                        
-                                                    @else
-                                                        <td>
+                                                    {{-- @else --}}
+                                                        {{-- <td>
                                                             @if (Auth::user()->hasPermission(['admin.items.delete','contracts.items.update']))
                                                                 <button type="button" title="Borrar" class="btn btn-danger btn-icon" onclick="deleteItemAwardHistories({{$item->itemAwardHistories[$i]->id }})">
                                                                     <i class="fa fa-trash"></i>
                                                                 </button>
-                                                            @endif
+                                                            @endif --}}
                                                         </td>
-                                                    @endif
+                                                    {{-- @endif --}}
                                                     <td>
                                                         <a href="{{ asset('storage/files/'.$item->itemAwardHistories[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-success btn-icon"><i class="fa fa-eye"></i></a>
                                                     </td>
