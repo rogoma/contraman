@@ -331,7 +331,7 @@ class ItemsController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-
+        
         // Muestra desde la vista el nombre del archivo que está en un label 
         $filename = $request->input('filename');
         // var_dump($filename);exit;
@@ -344,10 +344,12 @@ class ItemsController extends Controller
             // $fileName = time().'-policy-file.'.$extension;
             $fileName = 'poliza_nro_'.$request->input('number_policy').'.'.$extension; // nombre a guardar
             $path = $request->file('file')->storeAs('public/files', $fileName);
-            $item->file = $fileName; // Asigna el nombre al modelo
-                       
+
+            // Capturamos nombre del archivo almacenado en la tabla
+            $filename = $item->file;
+
             // Eliminamos el archivo del public/files
-            Storage::delete('public/files/'.$filename);
+            // Storage::delete('public/files/'.$filename);
 
             
         }

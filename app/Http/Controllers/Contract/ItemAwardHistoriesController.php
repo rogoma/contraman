@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Contract;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Item;
 use App\Models\ItemAwardHistory;
 use App\Models\ItemAwardType;
@@ -340,6 +341,14 @@ class ItemAwardHistoriesController extends Controller
             return response()->json(['status' => 'error', 'message' => 'No posee los suficientes permisos para realizar esta acción.', 'code' => 200], 200);
         }
 
+        // Capturamos nombre del archivo almacenado en la tabla
+        $filename = $itemA->file;
+        // var_dump($filename);exit;
+
+        // Eliminamos el archivo del public/files
+        Storage::delete('public/files/'.$filename);
+
+
         // Eliminamos en caso de no existir registros referenciando al item
         $itemA->delete();
         session()->flash('status', 'success');
@@ -350,6 +359,7 @@ class ItemAwardHistoriesController extends Controller
             'message' => 'Se ha eliminado el endoso'. $itemA->number_policy,
             'code' => 200
         ], 200);
+
 
         // $request->session()->flash('success', 'Se ha eliminado el endoso referencial a la póliza');
         // return response()->json(['status' => 'success', 'code' => 200], 200);

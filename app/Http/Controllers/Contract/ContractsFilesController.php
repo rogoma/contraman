@@ -574,8 +574,13 @@ class ContractsFilesController extends Controller
         // }
 
         $file = File::find($file_id);
+
+        // Capturamos nombre del archivo almacenado en la tabla
+        $filename = $file->file;
+        // var_dump($filename);exit;
+
         // Eliminamos el archivo
-        Storage::delete('public/files/'.$file->file);
+        Storage::delete('public/files/'.$filename);       
 
         // Eliminamos el registro del archivo
         $file->delete();
