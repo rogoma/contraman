@@ -207,22 +207,14 @@ p.centrado {
                                                                 <td>{{ $contract->items[$i]->policy->description }}</td>
                                                                 <td>{{ $contract->items[$i]->number_policy }}</td>
                                                                 <td>{{ $contract->items[$i]->itemFromDateFormat() }}</td>
-
-                                                                {{-- $cal = $contract->items[$i]->item_to - 60 - CURRENT_DATE --}}
-                                                                {{-- @if ($contract->items[$i]->item_to > today()) --}}
-
-                                                                {{-- @if ((($contract->items[$i]->item_to)))
-                                                                    <td style="color:#ff0000">{{ $contract->items[$i]->itemToDateFormat() }}</td>
-                                                                @endif --}}
-                                                                {{-- <td>{{ $contract->items[$i]->itemToDateFormat() }}</td> --}}
                                                                 <td style="color:red;font-weight">{{ $contract->items[$i]->itemToDateFormat() }}</td>
                                                                 <td>{{ $contract->items[$i]->AmountFormat()}} </td>
                                                                 <td>{{ $contract->items[$i]->comments }}</td>
                                                                 <td>
-                                                                
+
                                                                 {{-- No muestra si estado de llamado no es rescindido, cerrado, impugando o en proceso de rescisión --}}
-                                                                @if (in_array($contract->contract_state_id, [1,5]))                                                                
-                                                                    @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']))                                                                
+                                                                @if (in_array($contract->contract_state_id, [1,5]))
+                                                                    @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']))
                                                                         <button type="button" title="Editar" class="btn btn-warning btn-icon" onclick="updateItem({{ $contract->items[$i]->id }})">
                                                                             <i class="fa fa-pencil"></i>
                                                                         </button>
