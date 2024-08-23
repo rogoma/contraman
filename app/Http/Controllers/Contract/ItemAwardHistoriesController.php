@@ -244,6 +244,7 @@ class ItemAwardHistoriesController extends Controller
 
         $item = Item::findOrFail($item_id);
         $item_award_types = ItemAwardType::all();
+        $post_max_size = $this->postMaxSize;
 
         // Chequeamos permisos del usuario en caso de no ser de la dependencia solicitante
         if(!$request->user()->hasPermission(['admin.item_award_histories.create', 'contracts.item_award_histories.create']) &&
@@ -253,7 +254,7 @@ class ItemAwardHistoriesController extends Controller
 
         $itemA = ItemAwardHistory::findOrFail($itemA_id);
 
-        return view('contract.item_award_histories.update', compact('item','itemA','item_award_types'));
+        return view('contract.item_award_histories.update', compact('item','itemA','item_award_types','post_max_size'));
     }
 
     /**
@@ -289,13 +290,50 @@ class ItemAwardHistoriesController extends Controller
             'item_from' => 'date_format:d/m/Y',
             'item_to' => 'required|date_format:d/m/Y',
             'amount' => 'nullable|string|max:9223372036854775807',
+            'file' => 'nullable|file|max:2040', // Ejemplo para archivo de hasta 2 MB
             'comments' => 'nullable|max:300'
         );
+
+        // Valida los datos de entrada
+        $validatedData = $request->validate($rules);
+
+        // Actualiza el item con los datos validados
+        $itemA->update($validatedData);
+
 
         $validator =  Validator::make($request->input(), $rules);
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
+
+        // Muestra desde la vista el nombre del archivo que está en un label
+        $filename = $request->input('filename');
+        // var_dump($filename);exit;
+
+        if ($request->hasFile('file')) {
+            // Obtén la extensión del archivo (omite validación)
+            $extension = $request->file('file')->getClientOriginalExtension();
+            if(!in_array($extension, array('doc', 'docx', 'pdf'))){
+                $validator = Validator::make($request->input(), []); // Creamos un objeto validator
+                $validator->errors()->add('file', 'El archivo introducido debe corresponder a alguno de los siguientes formatos: doc, docx, pdf'); // Agregamos el error
+                return back()->withErrors($validator)->withInput();
+            }
+
+            // Guarda el archivo con un nombre único
+            // $fileName = time().'-policy-file.'.$extension;
+            $fileName = 'endoso_nro_'.$request->input('number_policy').'.'.$extension; // nombre a guardar
+            $path = $request->file('file')->storeAs('public/files', $fileName);
+
+            // Capturamos nombre del archivo almacenado en la tabla
+            $filename = $itemA->file;
+
+            // Eliminamos el archivo del public/files
+            // Storage::delete('public/files/'.$filename);
+        }
+        // $validator =  Validator::make($request->input(), $rules);
+        // if ($validator->fails()) {
+        //     return back()->withErrors($validator)->withInput();
+        // }
 
         $itemA->item_award_type_id = $request->input('item_award_type_id');
         $itemA->number_policy = $request->input('number_policy');
@@ -317,6 +355,9 @@ class ItemAwardHistoriesController extends Controller
         // }
 
         $itemA->comments = $request->input('comments');
+        // $itemA->file = $fileName;
+        $itemA->file_type = 2;//endoso
+        $itemA->state_id = 1;
         $itemA->creator_user_id = $request->user()->id;  // usuario logueado
         $itemA->save();
 

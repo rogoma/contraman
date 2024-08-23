@@ -14,7 +14,17 @@ class ItemAwardHistory extends Model
      *
      * @var string
      */
-    protected $table = 'item_award_histories';
+    // protected $table = 'item_award_histories';
+    protected $fillable = [
+        'policy_number',
+        // 'name',
+        // 'lastname',
+        // 'email',
+        // 'password',
+        // 'dependency_id',
+        // 'position_id',
+        // 'state',
+    ];
 
     /**
      * Para obtener el vinculo con la tabla items

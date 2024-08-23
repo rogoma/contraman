@@ -53,7 +53,7 @@
                                     <label id="fecha_actual" name="fecha_actual"  style="font-size: 20px;color: #FF0000;float: left;" for="fecha_actual">{{ Carbon\Carbon::now()->format('d/m/Y') }}</label>
                                 </div>
                                 <div class="card-block">
-                                        <form method="POST" action="{{ route('contracts.items.update', [$contract->id, $item->id]) }}" enctype="multipart/form-data">                                                                       
+                                        <form method="POST" action="{{ route('contracts.items.update', [$contract->id, $item->id]) }}" enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
 
