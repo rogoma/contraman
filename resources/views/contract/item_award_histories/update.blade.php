@@ -38,13 +38,10 @@
                                 <div class="card-header">
                                     <h5>Modificar Endoso de la Póliza {{ $itemA->number_year }}</h5>
                                     <br><br>
-                                    <label id="fecha_actual" name="fecha_actual"  style="font-size: 20px;color: #FF0000;float: left;" for="fecha_actual">{{ Carbon\Carbon::now()->format('d/m/Y') }}</label>
-                                    {{-- <label style="font-size: 20px;color: #FF0000;float: left;">FECHA: </label> --}}
-                                    {{-- <label id="fecha_actual" name="fecha_actual"  style="font-size: 20px;color: #FF0000;float: right;" for="fecha_actual">{{ Carbon\Carbon::now()->format('d/m/Y') }}</label>
-                                    <label style="font-size: 20px;color: #FF0000;float: right;">FECHA: </label> --}}
+                                    <label id="fecha_actual" name="fecha_actual"  style="font-size: 20px;color: #FF0000;float: left;" for="fecha_actual">{{ Carbon\Carbon::now()->format('d/m/Y') }}</label>                                    
                                 </div>
                                 <div class="card-block">
-                                        <form method="POST" action="{{ route('items.item_award_histories.update', [$item->id, $itemA->id]) }}">
+                                        <form method="POST" action="{{ route('items.item_award_histories.update', [$item->id, $itemA->id]) }}" enctype="multipart/form-data">                                            
                                         @csrf
                                         @method('PUT')
 
@@ -148,7 +145,7 @@
                                                         </a>
                                                     </label>
                                                     <!-- Para poder ver el valor del label en el controlador -->
-                                                    <input type="hidden" name="filename" value="{{ old('filename', $item->file) }}">
+                                                    <input type="hidden" name="filename" value="{{ old('filename', $itemA->file) }}">
                                                 </div>
                                             </div>
 
@@ -163,16 +160,9 @@
                                         <div class="col-sm-12">
                                             <br>
                                             <div class="form-group text-center">
-                                                <button type="submit" class="btn btn-primary">Modificar Endoso</button>
+                                                <button id="guardar" type="submit" class="btn btn-primary">Modificar Endoso</button>
                                             </div>
-                                        </div>
-                                        {{-- </div>
-                                        <div class="col-sm-12">
-                                            <br>
-                                            <div class="form-group text-center">
-                                                <button type="submit" class="btn btn-primary">Modificar Endoso</button>
-                                            </div>
-                                        </div> --}}
+                                        </div>                                        
                                     </form>
                                 </div>
                             </div>

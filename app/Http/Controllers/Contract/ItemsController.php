@@ -311,11 +311,10 @@ class ItemsController extends Controller
                 'required',
                 Rule::unique('items')->ignore($item->id),
             ],
-            // 'number_policy' => 'string|required|unique:items,number_policy->ignore($item->id)',
+            
             'item_from' => 'date_format:d/m/Y',
             'item_to' => 'required|date_format:d/m/Y',
-            'amount' => 'nullable|string|max:9223372036854775807',
-            // 'file' => 'required_if:has_attachment,false|nullable|file|max:2040', // Ejemplo para archivo de hasta 10 MB
+            'amount' => 'nullable|string|max:9223372036854775807',            
             'file' => 'nullable|file|max:2040', // Ejemplo para archivo de hasta 2 MB
             'comments' => 'nullable|max:300'
         );
@@ -325,7 +324,6 @@ class ItemsController extends Controller
 
         // Actualiza el item con los datos validados
         $item->update($validatedData);
-
 
         $validator =  Validator::make($request->input(), $rules);
         if ($validator->fails()) {
@@ -351,7 +349,7 @@ class ItemsController extends Controller
             $path = $request->file('file')->storeAs('public/files', $fileName);
 
             // Capturamos nombre del archivo almacenado en la tabla
-            $filename = $item->file;
+            $filename = $item->file;            
 
             // Eliminamos el archivo del public/files
             // Storage::delete('public/files/'.$filename);

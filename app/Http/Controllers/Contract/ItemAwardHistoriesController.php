@@ -258,35 +258,101 @@ class ItemAwardHistoriesController extends Controller
     }
 
     /**
+ * Update the specified resource in storage.
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @param  int  $item_id
+ * @param  int  $itemA_id
+ * @return \Illuminate\Http\Response
+ */
+public function update(Request $request, $item_id, $itemA_id)
+{
+    // Encontrar los modelos correspondientes o lanzar una excepción
+    $item = Item::findOrFail($item_id);
+    $itemA = ItemAwardHistory::findOrFail($itemA_id);
+
+    // Reglas de validación
+    $rules = [
+        'item_award_type_id' => 'numeric|required|max:2147483647',
+        'number_policy' => [
+            'string',
+            'required',
+            Rule::unique('item_award_histories')->ignore($itemA->id),
+            Rule::unique('items'),
+        ],
+        'item_from' => 'date_format:d/m/Y',
+        'item_to' => 'required|date_format:d/m/Y',
+        'amount' => 'nullable|string|max:9223372036854775807',
+        'file' => 'nullable|file|max:2040', // Ejemplo para archivo de hasta 2 MB
+        'comments' => 'nullable|max:300'
+    ];
+
+    // Validar los datos de entrada
+    $validatedData = $request->validate($rules);
+
+    // Manejar la validación manual adicional para los archivos
+    if ($request->hasFile('file')) {
+        $extension = $request->file('file')->getClientOriginalExtension();
+        if (!in_array($extension, ['doc', 'docx', 'pdf'])) {
+            return back()->withErrors(['file' => 'El archivo debe ser de tipo: doc, docx o pdf.'])->withInput();
+        }
+
+        // Guardar el archivo con un nombre único
+        $fileName = 'endoso_nro_' . $request->input('number_policy') . '.' . $extension;
+        $path = $request->file('file')->storeAs('public/files', $fileName);
+
+        // Guardar el nombre del archivo en la base de datos
+        $itemA->file = $fileName;
+    }
+
+    // Convertir las fechas al formato adecuado
+    $itemA->item_award_type_id = $validatedData['item_award_type_id'];
+    $itemA->number_policy = $validatedData['number_policy'];
+    $itemA->item_from = date('Y-m-d', strtotime(str_replace("/", "-", $validatedData['item_from'])));
+    $itemA->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $validatedData['item_to'])));
+
+    // Manejar el campo amount
+    $amount = str_replace('.', '', $validatedData['amount']);
+    if ($amount === '') {
+        return back()->withErrors(['amount' => 'Ingrese Monto'])->withInput();
+    }
+    $itemA->amount = $amount;
+
+    // Actualizar otros campos
+    $itemA->comments = $validatedData['comments'];
+    $itemA->file_type = 2; // endoso
+    $itemA->state_id = 1;
+    $itemA->creator_user_id = $request->user()->id; // usuario logueado
+
+    // Guardar los cambios
+    $itemA->save();
+
+    // Redirigir con mensaje de éxito
+    return redirect()->route('items.item_award_histories.index', $item_id)
+                     ->with('success', 'Se ha modificado exitosamente el endoso de la póliza');
+}
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  int  $item_id
+     * @param  int  $itemA_id
+     * @return \Illuminate\Http\Respons
      */
-    public function update(Request $request, $item_id, $itemA_id)
+    public function update_orig(Request $request, $item_id, $itemA_id)
     {
         $item = Item::findOrFail($item_id);
         $itemA = ItemAwardHistory::findOrFail($itemA_id);
 
         $rules = array(
             'item_award_type_id' => 'numeric|required|max:2147483647',
-            // esto se usa en caso de que no permita el mismo tipo de endoso en una misma póliza
-            // 'item_award_type_id' => [
-            // 'numeric','required','max:2147483647',
-            // Rule::unique('item_award_histories')->ignore($itemA->id)->where(function ($query) use ($item_id) {
-            //     return $query->where('item_id', $item_id);
-            //     })
-            // ],
-
             'number_policy' => [
                 'string',
                 'required',
                 Rule::unique('item_award_histories')->ignore($itemA->id),
-                Rule::unique('items')->ignore($item->id),
+                Rule::unique('items'),                
             ],
-
-            // 'number_policy' => 'string|required|unique:items,number_policy|unique:item_award_histories,number_policy',
             'item_from' => 'date_format:d/m/Y',
             'item_to' => 'required|date_format:d/m/Y',
             'amount' => 'nullable|string|max:9223372036854775807',
@@ -307,8 +373,7 @@ class ItemAwardHistoriesController extends Controller
         }
 
         // Muestra desde la vista el nombre del archivo que está en un label
-        $filename = $request->input('filename');
-        // var_dump($filename);exit;
+        $filename = $request->input('filename');        
 
         if ($request->hasFile('file')) {
             // Obtén la extensión del archivo (omite validación)
@@ -319,48 +384,28 @@ class ItemAwardHistoriesController extends Controller
                 return back()->withErrors($validator)->withInput();
             }
 
-            // Guarda el archivo con un nombre único
-            // $fileName = time().'-policy-file.'.$extension;
+            // Guarda el archivo con un nombre único           
             $fileName = 'endoso_nro_'.$request->input('number_policy').'.'.$extension; // nombre a guardar
             $path = $request->file('file')->storeAs('public/files', $fileName);
 
             // Capturamos nombre del archivo almacenado en la tabla
-            $filename = $itemA->file;
-
-            // Eliminamos el archivo del public/files
-            // Storage::delete('public/files/'.$filename);
-        }
-        // $validator =  Validator::make($request->input(), $rules);
-        // if ($validator->fails()) {
-        //     return back()->withErrors($validator)->withInput();
-        // }
-
+            $filename = $itemA->file;            
+        }        
         $itemA->item_award_type_id = $request->input('item_award_type_id');
         $itemA->number_policy = $request->input('number_policy');
         $itemA->item_from = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_from'))));
         $itemA->item_to = date('Y-m-d', strtotime(str_replace("/", "-", $request->input('item_to'))));
-
         $amount = str_replace('.', '',($request->input('amount')));
         if ($amount === '' ) {
             $validator->errors()->add('amount', 'Ingrese Monto');
             return back()->withErrors($validator)->withInput();
         }
-
-        //SE DEJA DE CONTROLAR MONTO DE POLIZA VS MONTO DE ENDOSO
-        // if ($amount < 0 ) {
-        //     $validator->errors()->add('amount', 'Monto no puede ser negativo');
-        //     return back()->withErrors($validator)->withInput();
-        // }else{
-             $itemA->amount = $amount;
-        // }
-
-        $itemA->comments = $request->input('comments');
-        // $itemA->file = $fileName;
+        $itemA->amount = $amount;
+        $itemA->comments = $request->input('comments');        
         $itemA->file_type = 2;//endoso
         $itemA->state_id = 1;
         $itemA->creator_user_id = $request->user()->id;  // usuario logueado
         $itemA->save();
-
         return redirect()->route('items.item_award_histories.index',$item_id)->with('success', 'Se ha modificado exitosamente el endoso de la póliza'); // Caso usuario posee rol pedidos
     }
 

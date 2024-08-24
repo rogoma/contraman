@@ -172,7 +172,7 @@
                                         <div class="col-sm-12">
                                             <br>
                                             <div class="form-group text-center">
-                                                <button type="submit" class="btn btn-primary">Modificar Póliza</button>
+                                                <button id="guardar" type="submit" class="btn btn-primary">Modificar Póliza</button>
                                             </div>
                                         </div>
                                     </form>
