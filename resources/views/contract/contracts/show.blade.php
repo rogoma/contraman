@@ -197,7 +197,8 @@ p.centrado {
                                                             <th>Monto</th>
                                                             <th>Comentarios</th>
                                                             <th>Acciones</th>
-                                                            <th>Archivo</th>
+                                                            <th>Status</th>
+                                                            <th>Archivo</th>                                                                                                                        
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -207,11 +208,25 @@ p.centrado {
                                                                 <td>{{ $contract->items[$i]->policy->description }}</td>
                                                                 <td>{{ $contract->items[$i]->number_policy }}</td>
                                                                 <td>{{ $contract->items[$i]->itemFromDateFormat() }}</td>
-                                                                <td style="color:red;font-weight">{{ $contract->items[$i]->itemToDateFormat() }}</td>
+
+                                                                {{-- Se calcula 60 días antes para mostrar colores y botón de Endoso --}}
+                                                                @php
+                                                                    // Ajusta el formato para que coincida con tu cadena de fecha
+                                                                    $toDate = \Carbon\Carbon::createFromFormat('d/m/Y', $contract->items[$i]->itemToDateFormat());
+                                                                    $currentDate = \Carbon\Carbon::now();
+                                                                    $sixtyDaysBefore = $toDate->copy()->subDays(60);  // Resta 60 días a $toDate
+                                                                    // var_dump($sixtyDaysBefore);exit;
+                                                                @endphp
+
+                                                                @if ($currentDate <= $sixtyDaysBefore)
+                                                                    <td style="color:blue;font-weight">{{ $contract->items[$i]->itemToDateFormat() }}</td>                                                                    
+                                                                @else
+                                                                    <td style="color:red;font-weight">{{ $contract->items[$i]->itemToDateFormat() }}</td>
+                                                                @endif
+
                                                                 <td>{{ $contract->items[$i]->AmountFormat()}} </td>
                                                                 <td>{{ $contract->items[$i]->comments }}</td>
                                                                 <td>
-
                                                                 {{-- No muestra si estado de llamado no es rescindido, cerrado, impugando o en proceso de rescisión --}}
                                                                 @if (in_array($contract->contract_state_id, [1,5]))
                                                                     @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']))
@@ -227,16 +242,21 @@ p.centrado {
                                                                     @endif
                                                                 @endif
 
-                                                                @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']) || $contract->dependency_id == Auth::user()->dependency_id)
-                                                                {{-- @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update'])) --}}
-                                                                    <button type="button" title="Endosos de Póliza" class="btn btn-primary btn-icon" onclick="itemAwardHistories({{ $contract->items[$i]->id }})">
-                                                                        <i class="fa fa-list"></i>
-                                                                    </button>
-                                                                @endif
-                                                                </td>
+                                                                @if ($currentDate <= $sixtyDaysBefore)
+                                                                    <td style="color:BLUE;font-weight">OK</td>    
+                                                                @else
+                                                                    @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']) || $contract->dependency_id == Auth::user()->dependency_id)
+                                                                    {{-- @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update'])) --}}
+                                                                        <button type="button" title="Endosos de Póliza" class="btn btn-primary btn-icon" onclick="itemAwardHistories({{ $contract->items[$i]->id }})">
+                                                                            <i class="fa fa-list"></i>
+                                                                        </button>
+                                                                    @endif
+                                                                    <td style="color:red;font-weight">ALERTA</td>    
+                                                                @endif                                                                
+                                                                </td>                                                                
                                                                 <td>
                                                                     <a href="{{ asset('storage/files/'.$contract->items[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-success btn-icon"><i class="fa fa-eye"></i></a>
-                                                                </td>
+                                                                </td>                                                                
                                                             </tr>
                                                         @endfor
 
