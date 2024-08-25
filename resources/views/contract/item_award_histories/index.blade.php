@@ -65,6 +65,7 @@
                                                     <th>Estado</th>
                                                     <th>Comentarios</th>
                                                     <th>Acciones</th>
+                                                    <th>Status</th>
                                                     <th>Archivo</th>
                                                 </tr>
                                             </thead>
@@ -75,11 +76,28 @@
                                                     <td>{{ $item->itemAwardHistories[$i]->itemAwardType->description }}</td>
                                                     <td>{{ $item->itemAwardHistories[$i]->number_policy }}</td>
                                                     <td>{{ $item->itemAwardHistories[$i]->itemFromDateFormat() }}</td>
-                                                    @if ($item->itemAwardHistories[$i]->state_id == 1)
+                                                    
+                                                    {{-- Se calcula 60 días antes para mostrar colores y botón de Endoso --}}
+                                                    @php
+                                                        // Ajusta el formato para que coincida con tu cadena de fecha
+                                                        $toDate = \Carbon\Carbon::createFromFormat('d/m/Y', $item->itemAwardHistories[$i]->itemtoDateFormat());
+                                                        $currentDate = \Carbon\Carbon::now();
+                                                        $sixtyDaysBefore = $toDate->copy()->subDays(60);  // Resta 60 días a $toDate
+                                                        // var_dump($sixtyDaysBefore);exit;
+                                                    @endphp
+
+                                                    @if ($currentDate <= $sixtyDaysBefore)
+                                                        <td style="color:blue;font-weight">{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td>                                                                    
+                                                    @else
+                                                        <td style="color:red;font-weight">{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td>
+                                                    @endif
+                                                
+                                                    {{-- @if ($item->itemAwardHistories[$i]->state_id == 1)
                                                         <td style="color:red;font-weight">{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td>
                                                     @else
                                                         <td>{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td>
-                                                    @endif
+                                                    @endif --}}
+
                                                     <td>{{ $item->itemAwardHistories[$i]->amountFormat() }}</td>
                                                     
                                                     {{-- ESTADO DEL ENDOSO --}}
@@ -90,8 +108,7 @@
                                                     @endif
                                                     
                                                     <td>{{ $item->itemAwardHistories[$i]->comments }}</td>
-
-                                                    {{-- @if ($item->itemAwardHistories[$i]->state_id == 1) --}}
+                                                    
                                                         <td>                                                    
                                                             @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']))
                                                                 <button type="button" title="Editar" class="btn btn-warning btn-icon" onclick="updateItem({{ $item->itemAwardHistories[$i]->id }})">
@@ -104,16 +121,13 @@
                                                                 <i class="fa fa-trash"></i>
                                                             </button>
                                                         @endif
-                                                        </td>                                                        
-                                                    {{-- @else --}}
-                                                        {{-- <td>
-                                                            @if (Auth::user()->hasPermission(['admin.items.delete','contracts.items.update']))
-                                                                <button type="button" title="Borrar" class="btn btn-danger btn-icon" onclick="deleteItemAwardHistories({{$item->itemAwardHistories[$i]->id }})">
-                                                                    <i class="fa fa-trash"></i>
-                                                                </button>
-                                                            @endif --}}
-                                                        </td>
-                                                    {{-- @endif --}}
+                                                        </td> 
+                                                        @if ($currentDate <= $sixtyDaysBefore)
+                                                            <td style="color:BLUE;font-weight">OK</td>    
+                                                        @else                                                                    
+                                                            <td style="color:red;font-weight">ALERTA</td>    
+                                                        @endif                                                    
+                                                        </td>                                                    
                                                     <td>
                                                         <a href="{{ asset('storage/files/'.$item->itemAwardHistories[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-success btn-icon"><i class="fa fa-eye"></i></a>
                                                     </td>
