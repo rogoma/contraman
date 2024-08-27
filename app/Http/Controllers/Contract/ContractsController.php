@@ -928,18 +928,32 @@ class ContractsController extends Controller
     {
 
         if($request->user()->hasPermission(['admin.contracts.show'])){
-            $orders = DB::table('vista_contracts_full')//vista que muestra los datos
+            $orders = DB::table('vista_contracts_full3')//vista que muestra los datos
                 ->select(['contrato', 'iddncp','number_year','year_adj','contratista',
                 'estado', 'modalidad', 'tipo_contrato','amount', 'item_from',
                 'item_to','comments'])
-                ->where('state_id', '=', 1)
+                ->where([
+                    ['dias_advance', '<=', 0],
+                    ['dias_advance_endo', null]
+                ])
+                ->orwhere([
+                    ['dias_advance', '<=', 0],
+                    ['dias_advance_endo', '<=', 0]
+                ])
                 ->get();
         }else{
-            $orders = DB::table('vista_contracts_full')//vista que muestra los datos
+            $orders = DB::table('vista_contracts_full3')//vista que muestra los datos
                 ->select(['contrato', 'iddncp','number_year','year_adj','contratista',
                 'estado', 'modalidad', 'tipo_contrato','amount', 'item_from',
                 'item_to','comments'])
-                ->where('state_id', '=', 1)
+                ->where([
+                    ['dias_advance', '<=', 0],
+                    ['dias_advance_endo', null]
+                ])
+                ->orwhere([
+                    ['dias_advance', '<=', 0],
+                    ['dias_advance_endo', '<=', 0]
+                ])
                 ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
                 ->get();       }
 
