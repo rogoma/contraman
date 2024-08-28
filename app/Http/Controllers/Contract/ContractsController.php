@@ -945,7 +945,7 @@ class ContractsController extends Controller
             $orders = DB::table('vista_contracts_full3')//vista que muestra los datos
                 ->select(['contrato', 'iddncp','number_year','year_adj','contratista',
                 'estado', 'modalidad', 'tipo_contrato','amount', 'item_from',
-                'item_to','comments'])
+                'item_to','comments', 'dias_advance'])
                 ->where([
                     ['dias_advance', '<=', 0],
                     ['dias_advance_endo', null]
@@ -954,8 +954,9 @@ class ContractsController extends Controller
                     ['dias_advance', '<=', 0],
                     ['dias_advance_endo', '<=', 0]
                 ])
-                ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
-                ->get();       }
+                // ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
+                ->get();
+        }
 
             // Por cada orden verificamos fecha tope y consultas sin responder
             $alerta_advance = array();
@@ -970,7 +971,8 @@ class ContractsController extends Controller
                 $tope_recepcion_consultas = 0;
 
                 // definimos proceso para generar datos de poliza de anticipos
-                if(empty($order->item_to)){
+                // if(empty($order->item_to)){
+                if ($order->dias_advance > 0){
                     // continue;
                 }else{
                     $limite_mayor_consultas = strtotime($order->item_to . ' +'.$tope_recepcion_consultas.' days');
