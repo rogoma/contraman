@@ -971,8 +971,8 @@ class ContractsController extends Controller
                 $tope_recepcion_consultas = 0;
 
                 // definimos proceso para generar datos de poliza de anticipos
-                // if(empty($order->item_to)){
-                if ($order->dias_advance > 0){
+                if(empty($order->item_to)){
+                // if ($order->dias_advance < 0){
                     // continue;
                 }else{
                     $limite_mayor_consultas = strtotime($order->item_to . ' +'.$tope_recepcion_consultas.' days');
