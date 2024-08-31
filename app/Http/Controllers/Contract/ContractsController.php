@@ -954,40 +954,16 @@ class ContractsController extends Controller
                     ['dias_advance', '<=', 0],
                     ['dias_advance_endo', '<=', 0]
                 ])
-                // ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
+                ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
                 ->get();
         }
 
-            // Por cada orden verificamos fecha tope y consultas sin responder
+            // Para generar contador en la campanita de alerta
             $alerta_advance = array();
-            // $alerta_fidelity = array();
 
-            $tope_recepcion_consultas = 0;
-            $dias_tope_consultas = 0;
-
-            $hoy = strtotime(date('Y-m-d'));
             foreach($orders as $order){
-                // definimos fecha de recepcion de consultas
-                $tope_recepcion_consultas = 0;
-
-                // definimos proceso para generar datos de poliza de anticipos
-                if(empty($order->item_to)){                
-                    // continue;
-                }else{
-                    $limite_mayor_consultas = strtotime($order->item_to . ' +'.$tope_recepcion_consultas.' days');
-                    $dias_aviso = $tope_recepcion_consultas - 60;
-                    $limite_menor_consultas = strtotime($order->item_to . ' +'.$dias_aviso.' days');
-
-                    if($hoy <= $limite_mayor_consultas && $hoy >= $limite_menor_consultas){
-                        $segundos_llegar_tope = $limite_mayor_consultas - $hoy;
-                        $dias_tope_consultas = floor(abs($segundos_llegar_tope / 60 / 60 / 24 ));
-                        $pac_id = number_format($order->iddncp,0,",",".");
-                        $contratista = $order->contratista;
-                        $fecha_ini = date("d-m-Y", $limite_menor_consultas);
-                        $fecha_fin = date("d-m-Y", $limite_mayor_consultas);
-                        array_push($alerta_advance, array('pac_id' => $pac_id,'llamado' => $order->number_year, 'contratista' => $contratista, 'dias' => $dias_tope_consultas, 'fecha_fin' => $fecha_fin, 'fecha_ini' => $fecha_ini));
-                    }
-                }
+                $pac_id = number_format($order->iddncp,0,",",".");
+                array_push($alerta_advance, array('pac_id' => $pac_id));
             }
             // return response()->json(['status' => 'success', 'alerta_advance' => $alerta_advance,'alerta_fidelity' => $alerta_fidelity], 200);
             return response()->json(['status' => 'success', 'alerta_advance' => $alerta_advance], 200);
