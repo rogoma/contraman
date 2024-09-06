@@ -24,14 +24,14 @@ $(document).ready(function(){
                                         alertas = 0;
 
                                         // LISTADO DE VENCIMIENTO EN PDF ESTIRA DE UNA VISTA
-                                        // notificaciones += '<p><u style="font-size: 14px;color:red" target="_blank" href="pdf/panel_contracts4">**** REPORTE DE VENCIMIENTOS: ****</u></p>'
                                         notificaciones += '<p><a style="font-size: 18px;color:BLUE" target="_blank" href="/pdf/panel_contracts5">REPORTE VCTOS PDF</a></p>'
+                                        notificaciones += '<p><a style="font-size: 18px;color:BLUE" target="_blank" href="/pdf/panel_contracts7">REPORTE PRUEBA</a></p>'
                                         notificaciones += '<p><a style="font-size: 18px;color:GREEN" target="_blank" href="/contracts/exportarexcel6">REPORTE VCTOS EXCEL</a></p>'
 
                                         // notificaciones pólizas anticipos
                                         if(data.alerta_advance.length > 0){
                                             data.alerta_advance.forEach(element => {
-                                                alertas += 1;                                                
+                                                alertas += 1;
                                             });
                                         }
 

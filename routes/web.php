@@ -379,6 +379,9 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     //REPORTE DE ALERTAS DE VENCIMIENTOS DE PÓLIZAS
     Route::get('pdf/panel_contracts5', [ReportsController::class, 'generarContracts5'])->name('pdf.panel_contracts5');
 
+    //VISTA PARA ELEGIR DEPENDENCIA OPARA MOSTRAR ALERTAS DE VENCIMIENTOS DE PÓLIZAS
+    Route::get('pdf/panel_contracts7', [ReportsController::class, 'generarContracts7'])->name('pdf.panel_contracts7');
+
     //REPORTE DE UN CONTRATO ESPECÍFICO
     Route::get('pdf/panel_contracts/{contract_id}', [ReportsController::class, 'generarContracts'])->name('pdf.panel_contracts');
 
