@@ -637,6 +637,70 @@ class ReportsController extends Controller
         //capturamos el nombre del método para poder cambiar el título del reporte en la VISTA
         $nombreMetodo = __METHOD__;
 
+            $contracts_poli = DB::table('vista_contracts_vctos_poli') //vista que muestra los datos
+                ->select([
+                    'iddncp',
+                    'number_year',
+                    'contratista',
+                    'tipo_contrato',
+                    'total_amount',
+                    'fecha_tope_advance',
+                    'vcto_adv',
+                    'dias_advance',
+                    'llamado',
+                    'polizas',
+                    'number_policy',
+                    'modalidad',
+                    'dependency_id',
+                    'dependencia',
+                    'comments',
+                    'award_type_id',
+                    'award_type_description'
+                ])
+                ->where('dias_advance', '<=', 0)
+                ->get();
+
+            $contracts_endo = DB::table('vista_contracts_vctos_endo') //vista que muestra los datos
+                ->select([
+                    'iddncp',
+                    'number_year',
+                    'contratista',
+                    'tipo_contrato',
+                    'amount_endoso',
+                    'fecha_tope_advance_endo',
+                    'vcto_adv_endo',
+                    'dias_advance_endo',
+                    'llamado',
+                    'polizas',
+                    'number_policy_endoso',
+                    'modalidad',
+                    'dependency_id',
+                    'dependencia',
+                    'comments_endoso',
+                    'state_endoso',
+                    'award_type_id',
+                    'award_type_description',
+                    'state_id',
+                ])
+                ->where('dias_advance_endo', '<=', 0)
+                // ->where('state_id', '=', 1)
+                // ->where('dependency_id', $request->user()->dependency_id) //filtra por dependencia que generó la info
+                ->get();
+        return view('reports.contracts_vctos_polizas_menu', compact('contracts_poli','contracts_endo'));
+
+        // $view = View::make('reports.contracts_vctos_polizas_menu', compact('contracts_poli', 'contracts_endo', 'nombreMetodo'))->render();
+        // $pdf = App::make('dompdf.wrapper');
+        // $pdf->loadHTML($view);
+        // $pdf->setPaper('A4', 'landscape'); //coloca en apaisado
+        // return $pdf->stream('MENU DE DETALLES ALERTA VENCIMIENTOS DE PÓLIZAS' . '.pdf');
+    }
+
+    // PARA MOSTRAR ALERTAS DE VENCIMIENTOS DE LAS PÓLIZAS Y ENDOSOS
+    // PARA MOSTRAR ALERTAS DE VENCIMIENTOS DE LAS PÓLIZAS Y ENDOSOS
+    public function generarContracts9(Request $request)
+    {
+        //capturamos el nombre del método para poder cambiar el título del reporte en la VISTA
+        $nombreMetodo = __METHOD__;
 
             $contracts_poli = DB::table('vista_contracts_vctos_poli') //vista que muestra los datos
                 ->select([
@@ -652,6 +716,7 @@ class ReportsController extends Controller
                     'polizas',
                     'number_policy',
                     'modalidad',
+                    'dependency_id',
                     'dependencia',
                     'comments',
                     'award_type_id',
@@ -659,7 +724,34 @@ class ReportsController extends Controller
                 ])
                 ->where('dias_advance', '<=', 0)
                 ->get();
-        return view('reports.contracts_vctos_polizas_menu', compact('contracts_poli'));
+
+            $contracts_endo = DB::table('vista_contracts_vctos_endo') //vista que muestra los datos
+                ->select([
+                    'iddncp',
+                    'number_year',
+                    'contratista',
+                    'tipo_contrato',
+                    'amount_endoso',
+                    'fecha_tope_advance_endo',
+                    'vcto_adv_endo',
+                    'dias_advance_endo',
+                    'llamado',
+                    'polizas',
+                    'number_policy_endoso',
+                    'modalidad',
+                    'dependency_id',
+                    'dependencia',
+                    'comments_endoso',
+                    'state_endoso',
+                    'award_type_id',
+                    'award_type_description',
+                    'state_id',
+                ])
+                ->where('dias_advance_endo', '<=', 0)
+                // ->where('state_id', '=', 1)
+                // ->where('dependency_id', $request->user()->dependency_id) //filtra por dependencia que generó la info
+                ->get();
+        return view('reports.contracts_vctos_polizas_menu', compact('contracts_poli','contracts_endo'));
 
         // $view = View::make('reports.contracts_vctos_polizas_menu', compact('contracts_poli', 'contracts_endo', 'nombreMetodo'))->render();
         // $pdf = App::make('dompdf.wrapper');
@@ -667,7 +759,6 @@ class ReportsController extends Controller
         // $pdf->setPaper('A4', 'landscape'); //coloca en apaisado
         // return $pdf->stream('MENU DE DETALLES ALERTA VENCIMIENTOS DE PÓLIZAS' . '.pdf');
     }
-
 
     // function to display preview
     public function generarModalities()
