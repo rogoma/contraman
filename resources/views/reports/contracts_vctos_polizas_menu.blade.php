@@ -89,22 +89,6 @@
                                                                 </td>
                                                             </tr>
                                                         @endfor
-
-                                                        @for ($j = 0; $j < count($contracts_endo); $j++)
-                                                            <tr>
-                                                                <td>{{ $i + ($j + 1) }}</td>
-                                                                <td> {{ $contracts_endo[$j]->dependency_id }}</td>
-                                                                <td> {{ $contracts_endo[$j]->dependencia }}</td>
-                                                                <td>
-                                                                    {{-- <button type="button" title="Editar"
-                                                                        class="btn btn-danger btn-icon" onclick="updateItem({{ $contracts_endo[$j]->dependency_id }})">
-                                                                        <i class="fa fa-file-pdf-o"></i>
-                                                                    </button> --}}
-                                                                    <a href="/pdf/panel_contracts9" title="Ver Archivo" target="_blank" class="btn btn-danger btn-icon"><i class="fa fa-file-pdf-o"></i></a>
-                                                                    {{-- <a href="/pdf/panel_contracts7" class="btn btn-outline-warning" target="_blank">EN CURSO</a> --}}
-                                                                </td>
-                                                            </tr>
-                                                        @endfor
                                                     </table>
                                                 @endif
                                             </table>

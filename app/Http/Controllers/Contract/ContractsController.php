@@ -926,7 +926,7 @@ class ContractsController extends Controller
 
     public function getNotifications(Request $request)
     {
-        //alertas general abarca todas las dependencias
+        //alertas general abarca todas las dependencias para mostrar la campanita
         if($request->user()->hasPermission(['admin.contracts.show'])){
             $orders = DB::table('vista_contracts_full3')//vista que muestra los datos
                 ->select(['contrato', 'iddncp','number_year','year_adj','contratista',
@@ -950,7 +950,7 @@ class ContractsController extends Controller
                     array_push($alerta_advance, array('pac_id' => $pac_id));
                 }
         }else{
-            //alertas por dependencias
+            //alertas por dependencias para mostrar la campanita
             $orders = DB::table('vista_contracts_full3')//vista que muestra los datos
                 ->select(['contrato', 'iddncp','number_year','year_adj','contratista',
                 'estado', 'modalidad', 'tipo_contrato','amount', 'item_from',
@@ -973,7 +973,7 @@ class ContractsController extends Controller
                     if ($order->dependency_id == $request->user()->dependency_id){
                         $dependency_id = number_format($order->dependency_id,0,",",".");
                         $pac_id = number_format($order->iddncp,0,",",".");
-                        array_push($alerta_advance, array('pac_id' => $dependency_id));
+                        array_push($alerta_advance, array('pac_id' => $pac_id));
                     }else{
 
                     }
