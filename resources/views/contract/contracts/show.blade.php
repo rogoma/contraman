@@ -41,7 +41,7 @@ p.centrado {
                         <h5>Visualizar Llamado</h5>
                         <span>Llamado Nº {{ $contract->number_year }}</span>
                         <br><br>
-                        <h5><p style="font-size: 17px; font-weight: bold; color:#FF0000">Estado Actual: {{ $contract->contractState->id." - ".$contract->contractState->description }}</p></h5>
+                        <h5><p style="font-size: 17px; font-weight: bold; color:#FF0000;">Estado Actual: {{ $contract->contractState->id." - ".$contract->contractState->description }}</p></h5>
                     </div>
                 </div>
             </div>
@@ -198,7 +198,7 @@ p.centrado {
                                                             <th>Comentarios</th>
                                                             <th>Acciones</th>
                                                             <th>Status</th>
-                                                            <th>Archivo</th>                                                                                                                        
+                                                            <th>Archivo</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -219,7 +219,7 @@ p.centrado {
                                                                 @endphp
 
                                                                 @if ($currentDate <= $sixtyDaysBefore)
-                                                                    <td style="color:blue;font-weight">{{ $contract->items[$i]->itemToDateFormat() }}</td>                                                                    
+                                                                    <td style="color:blue;font-weight">{{ $contract->items[$i]->itemToDateFormat() }}</td>
                                                                 @else
                                                                     <td style="color:red;font-weight">{{ $contract->items[$i]->itemToDateFormat() }}</td>
                                                                 @endif
@@ -243,7 +243,7 @@ p.centrado {
                                                                 @endif
 
                                                                 @if ($currentDate <= $sixtyDaysBefore)
-                                                                    <td style="color:BLUE;font-weight">OK</td>    
+                                                                    <td style="color:BLUE;font-weight">OK</td>
                                                                 @else
                                                                     @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']) || $contract->dependency_id == Auth::user()->dependency_id)
                                                                     {{-- @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update'])) --}}
@@ -251,12 +251,12 @@ p.centrado {
                                                                             <i class="fa fa-list"></i>
                                                                         </button>
                                                                     @endif
-                                                                    <td style="color:red;font-weight">ALERTA</td>    
-                                                                @endif                                                                
-                                                                </td>                                                                
+                                                                    <td style="color:red;font-weight">ALERTA</td>
+                                                                @endif
+                                                                </td>
                                                                 <td>
                                                                     <a href="{{ asset('storage/files/'.$contract->items[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-success btn-icon"><i class="fa fa-eye"></i></a>
-                                                                </td>                                                                
+                                                                </td>
                                                             </tr>
                                                         @endfor
 
@@ -267,7 +267,7 @@ p.centrado {
                                                     {{-- @if (Auth::user()->hasPermission(['contracts.contracts.create','admin.orders.create'])) --}}
                                                     @if (Auth::user()->hasPermission(['admin.orders.create']))
                                                         {{-- Si pedido está anulado no muestra agregar ítems --}}
-                                                        @if (in_array($contract->contract_state_id, [1,2]))
+                                                        @if (in_array($contract->contract_state_id, [1]))
                                                         <a href="{{ route('contracts.items.create', $contract->id) }}" class="btn btn-primary">Agregar Póliza</a>
                                                         @endif
                                                     @endif

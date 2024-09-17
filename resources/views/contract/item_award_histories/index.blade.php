@@ -76,7 +76,7 @@
                                                     <td>{{ $item->itemAwardHistories[$i]->itemAwardType->description }}</td>
                                                     <td>{{ $item->itemAwardHistories[$i]->number_policy }}</td>
                                                     <td>{{ $item->itemAwardHistories[$i]->itemFromDateFormat() }}</td>
-                                                    
+
                                                     {{-- Se calcula 60 días antes para mostrar colores y botón de Endoso --}}
                                                     @php
                                                         // Ajusta el formato para que coincida con tu cadena de fecha
@@ -87,11 +87,11 @@
                                                     @endphp
 
                                                     @if ($currentDate <= $sixtyDaysBefore)
-                                                        <td style="color:blue;font-weight">{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td>                                                                    
+                                                        <td style="color:blue;font-weight">{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td>
                                                     @else
                                                         <td style="color:red;font-weight">{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td>
                                                     @endif
-                                                
+
                                                     {{-- @if ($item->itemAwardHistories[$i]->state_id == 1)
                                                         <td style="color:red;font-weight">{{ $item->itemAwardHistories[$i]->itemtoDateFormat() }}</td>
                                                     @else
@@ -99,17 +99,17 @@
                                                     @endif --}}
 
                                                     <td>{{ $item->itemAwardHistories[$i]->amountFormat() }}</td>
-                                                    
+
                                                     {{-- ESTADO DEL ENDOSO --}}
                                                     @if ($item->itemAwardHistories[$i]->state_id == 1)
                                                         <td style="color:blue;font-weight">Activo</td>
                                                     @else
                                                         <td style="color:red;font-weight">Inactivo</td>
                                                     @endif
-                                                    
+
                                                     <td>{{ $item->itemAwardHistories[$i]->comments }}</td>
-                                                    
-                                                        <td>                                                    
+
+                                                        <td>
                                                             @if (Auth::user()->hasPermission(['admin.items.update','contracts.items.update']))
                                                                 <button type="button" title="Editar" class="btn btn-warning btn-icon" onclick="updateItem({{ $item->itemAwardHistories[$i]->id }})">
                                                                     <i class="fa fa-pencil"></i>
@@ -121,13 +121,13 @@
                                                                 <i class="fa fa-trash"></i>
                                                             </button>
                                                         @endif
-                                                        </td> 
+                                                        </td>
                                                         @if ($currentDate <= $sixtyDaysBefore)
-                                                            <td style="color:BLUE;font-weight">OK</td>    
-                                                        @else                                                                    
-                                                            <td style="color:red;font-weight">ALERTA</td>    
-                                                        @endif                                                    
-                                                        </td>                                                    
+                                                            <td style="color:BLUE;font-weight">OK</td>
+                                                        @else
+                                                            <td style="color:red;font-weight">ALERTA</td>
+                                                        @endif
+                                                        </td>
                                                     <td>
                                                         <a href="{{ asset('storage/files/'.$item->itemAwardHistories[$i]->file) }}" title="Ver Archivo" target="_blank" class="btn btn-success btn-icon"><i class="fa fa-eye"></i></a>
                                                     </td>
@@ -139,8 +139,8 @@
                                         <div class="text-right">
                                             @if (Auth::user()->hasPermission(['contracts.contracts.create','admin.orders.create']))
                                                 {{-- Si pedido está anulado no muestra agregar ítems --}}
-                                                {{-- @if (in_array($contract->contract_state_id, [1,2])) --}}
-                                                <a href="{{ route('items.item_award_histories.create', $item->id) }}" class="btn btn-primary">Agregar Endoso</a>
+                                                {{-- @if (in_array($contract->contract_state_id, [1])) --}}
+                                                    <a href="{{ route('items.item_award_histories.create', $item->id) }}" class="btn btn-primary">Agregar Endoso</a>
                                                 {{-- @endif --}}
                                             @endif
                                         </div>

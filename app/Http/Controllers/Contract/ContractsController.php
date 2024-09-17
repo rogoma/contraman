@@ -926,26 +926,36 @@ class ContractsController extends Controller
 
     public function getNotifications(Request $request)
     {
-
+        //alertas general abarca todas las dependencias
         if($request->user()->hasPermission(['admin.contracts.show'])){
             $orders = DB::table('vista_contracts_full3')//vista que muestra los datos
                 ->select(['contrato', 'iddncp','number_year','year_adj','contratista',
                 'estado', 'modalidad', 'tipo_contrato','amount', 'item_from',
                 'item_to','comments'])
+                ->whereIn('state_id', [1])//1-En curso
                 ->where([
                     ['dias_advance', '<=', 0],
-                    ['dias_advance_endo', null]
+                    ['dias_advance_endo', null],
                 ])
                 ->orwhere([
                     ['dias_advance', '<=', 0],
                     ['dias_advance_endo', '<=', 0]
                 ])
                 ->get();
+
+                $alerta_advance = array();
+
+                foreach($orders as $order){
+                    $pac_id = number_format($order->iddncp,0,",",".");
+                    array_push($alerta_advance, array('pac_id' => $pac_id));
+                }
         }else{
+            //alertas por dependencias
             $orders = DB::table('vista_contracts_full3')//vista que muestra los datos
                 ->select(['contrato', 'iddncp','number_year','year_adj','contratista',
                 'estado', 'modalidad', 'tipo_contrato','amount', 'item_from',
-                'item_to','comments', 'dias_advance'])
+                'item_to','comments', 'dias_advance', 'dependency_id'])
+                ->whereIn('state_id', [1])//1-En curso
                 ->where([
                     ['dias_advance', '<=', 0],
                     ['dias_advance_endo', null]
@@ -956,16 +966,20 @@ class ContractsController extends Controller
                 ])
                 ->where('dependency_id', $request->user()->dependency_id)//filtra por dependencia que generó la info
                 ->get();
+
+                $alerta_advance = array();
+
+                foreach($orders as $order){
+                    if ($order->dependency_id == $request->user()->dependency_id){
+                        $dependency_id = number_format($order->dependency_id,0,",",".");
+                        $pac_id = number_format($order->iddncp,0,",",".");
+                        array_push($alerta_advance, array('pac_id' => $dependency_id));
+                    }else{
+
+                    }
+                }
         }
 
-            // Para generar contador en la campanita de alerta
-            $alerta_advance = array();
-
-            foreach($orders as $order){
-                $pac_id = number_format($order->iddncp,0,",",".");
-                array_push($alerta_advance, array('pac_id' => $pac_id));
-            }
-            // return response()->json(['status' => 'success', 'alerta_advance' => $alerta_advance,'alerta_fidelity' => $alerta_fidelity], 200);
             return response()->json(['status' => 'success', 'alerta_advance' => $alerta_advance], 200);
     }
 }

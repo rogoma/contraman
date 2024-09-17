@@ -702,55 +702,32 @@ class ReportsController extends Controller
         //capturamos el nombre del método para poder cambiar el título del reporte en la VISTA
         $nombreMetodo = __METHOD__;
 
-            $contracts_poli = DB::table('vista_contracts_vctos_poli') //vista que muestra los datos
-                ->select([
-                    'iddncp',
-                    'number_year',
-                    'contratista',
-                    'tipo_contrato',
-                    'total_amount',
-                    'fecha_tope_advance',
-                    'vcto_adv',
-                    'dias_advance',
-                    'llamado',
-                    'polizas',
-                    'number_policy',
-                    'modalidad',
-                    'dependency_id',
-                    'dependencia',
-                    'comments',
-                    'award_type_id',
-                    'award_type_description'
-                ])
-                ->where('dias_advance', '<=', 0)
-                ->get();
+        $contracts_poli = DB::table('vista_contracts_vctos_poli')
+            ->selectRaw('DISTINCT ON (dependencia) iddncp, number_year, dependency_id, dependencia')
+            ->whereIn('state_id', [1]) //1-En curso
+            ->where([
+                ['dias_advance', '<=', 0],
+                ['dias_advance_endo', null]
+            ])
+            ->orWhere([
+                ['dias_advance', '<=', 0],
+                ['dias_advance_endo', '<=', 0]
+            ])
+            ->get();
 
-            $contracts_endo = DB::table('vista_contracts_vctos_endo') //vista que muestra los datos
-                ->select([
-                    'iddncp',
-                    'number_year',
-                    'contratista',
-                    'tipo_contrato',
-                    'amount_endoso',
-                    'fecha_tope_advance_endo',
-                    'vcto_adv_endo',
-                    'dias_advance_endo',
-                    'llamado',
-                    'polizas',
-                    'number_policy_endoso',
-                    'modalidad',
-                    'dependency_id',
-                    'dependencia',
-                    'comments_endoso',
-                    'state_endoso',
-                    'award_type_id',
-                    'award_type_description',
-                    'state_id',
-                ])
-                ->where('dias_advance_endo', '<=', 0)
-                // ->where('state_id', '=', 1)
-                // ->where('dependency_id', $request->user()->dependency_id) //filtra por dependencia que generó la info
-                ->get();
+        $contracts_endo = DB::table('vista_contracts_vctos_endo') //vista que muestra los datos
+            ->selectRaw('DISTINCT ON (dependencia) iddncp, number_year, dependency_id, dependencia')
+            ->whereIn('state_id', [1]) //1-En curso
+            ->where([
+                ['dias_advance', '<=', 0],
+                ['dias_advance_endo', null]
+            ])
+            ->orWhere([
+                ['dias_advance', '<=', 0],
+                ['dias_advance_endo', '<=', 0]
+            ])
+            ->get();
+
         return view('reports.contracts_vctos_polizas_menu', compact('contracts_poli','contracts_endo'));
 
         // $view = View::make('reports.contracts_vctos_polizas_menu', compact('contracts_poli', 'contracts_endo', 'nombreMetodo'))->render();
