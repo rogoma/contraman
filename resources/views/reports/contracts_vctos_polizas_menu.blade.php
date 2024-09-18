@@ -85,7 +85,8 @@
                                                                 <td> {{ $contracts_poli[$i]->dependency_id }}</td>
                                                                 <td> {{ $contracts_poli[$i]->dependencia }}</td>
                                                                 <td>
-                                                                    <a href="/pdf/panel_contracts9" title="Ver Archivo" target="_blank" class="btn btn-danger btn-icon"><i class="fa fa-file-pdf-o"></i></a>
+                                                                    {{-- <a href="/pdf/panel_contracts5" title="Ver Archivo"                      target="_blank" class="btn btn-danger btn-icon"><i class="fa fa-file-pdf-o"></i></a> --}}
+                                                                    <a href="/pdf/panel_contracts7/{{ $contracts_poli[$i]->dependency_id }}" target="_blank" class="btn btn-danger btn-icon"><i class="fa fa-file-pdf-o"></i></a>
                                                                 </td>
                                                             </tr>
                                                         @endfor
