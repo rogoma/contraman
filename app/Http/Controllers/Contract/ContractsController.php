@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Contract;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Enviar_alertas;
 use Illuminate\Support\Facades\Storage;
 
 use App\Models\Contract;
@@ -980,6 +982,7 @@ class ContractsController extends Controller
                 }
         }
 
-            return response()->json(['status' => 'success', 'alerta_advance' => $alerta_advance], 200);
+        return response()->json(['status' => 'success', 'alerta_advance' => $alerta_advance], 200);
+        //Mail::to('rogoma700@gmail.com')->send(new Enviar_alertas($contenido));
     }
 }

@@ -64,6 +64,7 @@ use App\Http\Controllers\Documental\DocumentalsController;
 // use App\Http\Controllers\Report\PdfsController;
 use App\Http\Controllers\Report\ReportsController;
 // use PHPJasper\PHPJasper;
+use App\Http\Controllers\EmailController;
 
 
 /*
@@ -109,7 +110,8 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     //PARA RESETEAR PASSWORD
     Route::get('users/{id}/reset_pass', [UsersController::class, 'reset_pass'])->name('users.reset_pass');
 
-
+    //RUTA PARA ENVIAR EMAIL
+    Route::get('/send-mail', [EmailController::class, 'sendMail']);
 
     Route::resource('positions', PositionsController::class);
     Route::resource('roles', RolesController::class);
@@ -551,7 +553,13 @@ Route::middleware('auth')->group(function () {  // Las siguientes funcionalidade
     Route::delete('contracts/contract/{contract_id}/delete', [ContractsController::class, 'destroy'])->name('contracts.delete');
 
 
+    // Route::get('/sendToMultiple', function() {
+    //     $emails = ['first@example.com', 'second@example.com', 'third@example.com'];
+    //     $name = "Funny Coder"; // Assuming you want to send the same content to all
 
+    //     Mail::to($emails)->send(new MyTestEmail($name));
+    // });
+    // Route::get('/enviar-correo', [CorreoController::class, 'enviarCorreo']);
 
     Route::get('contracts/getNotifications', [ContractsController::class, 'getNotifications'])->name('contracts.getNotifications');
     Route::resource('contracts', ContractsController::class);

@@ -9,6 +9,9 @@ use App\Models\Provider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\enviar_alertas;
+
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\OrdersExport6;
 use Mpdf;
@@ -594,7 +597,7 @@ class ReportsController extends Controller
         }
     }
 
-    // PARA MOSTRAR ALERTAS DE VENCIMIENTOS DE LAS PÓLIZAS Y ENDOSOS DESDE UOC
+    // PARA MOSTRAR ALERTAS DE VENCIMIENTOS DE LAS PÓLIZAS Y ENDOSOS DE TODAS LAS DEPENDENCIAS DESDE UOC
     public function generarContracts7(Request $request, $dependency_id)
     {
         if ($request->user()->hasPermission(['admin.contracts.show'])) {
@@ -654,6 +657,7 @@ class ReportsController extends Controller
                 $pdf->setPaper('A4', 'landscape'); //coloca en apaisado
                 return $pdf->stream('DETALLES ALERTA VENCIMIENTOS DE PÓLIZAS' . '.pdf');
         }
+        // Mail::to('rogoma700@gmail.com')->send(new enviar_alertas($contenido));
     }
 
     // POR DEPENDENCIAS GENERA PDF - PARA MOSTRAR ALERTAS DE VENCIMIENTOS DE LAS PÓLIZAS Y ENDOSOS
