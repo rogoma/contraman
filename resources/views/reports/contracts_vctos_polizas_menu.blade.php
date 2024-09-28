@@ -91,6 +91,9 @@
                                                             </tr>
                                                         @endfor
                                                     </table>
+                                                    {{-- <a href="/pdf/panel_contracts6 }}" target="_blank" class="btn btn-danger btn-icon"><i class="fa fa-file-pdf-o"></i></a> --}}
+                                                    <br>
+                                                    <a style="font-size: 18px;color:BLUE" target="_blank" href="/pdf/panel_contracts5">LISTADO GENERAL DE ALERTAS</a></p>
                                                 @endif
                                             </table>
                                         </div>
