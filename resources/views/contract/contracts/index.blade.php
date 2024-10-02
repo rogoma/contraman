@@ -96,7 +96,7 @@ p.centrado {
                                                     <th>IDDNCP</th>
                                                     <th>Link DNCP</th>
                                                     <th>Monto total LLAMADO</th>
-                                                    <th>Contratista</th>
+                                                    <th>Contratista-RUC</th>
                                                     <th>Modalidad</th>
                                                     <th>Estado</th>
                                                     <th>Tipo Contrato</th>
@@ -112,7 +112,7 @@ p.centrado {
                                                     <td> {{ number_format($contracts[$i]->iddncp,'0', ',','.') }} </td>
                                                     <td style="color:#ff0000">{{ $contracts[$i]->linkdncp }}</td>
                                                     <td> Gs.{{ number_format($contracts[$i]->total_amount,'0', ',','.') }} </td>
-                                                    <td>{{ $contracts[$i]->provider->ruc }}-{{ $contracts[$i]->provider->description }}</td>
+                                                    <td>{{ $contracts[$i]->provider->description }}-{{ $contracts[$i]->provider->ruc }}</td>
                                                     <td>{{ $contracts[$i]->modality->code }}-{{ $contracts[$i]->modality->description }}</td>
 
                                                     @if (in_array($contracts[$i]->contractState->id, [2,3,6]))
