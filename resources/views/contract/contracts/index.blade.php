@@ -93,8 +93,9 @@ p.centrado {
                                                     <th>#</th>
                                                     <th>Responsable</th>
                                                     <th>Llamado</th>
-                                                    <th>IDDNCP</th>
+                                                    <th>IDDNCP</th>                                                    
                                                     <th>Link DNCP</th>
+                                                    <th>AÑO</th>
                                                     <th>Monto total LLAMADO</th>
                                                     <th>Contratista-RUC</th>
                                                     <th>Modalidad</th>
@@ -109,8 +110,9 @@ p.centrado {
                                                     <td> {{ ($i+1) }}</td>
                                                     <td> {{ $contracts[$i]->dependency->description }}</td>
                                                     <td> {{ $contracts[$i]->description }}</td>
-                                                    <td> {{ number_format($contracts[$i]->iddncp,'0', ',','.') }} </td>
+                                                    <td> {{ number_format($contracts[$i]->iddncp,'0', ',','.') }} </td>                                                    
                                                     <td style="color:#ff0000">{{ $contracts[$i]->linkdncp }}</td>
+                                                    <td> {{ number_format($contracts[$i]->year_adj,'0', ',','.') }} </td>
                                                     <td> Gs.{{ number_format($contracts[$i]->total_amount,'0', ',','.') }} </td>
                                                     <td>{{ $contracts[$i]->provider->description }}-{{ $contracts[$i]->provider->ruc }}</td>
                                                     <td>{{ $contracts[$i]->modality->code }}-{{ $contracts[$i]->modality->description }}</td>
