@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+    app:
+        container_name: laravel_container
+        build:
+            context: .
+            dockerfile: Dockerfile
+        restart: unless-stopped
+#        environment:
+        tty: true
+        volumes:
+            - .:/var/www/html
+            - storage:/var/www/html/storage
+            - cache:/var/www/html/bootstrap/cache
+        ports:
+            - "8000:80"
+        networks:
+            - laravel_network
+
+networks:
+    laravel_network:
+
+volumes:
+    storage:
+    cache:
