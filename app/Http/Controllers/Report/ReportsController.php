@@ -154,10 +154,11 @@ class ReportsController extends Controller
                 ->get();
         }
 
-        $view = View::make('reports.contracts_items', compact('contracts1', 'contracts2', 'contracts3'))->render();
+        $view = View::make('reports.contracts_items3', compact('contracts1', 'contracts2', 'contracts3'))->render();
+        // $view = View::make('reports.contracts_items', compact('contracts1', 'contracts2', 'contracts3'))->render();
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML($view);
-        $pdf->setPaper('A4', 'landscape'); //coloca en apaisado
+        // $pdf->setPaper('A4', 'landscape'); //coloca en apaisado
         return $pdf->stream('LLAMADO-POLIZAS-ENDOSOS' . '.pdf');
     }
 

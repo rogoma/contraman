@@ -10,8 +10,8 @@ class EmailController extends Controller
     public function sendMail()
     {
         $data = [
-            'title' =>'Correo de prueba',
-            'body' => 'Este es un correo enviado desde una aplicación Laravel utilizando Gmail.'
+            'title' =>'Alerta de Vencimiento',
+            'body' => 'CONTRASIS - Verifique Alerta de Vencimiento de Póliza y/o Endoso de Contratos'
         ];
 
         //Se crea una variable donde se coloca la dirección de mail
@@ -20,7 +20,7 @@ class EmailController extends Controller
 
         Mail::send('emails.test', $data, function($message) use ($dir_mail){
             $message->to($dir_mail)
-                    ->subject('Correo de prueba Laravel');
+                    ->subject('Alerta de Vencimiento de Póliza');
         });
 
         return "Correo enviado exitosamente";
