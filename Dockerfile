@@ -1,55 +1,39 @@
-FROM composer:2 AS composer
+FROM php:7.4-fpm
 
-WORKDIR /app
-
-# Copiar composer.json y composer.lock
-COPY composer.json composer.lock ./
-
-# Instalar dependencias de Composer
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-
-FROM php:7.3-apache
-
-USER root
-
-# Configuración de Apache
-RUN echo "ServerName 127.0.0.1" >> /etc/apache2/apache2.conf
-
+# Set working directory
 WORKDIR /var/www/html
 
-# Instalar extensiones requeridas y otras herramientas necesarias
+# Install dependencies
+# librerias para el OS --> zip, vim, unzip, git, curl, build-essential
+# librerias para el php --> libpq-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev zlib1g-dev libzip-dev
 RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    libonig-dev \
+    build-essential \
     libpq-dev \
-    unzip \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    zlib1g-dev \
+    libzip-dev \
     zip \
-    curl \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd \
-    && docker-php-ext-install pdo pdo_pgsql pgsql bcmath \
-    && a2enmod rewrite \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    vim \
+    unzip \
+    git \
+    curl
 
-# Copiar el proyecto Laravel al contenedor
-COPY --chown=www-data:www-data . /var/www/html
-COPY --from=composer /app/vendor /var/www/html/vendor
+# Install php extensions
+# Para utilizar la base de datos postgres
+RUN docker-php-ext-install pdo pdo_pgsql
+# Para utilizar la libreria phpoffice/phpspreadsheet
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+RUN docker-php-ext-install -j$(nproc) gd
+RUN docker-php-ext-install zip
 
-# Configurar permisos para carpetas críticas
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache \
-    && touch /var/www/html/storage/logs/laravel.log \
-    && chown www-data:www-data /var/www/html/storage/logs/laravel.log
+# Install composer
+RUN curl -sS https://getcomposer.org/installer |php
+RUN mv composer.phar /usr/local/bin/composer
 
-# Configuración de zona horaria
-RUN ln -sf /usr/share/zoneinfo/America/Asuncion /etc/localtime
+# Run composer install
+# RUN php /usr/local/bin/composer install
 
-# Configurar Apache
-RUN a2enmod rewrite
-
-EXPOSE 80
-
-CMD ["apache2-foreground"]
+# make www-data owner of /var/www
+# RUN chown -R www-data:www-data /var/www
