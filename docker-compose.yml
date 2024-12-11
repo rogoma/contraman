@@ -9,7 +9,7 @@ services:
     image: nginx:stable-alpine
     container_name: nginx_man
     ports:
-      - "80:80" # Externo 8021, interno 80
+      - "8021:80" # Externo 8021, interno 80
     volumes:
       - .:/var/www/html:delegated
       - ./nginx/app.conf:/etc/nginx/conf.d/default.conf
@@ -25,7 +25,7 @@ services:
       dockerfile: Dockerfile
     container_name: php_man
     ports:
-      - "9000:9000" # Externo 6000, interno 9000
+      - "6000:9000" # Externo 6000, interno 9000
     volumes:
       - ./php:/usr/local/etc/php
       - .:/var/www/html:delegated
